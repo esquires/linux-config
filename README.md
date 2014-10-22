@@ -84,3 +84,53 @@ to get various plugins for vim
     
         mkdir ~/.vim/colors
         wget -P ~/.vim/colors -O wombat256.vim http://www.vim.org/scripts/download_script.php?src_id=13397
+
+if using lxde as the desktop environment, place this in
+    ~/.config/openbox/lxde-rc.xml
+
+    http://superuser.com/questions/167259/how-can-i-add-a-lxde-shortcut-to-launch-an-application
+    http://openbox.org/wiki/Help:Actions
+    http://openbox.org/wiki/Help:Bindings
+
+    <!-- Maximize commands -->
+    <keybind key="W-Up">
+        <action name="ToggleMaximizeFull" />
+    </keybind>
+
+    <keybind key="W-S-Up">
+        <action name="ToggleMaximizeVert" />
+    </keybind>
+
+    <keybind key="W-S-Down">
+        <action name="ToggleMaximizeHorz" />
+    </keybind>
+
+    <!-- application execute commands -->
+    <keybind key="W-c">
+        <action name="Execute">
+            <command>chromium</command>
+        </action>
+    </keybind>
+
+    <keybind key="C-A-t">
+        <action name="Execute">
+            <command>lxterminal</command>
+        </action>
+    </keybind>
+
+    <!-- window movement -->
+    <keybind key="W-A-Up">
+        <action name="MoveToEdgeNorth"/>
+    </keybind>
+
+    <keybind key="W-A-Down">
+        <action name="MoveToEdgeSouth"/>
+    </keybind>
+
+    <keybind key="W-A-Left">
+        <action name="MoveToEdgeWest"/>
+    </keybind>
+
+    <keybind key="W-A-Right">
+        <action name="MoveToEdgeEast"/>
+    </keybind>
