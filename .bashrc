@@ -21,6 +21,11 @@ set editing-mode vi
 shopt -s histverify
 shopt -s extglob
 
+#history settings 
+HISTSIZE=2000
+HISTFILESIZE=2000
+HISTCONTROL=ignoredups
+
 #allow ctrl_s for backward searching 
 #see http://unix.stackexchange.com/questions/39273/how-to-navigate-within-bashs-reverse-search
 #note, to quit a searchm, use ctrl_G, 
