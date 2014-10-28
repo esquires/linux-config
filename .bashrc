@@ -56,7 +56,7 @@ alias gu='git unstage'
 #   https://gist.github.com/JuggoPop/10706934
 # Git branch bash completion
 if [ -f ~/.git-completion.bash ]; then
-    source ~/git-completion.bash
+    source ~/.git-completion.bash
 
     # Add git completion to aliases
     __git_complete g __git_main

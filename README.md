@@ -4,6 +4,10 @@ Linux Config
 Installation
 ---
 
+get git autocompletion 
+
+    curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+
 place this in ~/.bashrc
 
     if [ -f <dir>/.bashrc ]; then
