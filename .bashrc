@@ -38,7 +38,7 @@ WHITE='\[\e[1;37m\]'
 GREEN='\[\e[1;32m\]'
 if [ -f ~/.git-prompt.sh ]; then
     source ~/.git-prompt.sh
-    PS1="\$(__git_ps1)${GREEN}\W\$ ${WHITE}"
+    PS1="${WHITE}\$(__git_ps1)${GREEN}\W\$ ${WHITE}"
 else
     PS1="${GREEN}\W\$ ${WHITE}"
 fi
