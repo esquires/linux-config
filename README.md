@@ -4,9 +4,10 @@ Linux Config
 Installation
 ---
 
-get git autocompletion 
+general configuration
 
     curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 
 place this in ~/.bashrc
 
@@ -24,18 +25,18 @@ place this in ~/.vimrc
     catch
     endtry
 
-place this in ~/.inputrc 
+place this in ~/.inputrc
 
-    #get vi mode for all binaries called from bash 
+    #get vi mode for all binaries called from bash
     #http://acg.github.io/2011/05/17/put-everything-in-vi-mode.html
-    set keymap vi 
+    set keymap vi
     set editing-mode vi
-    
+
     $if mode=vi
-        set keymap vi-insert 
+        set keymap vi-insert
         "jk": vi-movement-mode
-    $endif 
-    
+    $endif
+
 to get various plugins for vim
 
     cd into some place where you want your repos
@@ -49,31 +50,31 @@ to get various plugins for vim
         git clone https://github.com/tpope/vim-pathogen.git
         ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
 
-    Nerdtree:       
+    Nerdtree:
 
         git clone https://github.com/scrooloose/nerdtree
         git clone https://github.com/jistr/vim-nerdtree-tabs
         ln -s $DIR/nerdtree ~/.vim/bundle/
         ln -s $DIR/vim-nerdtree-tabs ~/.vim/bundle/
-    
-    neocomplcache: 
-    
+
+    neocomplcache:
+
         git clone https://github.com/Shougo/neocomplcache.vim
         ln -s $DIR/neocomplcache.vim ~/.vim/bundle/
-    
-    togglelist:     
+
+    togglelist:
 
         git clone https://github.com/milkypostman/vim-togglelist
         ln -s $DIR/vim-togglelist ~/.vim/bundle/
-    
+
     vim-pdb:
 
         git clone https://github.com/esquires/vim-pdb
         ln -s $DIR/vim-pdb ~/.vim/bundle/
 
     tabcity:
-        git clone https://github.com/esquires/tabcity 
-        ln -s $DIR/tabcity ~/.vim/bundle 
+        git clone https://github.com/esquires/tabcity
+        ln -s $DIR/tabcity ~/.vim/bundle
 
     vim-map-medley:
         git clone https://github.com/esquires/vim-map-medley
@@ -84,8 +85,8 @@ to get various plugins for vim
         git clone https://github.com/esquires/vim-matlab-fold
         ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
 
-    colors:         
-    
+    colors:
+
         mkdir ~/.vim/colors
         wget -P ~/.vim/colors -O wombat256.vim http://www.vim.org/scripts/download_script.php?src_id=13397
 

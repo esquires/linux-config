@@ -12,7 +12,7 @@
 "   colors:         https://github.com/qualiabyte/vim-colorstepper
 "                   https://github.com/flazz/vim-colorschemes
 "
-"   matchit:        https://github.com/tmhedberg/matchit:         
+"   matchit:        https://github.com/tmhedberg/matchit:
 "
 "   tabify:
 "
@@ -47,6 +47,9 @@ let g:toggle_list_no_mappings=1
 nnoremap <leader>l :call ToggleLocationList()<cr>
 nnoremap <leader>q :call ToggleQuickfixList()<cr>
 
+" vim_pdb settings  (always toggle line numbers)
+let g:vim_pdb_toggle_lines = 3
+
 " color setup
 " backspace/colors
 set bs=2
@@ -54,7 +57,7 @@ set bs=2
 "colorscheme stuff
 "change background
 set t_Co=256
-colorscheme wombat256
+colorscheme wombat256A
 if has("gui_running")
     set spell
 else
