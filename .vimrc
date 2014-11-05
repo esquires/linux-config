@@ -34,7 +34,6 @@ call pathogen#infect()
 "nerdtree settings
 let NERDTreeShowLineNumbers=1
 let NERDTreeShowBookmarks=1
-nnoremap <A-w> <C-w><C-w>
 nnoremap <leader>e :NERDTreeToggle<CR>
 let g:nerdtree_tabs_open_on_gui_startup = 0
 
