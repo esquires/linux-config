@@ -85,11 +85,6 @@ to get various plugins for vim
         git clone https://github.com/esquires/vim-matlab-fold
         ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
 
-    colors:
-
-        mkdir ~/.vim/colors
-        wget -P ~/.vim/colors -O wombat256.vim http://www.vim.org/scripts/download_script.php?src_id=13397
-
 if using lxde as the desktop environment, place this in
     ~/.config/openbox/lxde-rc.xml
 
