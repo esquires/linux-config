@@ -34,11 +34,11 @@ HISTCONTROL=ignoredups
 stty -ixon
 
 #setup the bash prompt
-WHITE='\[\e[1;37m\]'
-GREEN='\[\e[1;32m\]'
+WHITE='\[\e[0;37m\]'
+GREEN='\[\e[0;32m\]'
 if [ -f ~/.git-prompt.sh ]; then
     source ~/.git-prompt.sh
-    PS1="${WHITE}\$(__git_ps1)${GREEN}\W\$ ${WHITE}"
+    PS1="${WHITE}\$(__git_ps1)${GREEN}\W: ${WHITE}"
 else
     PS1="${GREEN}\W\$ ${WHITE}"
 fi
@@ -70,6 +70,7 @@ if [ -f ~/.git-completion.bash ]; then
     __git_complete glmb _git_log
     __git_complete gm _git_merge
     __git_complete gf _git_fetch
+    __git_complete gb _git_branch
 fi
 
 #see here: http://travisjeffery.com/b/2012/02/search-a-git-repo-like-a-ninja
