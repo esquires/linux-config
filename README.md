@@ -85,3 +85,23 @@ to get various plugins for vim
         git clone https://github.com/esquires/vim-matlab-fold
         ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
 
+awesome window manager setup
+
+    in ~/.config/awesome/rc.lua, place the following:
+
+        local awful = require("awful")
+
+        require("gen_config")
+
+        -- {{{ Tags
+        -- Define a tag table which hold all screen tags.
+        tags = {}
+        for s = 1, screen.count() do
+            -- Each screen has its own tag table.
+            tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+        end
+        -- }}}
+
+    then in bash, type
+
+        ln -s <dir>/gen_config.lua ~/.config/awesome/gen_config.lua
