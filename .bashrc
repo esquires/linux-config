@@ -53,7 +53,7 @@ alias gco='git checkout'
 alias gd='git difftool -y'
 alias gb='git branch'
 alias gh='git help'
-alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%cn] %Creset" --decorate --date=short -10 --graph'
+alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
 git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
 
@@ -85,6 +85,7 @@ git config --global core.whitespace trailing-space, space-before-tab
 #other aliases
 alias cb='xclip -selection clipboard'
 alias grep='grep --color=auto'
+alias find1='find -maxdepth 1 -mindepth 1'
 
 #machine specific operations
 if [ -f ~/.bash_specific ]; then
