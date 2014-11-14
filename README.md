@@ -19,11 +19,14 @@ place this in ~/.bashrc
 
 place this in ~/.vimrc
 
-
     try
         source <dir>/.vimrc
     catch
     endtry
+
+    set backup
+    set backupdir=~/.vim/backups
+    set dir=~/.vim/swaps
 
 place this in ~/.inputrc
 
