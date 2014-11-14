@@ -15,6 +15,10 @@ place this in ~/.bashrc
         source <dir>/.bashrc
     fi
 
+    if [ -f <dir>/cd_stack.sh ]; then
+        source <dir>/cd_stack.sh
+    fi
+    
     PATH=$PATH:~/bin
 
 place this in ~/.vimrc
