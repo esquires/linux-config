@@ -86,6 +86,7 @@ git config --global core.whitespace trailing-space, space-before-tab
 alias cb='xclip -selection clipboard'
 alias grep='grep --color=auto'
 alias find1='find -maxdepth 1 -mindepth 1'
+alias cd='cd_stack'
 
 #machine specific operations
 if [ -f ~/.bash_specific ]; then
