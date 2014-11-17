@@ -56,6 +56,15 @@ alias gh='git help'
 alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
 git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
+function git_fetch_dirs {
+
+    for d in $(find -maxdepth 1 -mindepth 1); do
+        cd $d
+        echo "fetching in $(pwd)"
+        cd ..
+    done
+
+}
 
 #code from here to allow completion on git aliases
 #   https://gist.github.com/JuggoPop/10706934
