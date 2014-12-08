@@ -80,6 +80,7 @@ if [ -f ~/.git-completion.bash ]; then
     __git_complete gm _git_merge
     __git_complete gf _git_fetch
     __git_complete gb _git_branch
+    __git_complete gd _git_diff
 fi
 
 #see here: http://travisjeffery.com/b/2012/02/search-a-git-repo-like-a-ninja
