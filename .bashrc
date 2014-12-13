@@ -61,6 +61,7 @@ function git_fetch_dirs {
     for d in $(find -maxdepth 1 -mindepth 1); do
         cd $d
         echo "fetching in $(pwd)"
+        git fetch
         cd ..
     done
 
