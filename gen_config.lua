@@ -263,7 +263,10 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "p", function() menubar.show() end),
+
+    --lock the computer (added by eric)
+    awful.key({ modkey },            "l",     function () awful.util.spawn("slock") end)
 )
 
 clientkeys = awful.util.table.join(
