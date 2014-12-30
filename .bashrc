@@ -47,13 +47,15 @@ fi
 alias gs='git status'
 alias gf='git fetch'
 alias gm='git merge'
+alias gms='git merge -S'
 alias ga='git add'
 alias gcm='git commit'
+alias gcms='git commit -S'
 alias gco='git checkout'
 alias gd='git difftool -y'
 alias gb='git branch'
 alias gh='git help'
-alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
+alias gl='git log --pretty=format:"%G? %C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
 git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
 function git_fetch_dirs {
@@ -78,7 +80,7 @@ if [ -f ~/.git-completion.bash ]; then
     __git_complete gco _git_checkout
     __git_complete gl _git_log
     __git_complete glmb _git_log
-    __git_complete gm _git_merge
+    __git_complete gms _git_merge
     __git_complete gf _git_fetch
     __git_complete gb _git_branch
     __git_complete gd _git_diff
