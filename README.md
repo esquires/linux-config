@@ -92,6 +92,13 @@ to get various plugins for vim
         git clone https://github.com/esquires/vim-matlab-fold
         ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
 
+setup mutt basics (other config files are in ~/.mutt/machine\_specific)
+
+    mkdir ~/.mutt 
+    cd ~/.mutt 
+    ln -s <dir>/.mutt/* .
+
+
 awesome window manager setup
 
     in ~/.config/awesome/rc.lua, place the following:
