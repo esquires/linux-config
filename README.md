@@ -44,6 +44,8 @@ place this in ~/.inputrc
         "jk": vi-movement-mode
     $endif
 
+    set bind-tty-special-chars off
+
 to get various plugins for vim
 
     cd into some place where you want your repos

@@ -21,6 +21,9 @@ set editing-mode vi
 shopt -s histverify
 shopt -s extglob
 
+#make <c-w> delete a word rather than all the way to whitespace
+bind '"\C-w":backward-kill-word'
+
 #history settings
 HISTSIZE=2000
 HISTFILESIZE=2000
