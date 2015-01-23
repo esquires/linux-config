@@ -55,7 +55,7 @@ set wait_key=no
 set mailcap_path 	= ~/.mutt/mailcap
 auto_view text/html
 macro pager \Cu "|urlview<enter>" "call urlview to open links"
-#alternative_order text/plain text/html
+alternative_order text/plain text/html
 macro attach 'V' "<pipe-entry>cat >~/.tmp/mutt_attach/mail.html && firefox ~/.tmp/mutt_attach/mail.html && rm ~/.tmp/mutt_attach/mail.html<enter>"
 
 ignore *                               # first, ignore all headers
