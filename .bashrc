@@ -63,7 +63,9 @@ git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
 function git_fetch_dirs {
 
-    for d in $(find -maxdepth 1 -mindepth 1); do
+    echo $(find -maxdepth 1 -mindepth 1)
+
+    for d in $(find -maxdepth 1 -mindepth 1 -type d); do
         cd $d
         echo "fetching in $(pwd)"
         git fetch
