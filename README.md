@@ -48,6 +48,9 @@ place this in ~/.inputrc
 
 to get various plugins for vim
 
+    mkdir ~/.vim/swaps 
+    mkdir ~/.vim/backups
+
     cd into some place where you want your repos
 
     DIR=$(pwd)
@@ -105,6 +108,7 @@ awesome window manager setup
 
     in ~/.config/awesome/rc.lua, place the following:
 
+        terminal = 'whatever your terminal program is'
         local awful = require("awful")
 
         require("gen_config")
