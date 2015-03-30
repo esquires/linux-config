@@ -86,6 +86,7 @@ if [ -f ~/.git-completion.bash ]; then
     __git_complete gl _git_log
     __git_complete glmb _git_log
     __git_complete gms _git_merge
+    __git_complete gm _git_merge
     __git_complete gf _git_fetch
     __git_complete gb _git_branch
     __git_complete gd _git_diff
