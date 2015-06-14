@@ -104,6 +104,10 @@ setup mutt basics (other config files are in ~/.mutt/machine\_specific)
     ln -s <dir>/.mutt/* .
 
 
+setup ipython default
+
+    ln -s <dir>/ipython_config.py ~/.ipython/profile_default/ipython_config.py
+
 awesome window manager setup
 
     in ~/.config/awesome/rc.lua, place the following:
