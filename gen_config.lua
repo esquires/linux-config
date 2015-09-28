@@ -265,7 +265,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end),
 
     --lock the computer (added by eric)
-    awful.key({ modkey },            "l",     function () awful.util.spawn("slock") end)
+    awful.key({ modkey, "Control" }, "s",     function () awful.util.spawn("slock") end)
 )
 
 clientkeys = awful.util.table.join(
