@@ -58,7 +58,7 @@ alias gco='git checkout'
 alias gd='git difftool -y'
 alias gb='git branch'
 alias gh='git help'
-alias gl='git log --pretty=format:"%G? %C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
+alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
 git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
 function git_fetch_dirs {
