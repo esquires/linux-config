@@ -6,20 +6,14 @@
 #
 # USAGE
 #
-#   usage: glmb [git log options] [--format=0] sha1 sha2 [sha3 ...]
+#   usage: glmb [git log options] [--format=1] sha1 [sha2=HEAD sha3 ...]
 #
 #   --format=0: print the default git log format (otherwise, one line per commit)
 #
 
-#check for appropriate number of arguments
-if [[ $# -le 1 ]]; then
-    echo "usage: glmb [git log options] [--format=1] sha1 sha2 [sha3 ...]" >&2
-    exit 1
-fi
-
 #process command line arguments
 if [[ $1 == '-h' || $1 == '--help' ]]; then
-    echo "usage: glmb [git log options] [--format=1] sha1 sha2 [sha3 ...]"
+    echo "usage: glmb [git log options] [--format=1] sha1 [sha2=HEAD sha3 ...]"
     exit 0
 fi
 
@@ -42,6 +36,16 @@ while [[ -n $1 ]]; do
     shift
 
 done
+
+# make HEAD default
+num_branches=$(echo $branches | wc -w)
+if [[ $num_branches -eq 0 ]]; then
+    echo 'hi'
+    echo "usage: glmb [git log options] [--format=1] sha1 [sha2=HEAD sha3 ...]" >&2
+    exit 1
+elif [[ $num_branches -eq 1 ]]; then
+    branches="$branches HEAD"
+fi
 
 #get the merge base.
 merge_base="$(git merge-base $branches)"
