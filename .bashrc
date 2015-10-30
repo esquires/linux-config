@@ -63,6 +63,7 @@ git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
 function git_fetch_dirs {
 
+    TEMP_OLDPWD=$OLDPWD
     echo $(find -maxdepth 1 -mindepth 1)
 
     for d in $(find -maxdepth 1 -mindepth 1 -type d); do
@@ -71,6 +72,8 @@ function git_fetch_dirs {
         git fetch
         cd ..
     done
+
+    OLDPWD=$TEMP_OLDPWD
 
 }
 
