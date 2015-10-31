@@ -61,16 +61,16 @@ alias gh='git help'
 alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[%an] %Creset" --decorate --date=short -10 --graph'
 git config --global alias.unstage 'reset HEAD --'
 alias gu='git unstage'
+
 function git_fetch_dirs {
 
     TEMP_OLDPWD=$OLDPWD
-    echo $(find -maxdepth 1 -mindepth 1)
 
-    for d in $(find -maxdepth 1 -mindepth 1 -type d); do
+    for d in $(dirname $(find -name "\.git")); do
         cd $d
-        echo "fetching in $(pwd)"
+        echo "fetching " $d
         git fetch
-        cd ..
+        cd $OLDPWD
     done
 
     OLDPWD=$TEMP_OLDPWD
