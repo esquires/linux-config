@@ -2,9 +2,6 @@
 "
 "   pathogen:       http://www.vim.org/scripts/script.php?script_id=2332
 "
-"   nerdtree:       https://github.com/scrooloose/nerdtree
-"                   https://github.com/jistr/vim-nerdtree-tabs
-"
 "   neocomplcache:  https://github.com/Shougo/neocomplcache.vim
 "
 "   togglelist:     https://github.com/milkypostman/vim-togglelist
@@ -30,12 +27,6 @@ filetype indent on
 
 "pathogen plugin
 call pathogen#infect()
-
-"nerdtree settings
-let NERDTreeShowLineNumbers=1
-let NERDTreeShowBookmarks=1
-nnoremap <leader>e :NERDTreeToggle<CR>
-let g:nerdtree_tabs_open_on_gui_startup = 0
 
 "neocomplcache
 let g:neocomplcache_enable_at_startup = 1
@@ -63,6 +54,19 @@ else
     "spell check comes out as poor highlighting
     set nospell
 endif
+
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {"mode": "passive"}
+nnoremap <localleader>s :SyntasticCheck<cr>
+let g:syntastic_python_pylint_args="--rcfile=~/.pylintrc"
 
 "in case there are system specific settings
 try
