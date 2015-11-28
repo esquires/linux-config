@@ -34,17 +34,7 @@ place this in ~/.vimrc
 
 place this in ~/.inputrc
 
-    #get vi mode for all binaries called from bash
-    #http://acg.github.io/2011/05/17/put-everything-in-vi-mode.html
-    set keymap vi
-    set editing-mode vi
-
-    $if mode=vi
-        set keymap vi-insert
-        "jk": vi-movement-mode
-    $endif
-
-    set bind-tty-special-chars off
+    $include /path/to/linux-config/.inputrc
 
 to get various plugins for vim
 
