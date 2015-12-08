@@ -77,6 +77,30 @@ function git_fetch_dirs {
 
 }
 
+function check_new_deps {
+
+    aurPkgs=$(pacman -Qm | cut -d ' ' -f 1)
+
+    for aurPkg in $aurPkgs; do
+
+        aurDte=$(pacman -Qi $aurPkg | grep "Install Date" | cut -d ':' -f 2-)
+        aurDte=$(date --date="$aurDte" "+%s")
+
+        depPkgs=$(pacman -Qi $aurPkg | grep "Depends On" | cut -d ':' -f 2-)
+
+        for depPkg in $depPkgs; do 
+
+            depDte=$(pacman -Qi $depPkg | grep "Install Date" | cut -d ':' -f 2-)
+            depDte=$(date --date="$depDte" "+%s")
+            if [[ $aurDte -lt $depDte ]]; then 
+                echo "update $aurPkg given $depPkg is more recent"
+            fi
+
+        done 
+
+    done
+}
+
 #code from here to allow completion on git aliases
 #   https://gist.github.com/JuggoPop/10706934
 # Git branch bash completion
