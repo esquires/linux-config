@@ -36,6 +36,10 @@ place this in ~/.inputrc
 
     $include /path/to/linux-config/.inputrc
 
+put pylintrc in your home directory
+
+    ln -s <dir>/.pylintrc ~/.pylintrc
+
 to get various plugins for vim
 
     mkdir ~/.vim/swaps 
@@ -86,6 +90,12 @@ to get various plugins for vim
 
         git clone https://github.com/esquires/vim-matlab-fold
         ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
+
+    syntastic:
+
+        git clone https://github.com/scrooloose/syntastic.git
+        ln -s $DIR/syntastic ~/.vim/bundle
+        ln -s 
 
 setup mutt basics (other config files are in ~/.mutt/machine\_specific)
 
