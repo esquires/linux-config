@@ -37,8 +37,8 @@ let g:toggle_list_no_mappings=1
 nnoremap <leader>l :call ToggleLocationList()<cr>
 nnoremap <leader>q :call ToggleQuickfixList()<cr>
 
-" vim_pdb settings  (always toggle line numbers)
-let g:vim_pdb_toggle_lines = 3
+" lvdb settings  (always toggle line numbers)
+let g:lvdb_toggle_lines = 3
 
 " color setup
 " backspace/colors
