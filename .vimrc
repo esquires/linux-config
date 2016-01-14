@@ -68,6 +68,20 @@ let g:syntastic_mode_map = {"mode": "passive"}
 nnoremap <localleader>s :SyntasticCheck<cr>
 let g:syntastic_python_pylint_args="--rcfile=~/.pylintrc"
 
+" note for cppcheck, you probably need a '-I' set, so use
+" let g:syntastic_cpp_cppcheck_args = '-I /path/to/incl/ -I /path/to/other_incl'
+"
+" for cpplint, you might want
+" let g:syntastic_cpp_cpplint_args = '--root=/path/to/project/root --recursive'
+let g:syntastic_cpp_checkers = ['cppcheck', 'cpplint']
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
+let g:syntastic_aggregate_errors = 1
+
+" nerdtree
+let g:nerdtree_tabs_open_on_gui_startup = 0
+let g:nerdtree_tabs_open_on_new_tab = 0
+nnoremap <leader>e :NERDTreeTabsToggle<CR>
+
 "in case there are system specific settings
 try
     source ~/.vimrc_specific

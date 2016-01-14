@@ -56,16 +56,9 @@ to get various plugins for vim
         git clone https://github.com/tpope/vim-pathogen.git
         ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
 
-    Nerdtree:
+    neocomplete:
 
-        git clone https://github.com/scrooloose/nerdtree
-        git clone https://github.com/jistr/vim-nerdtree-tabs
-        ln -s $DIR/nerdtree ~/.vim/bundle/
-        ln -s $DIR/vim-nerdtree-tabs ~/.vim/bundle/
-
-    neocomplcache:
-
-        git clone https://github.com/Shougo/neocomplcache.vim
+        git clone https://github.com/Shougo/neocomplete.vim.git
         ln -s $DIR/neocomplcache.vim ~/.vim/bundle/
 
     togglelist:
