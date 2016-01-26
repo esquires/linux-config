@@ -1,21 +1,3 @@
-" plugin summary
-"
-"   pathogen:       http://www.vim.org/scripts/script.php?script_id=2332
-"
-"   neocomplcache:  https://github.com/Shougo/neocomplcache.vim
-"
-"   togglelist:     https://github.com/milkypostman/vim-togglelist
-"
-"   colors:         https://github.com/qualiabyte/vim-colorstepper
-"                   https://github.com/flazz/vim-colorschemes
-"
-"   matchit:        https://github.com/tmhedberg/matchit:
-"
-"   tabify:
-"
-"   matlab-fold:
-"
-
 " mapping leaders
 let mapleader = "\<space>"
 let maplocalleader = "\\"
@@ -28,9 +10,9 @@ filetype indent on
 "pathogen plugin
 call pathogen#infect()
 
-"neocomplcache
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_auto_select = 1
+"neocomplete (if not using YouCompleteMe)
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_auto_select = 1
 
 " togglelist settings
 let g:toggle_list_no_mappings=1
@@ -76,11 +58,6 @@ let g:syntastic_python_pylint_args="--rcfile=~/.pylintrc"
 let g:syntastic_cpp_checkers = ['cppcheck', 'cpplint']
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
 let g:syntastic_aggregate_errors = 1
-
-" nerdtree
-let g:nerdtree_tabs_open_on_gui_startup = 0
-let g:nerdtree_tabs_open_on_new_tab = 0
-nnoremap <leader>e :NERDTreeTabsToggle<CR>
 
 "in case there are system specific settings
 try
