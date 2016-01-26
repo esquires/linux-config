@@ -48,7 +48,7 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = {"mode": "passive"}
 nnoremap <localleader>s :SyntasticCheck<cr>
-let g:syntastic_python_pylint_args="--rcfile=~/.pylintrc"
+let g:syntastic_python_pylint_args="--ignored-modules=numpy,gritsbot_sim"
 
 " note for cppcheck, you probably need a '-I' set, so use
 " let g:syntastic_cpp_cppcheck_args = '-I /path/to/incl/ -I /path/to/other_incl'
