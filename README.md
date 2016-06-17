@@ -15,10 +15,6 @@ place this in ~/.bashrc
         source <dir>/.bashrc
     fi
 
-    if [ -f <dir>/cd_stack.sh ]; then
-        source <dir>/cd_stack.sh
-    fi
-    
     PATH=$PATH:~/bin
 
 place this in ~/.vimrc
@@ -34,11 +30,18 @@ place this in ~/.vimrc
 
 place this in ~/.inputrc
 
-    $include /path/to/linux-config/.inputrc
+    #get vi mode for all binaries called from bash
+    #http://acg.github.io/2011/05/17/put-everything-in-vi-mode.html
+    set keymap vi
+    set editing-mode vi
+    
+    $if mode=vi
+        set keymap vi-insert
+        "jk": vi-movement-mode
+        "\C-p": "jkk"
+    $endif
 
-put pylintrc in your home directory
-
-    ln -s <dir>/.pylintrc ~/.pylintrc
+    set bind-tty-special-chars off
 
 to get various plugins for vim
 
@@ -51,25 +54,20 @@ to get various plugins for vim
     mkdir -p ~/.vim/autoload
     mkdir ~/.vim/bundle
 
-    Pathogen:
+    pathogen:
 
         git clone https://github.com/tpope/vim-pathogen.git
         ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
-
-    neocomplete:
-
-        git clone https://github.com/Shougo/neocomplete.vim.git
-        ln -s $DIR/neocomplcache.vim ~/.vim/bundle/
 
     togglelist:
 
         git clone https://github.com/milkypostman/vim-togglelist
         ln -s $DIR/vim-togglelist ~/.vim/bundle/
 
-    vim-pdb:
+    lvdb:
 
-        git clone https://github.com/esquires/vim-pdb
-        ln -s $DIR/vim-pdb ~/.vim/bundle/
+        git clone https://github.com/esquires/lvdb
+        ln -s $DIR/lvdb ~/.vim/bundle/
 
     tabcity:
         git clone https://github.com/esquires/tabcity
@@ -79,23 +77,11 @@ to get various plugins for vim
         git clone https://github.com/esquires/vim-map-medley
         ln -s $DIR/vim-map-medley ~/.vim/bundle/
 
-    vim-matlab-fold:
-
-        git clone https://github.com/esquires/vim-matlab-fold
-        ln -s $DIR/vim-matlab-fold ~/.vim/bundle/
-
     syntastic:
 
         git clone https://github.com/scrooloose/syntastic.git
         ln -s $DIR/syntastic ~/.vim/bundle
         ln -s 
-
-setup mutt basics (other config files are in ~/.mutt/machine\_specific)
-
-    mkdir ~/.mutt 
-    cd ~/.mutt 
-    ln -s <dir>/.mutt/* .
-
 
 setup ipython default
 

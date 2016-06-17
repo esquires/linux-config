@@ -4,7 +4,6 @@ c = get_config()
 c.InteractiveShellApp.exec_lines = [
     'import numpy as np',
     'import pandas as pd',
-    'import matplotlib.pyplot as plt',
     'from pandas import Series, DataFrame',
 ]
 
@@ -50,7 +49,7 @@ c.InteractiveShell.confirm_exit = False
 # c.InteractiveShellApp.hide_initial_ns = True
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
-c.InteractiveShellApp.matplotlib = 'auto'
+# c.InteractiveShellApp.matplotlib = 'auto'
 
 # Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk3', 'osx',
 # 'pyglet', 'qt', 'qt5', 'tk', 'wx').

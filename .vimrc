@@ -10,10 +10,6 @@ filetype indent on
 "pathogen plugin
 call pathogen#infect()
 
-"neocomplete (if not using YouCompleteMe)
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_auto_select = 1
-
 " togglelist settings
 let g:toggle_list_no_mappings=1
 nnoremap <leader>l :call ToggleLocationList()<cr>
@@ -48,7 +44,6 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = {"mode": "passive"}
 nnoremap <localleader>s :SyntasticCheck<cr>
-let g:syntastic_python_pylint_args="--ignored-modules=numpy,gritsbot_sim"
 
 " note for cppcheck, you probably need a '-I' set, so use
 " let g:syntastic_cpp_cppcheck_args = '-I /path/to/incl/ -I /path/to/other_incl'
