@@ -17,6 +17,11 @@ place this in ~/.bashrc
 
     PATH=$PATH:~/bin
 
+place this in ~/.zshrc (and install https://github.com/robbyrussell/oh-my-zsh)
+    
+    source <dir>/.zshrc
+    export ZSH=path_to_oh_my_zsh_install
+
 place this in ~/.vimrc
 
     try
