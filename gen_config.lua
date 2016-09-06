@@ -54,7 +54,7 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {
-    -- awful.layout.suit.fair,
+    awful.layout.suit.fair,
     awful.layout.suit.tile.left,
     awful.layout.suit.magnifier,
     awful.layout.suit.max,
