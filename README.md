@@ -19,8 +19,8 @@ place this in ~/.bashrc
 
 place this in ~/.zshrc (and install https://github.com/robbyrussell/oh-my-zsh)
     
-    source <dir>/.zshrc
-    export ZSH=path_to_oh_my_zsh_install
+    export ZSH=~/path_to_oh_my_zsh_install
+    source ~/repos/linux-config/.zshrc
 
 place this in ~/.vimrc
 
@@ -79,6 +79,7 @@ to get various plugins for vim
         ln -s $DIR/tabcity ~/.vim/bundle
 
     vim-map-medley:
+
         git clone https://github.com/esquires/vim-map-medley
         ln -s $DIR/vim-map-medley ~/.vim/bundle/
 
@@ -86,11 +87,22 @@ to get various plugins for vim
 
         git clone https://github.com/scrooloose/syntastic.git
         ln -s $DIR/syntastic ~/.vim/bundle
-        ln -s 
 
-setup ipython default
+    vim-l9:
+        # installed as a dependency for vim-fuzzyfinder
+        hg clone https://bitbucket.org/ns9tks/vim-l9
+        ln -s $DIR/vim-l9 ~/.vim/bundle
 
-    ln -s <dir>/ipython_config.py ~/.ipython/profile_default/ipython_config.py
+    vim-fuzzyfinder:
+        hg clone https://bitbucket.org/ns9tks/vim-fuzzyfinder
+        ln -s $DIR/vim-fuzzyfinder ~/.vim/bundle
+
+    youcompleteme:
+        # this is in the ubuntu packages under `vim-youcompleteme` or
+        # arch linux in the aur
+        # for ubuntu, do 
+        sudo apt install vim-youcompleteme && vam install youcompleteme
+
 
 awesome window manager setup
 

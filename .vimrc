@@ -10,6 +10,14 @@ filetype indent on
 "pathogen plugin
 call pathogen#infect()
 
+" ycm
+let g:ycm_show_diagnostics_ui = 1
+
+" fuzzy-finder
+nnoremap <localleader>f :FufFile **/<CR>
+nnoremap <localleader>r :FufRenewCache <CR>
+let g:fuf_file_exclude='\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|build.*$'
+
 " togglelist settings
 let g:toggle_list_no_mappings=1
 nnoremap <leader>l :call ToggleLocationList()<cr>
@@ -52,7 +60,7 @@ let g:syntastic_python_checkers = ['flake8']
 "
 " for cpplint, you might want
 " let g:syntastic_cpp_cpplint_args = '--root=/path/to/project/root --recursive'
-let g:syntastic_cpp_checkers = ['cppcheck', 'cpplint']
+let g:syntastic_cpp_checkers = ['cpplint']
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
 let g:syntastic_aggregate_errors = 1
 
