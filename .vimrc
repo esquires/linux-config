@@ -16,7 +16,7 @@ let g:ycm_show_diagnostics_ui = 1
 " fuzzy-finder
 nnoremap <localleader>f :FufFile **/<CR>
 nnoremap <localleader>r :FufRenewCache <CR>
-let g:fuf_file_exclude='\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|build.*$'
+let g:fuf_file_exclude='\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|build.*$|.*\.so.*$|.a$|data|bin'
 
 " togglelist settings
 let g:toggle_list_no_mappings=1
@@ -42,9 +42,9 @@ else
 endif
 
 " syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
