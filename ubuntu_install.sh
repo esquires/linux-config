@@ -58,12 +58,10 @@ ln -s $DIR/vim-map-medley ~/.vim/bundle/
 git clone https://github.com/scrooloose/syntastic.git
 ln -s $DIR/syntastic ~/.vim/bundle
 
-hg clone https://bitbucket.org/ns9tks/vim-l9
-ln -s $DIR/vim-l9 ~/.vim/bundle
+git clone https://github.com/scrooloose/syntastic.git
+ln -s $DIR/syntastic ~/.vim/bundle
 
-hg clone https://bitbucket.org/ns9tks/vim-fuzzyfinder
-ln -s $DIR/vim-fuzzyfinder ~/.vim/bundle
+git clone https://github.com/ctrlpvim/ctrlp.vim.git
+ln -s $DIR/ctrlp.vim ~/.vim/bundle
 
 sudo chsh -s /usr/bin/zsh $USER
-
-

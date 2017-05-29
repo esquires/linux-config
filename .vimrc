@@ -13,11 +13,6 @@ call pathogen#infect()
 " ycm
 let g:ycm_show_diagnostics_ui = 1
 
-" fuzzy-finder
-nnoremap <localleader>f :FufFile **/<CR>
-nnoremap <localleader>r :FufRenewCache <CR>
-let g:fuf_file_exclude='\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|build.*$|.*\.so.*$|.a$|data|bin'
-
 " togglelist settings
 let g:toggle_list_no_mappings=1
 nnoremap <leader>l :call ToggleLocationList()<cr>
@@ -63,6 +58,14 @@ let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_cpp_checkers = ['cpplint']
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
 let g:syntastic_aggregate_errors = 1
+
+" ctrlp
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/](git|hg|svn|build)$',
+\ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
+\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+\ }
+nnoremap <leader>p :CtrlP getcwd()<cr>
 
 "in case there are system specific settings
 try
