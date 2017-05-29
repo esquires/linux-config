@@ -2,6 +2,11 @@
 let mapleader = "\<space>"
 let maplocalleader = "\\"
 
+"enable very magic
+nnoremap / /\v
+nnoremap ? ?\v
+set smartcase
+
 "plugin management
 filetype on
 filetype plugin on
