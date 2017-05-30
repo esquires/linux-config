@@ -12,6 +12,9 @@ filetype on
 filetype plugin on
 filetype indent on
 
+" tagbar
+nnoremap <localleader>t :TagbarToggle<CR>
+
 "pathogen plugin
 call pathogen#infect()
 
@@ -70,7 +73,7 @@ let g:ctrlp_custom_ignore = {
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
-nnoremap <leader>p :CtrlP getcwd()<cr>
+nnoremap <localleader>f :CtrlP getcwd()<cr>
 
 "in case there are system specific settings
 try

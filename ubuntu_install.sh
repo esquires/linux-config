@@ -64,4 +64,7 @@ ln -s $DIR/syntastic ~/.vim/bundle
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 ln -s $DIR/ctrlp.vim ~/.vim/bundle
 
+git clone https://github.com/majutsushi/tagbar.git
+ln -s $DIR/tagbar ~/.vim/bundle
+
 sudo chsh -s /usr/bin/zsh $USER
