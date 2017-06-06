@@ -1,14 +1,21 @@
 sudo apt update
 sudo apt upgrade
 sudo apt install -y \
-	git \
-	awesome \
-	zsh \
-	vim-gnome \
-	mercurial \
-	vim-youcompleteme
+    curl \
+    terminator \
+    awesome \
+    zsh \
+    vim-gnome \
+    mercurial \
+    aptitude \
+    exuberant-ctags \
+    htop \
+    ipython \
+    python-ipdb \
+    ncurses-cmake-gui \
+    vim-youcompleteme
 
-vam install youcompleteme
+#vam install youcompleteme
 
 curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
@@ -54,9 +61,6 @@ ln -s $DIR/tabcity ~/.vim/bundle
 
 git clone https://github.com/esquires/vim-map-medley
 ln -s $DIR/vim-map-medley ~/.vim/bundle/
-
-git clone https://github.com/scrooloose/syntastic.git
-ln -s $DIR/syntastic ~/.vim/bundle
 
 git clone https://github.com/scrooloose/syntastic.git
 ln -s $DIR/syntastic ~/.vim/bundle
