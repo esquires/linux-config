@@ -12,10 +12,9 @@ sudo apt install -y \
     htop \
     ipython \
     python-ipdb \
-    ncurses-cmake-gui \
-    vim-youcompleteme
-
-#vam install youcompleteme
+    cmake-curses-gui \
+    libnotify-dev \
+    ninja-build
 
 curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
@@ -43,32 +42,53 @@ echo "set keymap vi" >> ~/.inputrc
 echo "set editing-mode vi" >> ~/.inputrc
 echo "set bind-tty-special-chars off" >> ~/.inputrc
 
+mkdir ~/repos
+cd repos
+git clone https://github.com/valr/cbatticon.git
+cd cbatticon
+make PREFIX=/usr/local
+sudo make PREFIX=/usr/local install
+
 DIR=~/repos/vim
+BUNDLE_DIR=~/.vim/bundle
 mkdir $DIR
 cd $DIR
+
+function add_vim_repo {
+    NAME=$(echo $1 | rev | cut -d '/' -f 1 | rev)
+    git clone $1
+    ln -s $DIR/$NAME $BUNDLE_DIR
+}
 
 git clone https://github.com/tpope/vim-pathogen.git
 ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
 
-git clone https://github.com/milkypostman/vim-togglelist
-ln -s $DIR/vim-togglelist ~/.vim/bundle/
+add_vim_repo https://github.com/milkypostman/vim-togglelist
+add_vim_repo https://github.com/esquires/lvdb
+add_vim_repo https://github.com/Shougo/deoplete.nvim
+add_vim_repo https://github.com/neomake/neomake
+add_vim_repo https://github.com/tpope/vim-fugitive
+add_vim_repo https://github.com/esquires/tabcity
+add_vim_repo https://github.com/esquires/vim-map-medley
+add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
+add_vim_repo https://github.com/majutsushi/tagbar
 
-git clone https://github.com/esquires/lvdb
-ln -s $DIR/lvdb ~/.vim/bundle/
+#install neovim
+mkdir ~/repos/neovim
+cd ~/repos/neovim
+sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python3-pip
 
-git clone https://github.com/esquires/tabcity
-ln -s $DIR/tabcity ~/.vim/bundle
+sudo apt install -y cppcheck
+sudo pip3 install neovim cpplint
+git clone https://github.com/neovim/neovim.git
+cd neovim
+git checkout v0.2.0
+mkdir .deps && cd .deps && cmake ../third-party -G Ninja && ninja
+cd .. && mkdir build && cd build && cmake .. -G Ninja && ninja && sudo ninja install
 
-git clone https://github.com/esquires/vim-map-medley
-ln -s $DIR/vim-map-medley ~/.vim/bundle/
-
-git clone https://github.com/scrooloose/syntastic.git
-ln -s $DIR/syntastic ~/.vim/bundle
-
-git clone https://github.com/ctrlpvim/ctrlp.vim.git
-ln -s $DIR/ctrlp.vim ~/.vim/bundle
-
-git clone https://github.com/majutsushi/tagbar.git
-ln -s $DIR/tagbar ~/.vim/bundle
+mkdir -p ~/.config/nvim
+echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath = &runtimepath
+source ~/.vimrc" > ~/.config/nvim/init.vim
 
 sudo chsh -s /usr/bin/zsh $USER

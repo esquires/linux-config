@@ -10,9 +10,8 @@ fi
 ##########################################3
 
 #stuff whose error I don't want to see
-alias gvim="gvim -p 2>/dev/null"
-alias gvimdiff="gvimdiff 2> /dev/null"
-alias g='gnome-open 2>/dev/null'
+alias vim="nvim"
+alias gvim="gnome-terminal -x nvim -p"
 
 #set editor to vi
 set -o vi
@@ -135,6 +134,7 @@ alias grep='grep --color=auto'
 alias find1='find -maxdepth 1 -mindepth 1'
 alias l='ls -lh'
 alias CLR='for i in {1..99}; do echo; done; clear'
+alias g="gnome-terminal -x nvim -p"
 
 #machine specific operations
 if [ -f ~/.bash_specific ]; then
