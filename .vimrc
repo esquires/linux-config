@@ -56,8 +56,9 @@ endif
 " errorformat for cppcheck copied from syntastic:
 "   https://github.com/vim-syntastic/syntastic/blob/master/syntax_checkers/c/cppcheck.vim
 autocmd! BufWritePost * Neomake
-let g:neomake_cpp_enabled_makers=['cpplint']
-let g:neomake_open_list=2
+let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck']
+let g:neomake_open_list=0
+let g:neomake_python_enabled_makers=['pyflakes', 'flake8']
 let g:neomake_cpp_cppcheck_maker={
         \ 'args': '--quiet --language=c++ --enable=warning,style,information,performance,portability,missingInclude',
         \ 'errorformat' :
@@ -77,6 +78,7 @@ let g:neomake_cpp_cpplint_maker={
         \     '%-G%.%#',
         \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
         \ }
+
 
 " ctrlp
 let g:ctrlp_custom_ignore = {

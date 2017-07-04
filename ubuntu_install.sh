@@ -11,6 +11,7 @@ sudo apt install -y \
     exuberant-ctags \
     htop \
     ipython \
+    ipython3 \
     python-ipdb \
     cmake-curses-gui \
     libnotify-dev \
@@ -78,7 +79,7 @@ mkdir ~/repos/neovim
 cd ~/repos/neovim
 sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python3-pip
 
-sudo apt install -y cppcheck
+sudo apt install -y cppcheck python{,3}-flake8
 sudo pip3 install neovim cpplint
 git clone https://github.com/neovim/neovim.git
 cd neovim
@@ -92,3 +93,11 @@ let &packpath = &runtimepath
 source ~/.vimrc" > ~/.config/nvim/init.vim
 
 sudo chsh -s /usr/bin/zsh $USER
+
+# setup python (and setup vim bindings for the shell)
+ipython profile create
+sed -i "s/#\(c.TerminalInteractiveShell.editing_mode = \)'emacs'/\1 'vi'/" ~/.ipython/profile_default/ipython_config.py
+
+cd ~/repos/vim/lvdb/python
+sudo python setup.py develop
+sudo python3 setup.py develop
