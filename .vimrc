@@ -132,3 +132,63 @@ function! MyTabLabel(n)
   return fnamemodify(label, ":t") 
 endfunction
 
+let g:ct=0
+function! PrefixStatusLine()
+     set statusline=
+     set statusline+=%6l/%-8L	"line number / total lines
+     set statusline+=%-4c
+     set statusline+=%-8y		"show the file-type
+endfunction 
+
+function! PostfixStatusLine()
+     set statusline+=%=			"now go to the right side of the statusline
+     set statusline+=%-3m
+     set statusline+=%<%F			"full path on the right side
+endfunction
+
+function! ToString(inp)
+  return a:inp
+endfunction 
+
+function! MyNeomakeGoodContext(context)
+    return has_key(a:context, "jobinfo") && has_key(a:context["jobinfo"], "name") && a:context["jobinfo"]["name"] == "makeprg"
+endfunction! 
+
+function! MyOnNeomakeInit() 
+    if GoodContext(g:neomake_hook_context)
+        call PrefixStatusLine()
+        set statusline+=starting
+        let g:ct=0
+        call PostfixStatusLine()
+    endif 
+endfunction
+
+function! MyOnNeomakeCountsChanged() 
+    if GoodContext(g:neomake_hook_context)
+        let context = g:neomake_hook_context
+        let g:ct = g:ct + 1
+        call PrefixStatusLine()
+        set statusline+=makeprog...
+        set statusline+=%{ToString(g:ct)}
+        call PostfixStatusLine()
+    endif 
+endfunction
+
+function! MyOnNeomakeFinished() 
+    if GoodContext(g:neomake_hook_context)
+      let context = g:neomake_hook_context
+      call PrefixStatusLine()
+      set statusline+=Done
+      call PostfixStatusLine()
+    endif 
+endfunction
+
+augroup my_neomake_hooks
+    au!
+    autocmd User NeomakeCountsChanged nested call MyOnNeomakeCountsChanged()
+    autocmd User NeomakeJobFinished nested call MyOnNeomakeFinished()
+    autocmd User NeomakeJobInit nested call MyOnNeomakeInit()
+augroup END
+
+"making
+nnoremap <localleader>m :Neomake!<cr>
