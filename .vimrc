@@ -58,7 +58,8 @@ endif
 autocmd! BufWritePost * Neomake
 let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck']
 let g:neomake_open_list=0
-let g:neomake_python_enabled_makers=['pyflakes', 'flake8']
+let g:neomake_highlight_lines=1
+let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
 let g:neomake_cpp_cppcheck_maker={
         \ 'args': '--quiet --language=c++ --enable=warning,style,information,performance,portability,missingInclude',
         \ 'errorformat' :
@@ -78,6 +79,27 @@ let g:neomake_cpp_cpplint_maker={
         \     '%-G%.%#',
         \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
         \ }
+
+let g:neomake_python_pylint_maker={
+        \ 'args': [
+            \ '--output-format=text',
+            \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
+            \ '--reports=no',
+            \ '--disable=import-error,no-member,invalid-name',
+            \ '--include-naming-hint=y'
+        \ ],
+        \ 'errorformat':
+            \ '%A%f:%l:%c:%t: %m,' .
+            \ '%A%f:%l: %m,' .
+            \ '%A%f:(%l): %m,' .
+            \ '%-Z%p^%.%#,' .
+            \ '%-G%.%#',
+        \ 'output_stream': 'stdout',
+        \ 'postprocess': [
+        \   function('neomake#postprocess#GenericLengthPostprocess'),
+        \   function('neomake#makers#ft#python#PylintEntryProcess'),
+        \ ]}
+
 
 
 " ctrlp
@@ -131,4 +153,3 @@ function! MyTabLabel(n)
   let label =  bufname(buflist[winnr - 1]) 
   return fnamemodify(label, ":t") 
 endfunction
-

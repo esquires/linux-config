@@ -79,8 +79,10 @@ mkdir ~/repos/neovim
 cd ~/repos/neovim
 sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python3-pip
 
-sudo apt install -y cppcheck python{,3}-flake8
-sudo pip3 install neovim cpplint
+sudo apt install -y cppcheck python{,3}-flake8 python{,3}-pylint
+touch ~/.pylintrc
+
+sudo pip3 install neovim cpplint pydocstyle
 git clone https://github.com/neovim/neovim.git
 cd neovim
 git checkout v0.2.0
