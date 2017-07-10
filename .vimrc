@@ -55,7 +55,8 @@ endif
 " neomake
 " errorformat for cppcheck copied from syntastic:
 "   https://github.com/vim-syntastic/syntastic/blob/master/syntax_checkers/c/cppcheck.vim
-autocmd! BufWritePost * Neomake
+autocmd! BufWritePost * Neomake | Neomake!
+let g:neomake_tex_enabled_makers=[]
 let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck']
 let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
