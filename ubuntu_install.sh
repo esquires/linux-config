@@ -13,6 +13,7 @@ sudo apt install -y \
     ipython \
     ipython3 \
     python-ipdb \
+    xclip \
     cmake-curses-gui \
     libnotify-dev \
     ninja-build
@@ -45,6 +46,7 @@ echo "set bind-tty-special-chars off" >> ~/.inputrc
 
 mkdir ~/repos
 cd repos
+sudo apt install libnotify-dev libgtk-3-dev
 git clone https://github.com/valr/cbatticon.git
 cd cbatticon
 make PREFIX=/usr/local
@@ -77,7 +79,7 @@ add_vim_repo https://github.com/majutsushi/tagbar
 #install neovim
 mkdir ~/repos/neovim
 cd ~/repos/neovim
-sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python3-pip
+sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
 
 sudo apt install -y cppcheck python{,3}-flake8 python{,3}-pylint
 touch ~/.pylintrc
