@@ -159,15 +159,15 @@ endfunction
 let g:ct=0
 function! PrefixStatusLine()
      set statusline=
-     set statusline+=%6l/%-8L	"line number / total lines
      set statusline+=%-4c
+     set statusline+=%l/%-6L	"line number / total lines
      set statusline+=%-8y		"show the file-type
 endfunction 
 
 function! PostfixStatusLine()
      set statusline+=%=			"now go to the right side of the statusline
      set statusline+=%-3m
-     set statusline+=%<%F			"full path on the right side
+     set statusline+=%<%f			"full path on the right side
 endfunction
 
 function! ToString(inp)
@@ -181,7 +181,7 @@ endfunction!
 function! MyOnNeomakeInit() 
     if MyNeomakeGoodContext(g:neomake_hook_context)
         call PrefixStatusLine()
-        set statusline+=building
+        set statusline+=building\ \ \ 
         let g:ct=0
         call PostfixStatusLine()
     endif 
@@ -192,7 +192,7 @@ function! MyOnNeomakeCountsChanged()
         let context = g:neomake_hook_context
         let g:ct = g:ct + 1
         call PrefixStatusLine()
-        set statusline+=makeprog...
+        set statusline+=makeprog...\ \ \ 
         set statusline+=%{ToString(g:ct)}
         call PostfixStatusLine()
     endif 
@@ -203,9 +203,9 @@ function! MyOnNeomakeFinished()
       let context = g:neomake_hook_context
       call PrefixStatusLine()
       if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
-          set statusline+=success
+          set statusline+=success\ \ \ 
       else 
-          set statusline+=failed
+          set statusline+=failed\ \ \ 
       endif 
       call PostfixStatusLine()
     endif 
