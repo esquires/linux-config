@@ -75,6 +75,7 @@ add_vim_repo https://github.com/esquires/tabcity
 add_vim_repo https://github.com/esquires/vim-map-medley
 add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
 add_vim_repo https://github.com/majutsushi/tagbar
+add_vim_repo https://github.com/tmhedberg/SimpylFold
 
 #install neovim
 mkdir ~/repos/neovim
