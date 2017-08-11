@@ -29,6 +29,7 @@ echo "source $CONFIG_DIR/.bashrc" >> ~/.bashrc
 echo "PATH=$PATH:~/bin" >> ~/.bashrc
 mkdir ~/bin
 ln -s $CONFIG_DIR/glmb.sh ~/bin/glmb
+ln -s $CONFIG_DIR/cpp_static_wrapper.sh ~/bin
 
 echo "export ZSH=~/.oh-my-zsh" >> ~/.zshrc
 echo "source $CONFIG_DIR/.zshrc" >> ~/.zshrc
