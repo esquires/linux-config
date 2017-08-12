@@ -16,10 +16,10 @@ def main():
             ["find", d, "-maxdepth", "4",
              "-name", "CMakeCache.txt"]).split('\n')[:-1]
 
-    pwd = os.path.dirname(file_path)
+    pwd = file_path if os.path.isdir(file_path) else os.path.dirname(file_path)
     cmakecache_files = _get_cmakecache_files(pwd)
     while (not cmakecache_files and
-           not os.path.exists('include') and
+           not os.path.exists(os.path.join(pwd, 'include')) and
            pwd != '/'):
         pwd = os.path.dirname(pwd)
         cmakecache_files = _get_cmakecache_files(pwd)
@@ -42,26 +42,25 @@ def main():
 
     new_include_dirs = []
     for d in include_dirs:
-        if 'usr' not in d and 'googletest' not in d:
+        if 'usr' not in d and \
+           'googletest' not in d and \
+           'build' not in d and \
+           ".local" not in d:
+
             new_include_dirs += ["-I", d]
 
     if exec_name == "cppclean":
-        cmd = ['cppclean', '--exclude', 'build'] + \
+        cmd = ['cppclean',
+               '--exclude', 'build', '--exclude',
+               'build_dependencies', '--exclude', 'build_resources'] + \
                 new_include_dirs + [pwd] + sys.argv[2:-1]
     elif exec_name == "cppcheck":
-        cmd = ['cppcheck']
+        cmd = ['cppcheck', '--quiet']
         src_dirs = \
             [os.path.join(pwd, d) for d in ['src', 'include', 'plugins']]
-        cmd += new_include_dirs + src_dirs
+        cmd += sys.argv[2:-1] + new_include_dirs + src_dirs
 
-    stdout, stderr = \
-        sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE).communicate()
-    for line in stdout.split('\n'):
-        if file_path in line:
-            print(line)
-    for line in stderr.split('\n'):
-        if file_path in line:
-            print(line, file=sys.stderr)
+    sp.call(cmd)
 
 
 if __name__ == '__main__':
