@@ -60,6 +60,7 @@ def main():
             [os.path.join(pwd, d) for d in ['src', 'include', 'plugins']]
         cmd += sys.argv[2:-1] + new_include_dirs + src_dirs
 
+    print(" ".join(cmd))
     sp.call(cmd)
 
 
