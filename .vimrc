@@ -55,14 +55,7 @@ endif
 " neomake
 " errorformat for cppcheck copied from syntastic:
 "   https://github.com/vim-syntastic/syntastic/blob/master/syntax_checkers/c/cppcheck.vim
-function! NeomakeHelper()
-    :NeomakeCancelJobs
-    :Neomake
-    :Neomake!
-endfunction 
-augroup testgroup
-    autocmd BufWrite * call NeomakeHelper()
-augroup END
+autocmd! BufWritePost * Neomake | Neomake!
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
@@ -103,7 +96,7 @@ let g:neomake_cpp_cppcheckall_maker={
         \   '%-G%.%#'}
 let g:neomake_cpp_cpplint_maker={
         \ 'exe': executable('cpplint') ? 'cpplint' : 'cpplint.py',
-        \ 'args': ['--verbose=3'],
+        \ 'args': ['--verbose=1'],
         \ 'errorformat':
         \     '%A%f:%l:  %m [%t],' .
         \     '%-G%.%#',
