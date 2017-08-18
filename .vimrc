@@ -71,6 +71,26 @@ let g:neomake_cpp_cppclean_maker={
         \ 'errorformat': '%f:%l: %m, %f:%l %m'
         \ }
 
+let g:neomake_python_pylint_maker={
+    \ 'args': [
+        \ '--rcfile=~/repos/linux-config/.pylintrc',
+        \ '--output-format=text',
+        \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
+        \ '--reports=no'
+    \ ],
+    \ 'errorformat':
+        \ '%A%f:%l:%c:%t: %m,' .
+        \ '%A%f:%l: %m,' .
+        \ '%A%f:(%l): %m,' .
+        \ '%-Z%p^%.%#,' .
+        \ '%-G%.%#',
+    \ 'output_stream': 'stdout',
+    \ 'postprocess': [
+    \   function('neomake#postprocess#GenericLengthPostprocess'),
+    \   function('neomake#makers#ft#python#PylintEntryProcess'),
+    \ ]}
+
+
 let g:neomake_cpp_cppcheck_maker={
         \ 'args': '--language=c++ --enable=warning,style,information,performance,portability,missingInclude',
         \ 'errorformat' :
@@ -96,7 +116,7 @@ let g:neomake_cpp_cppcheckall_maker={
         \   '%-G%.%#'}
 let g:neomake_cpp_cpplint_maker={
         \ 'exe': executable('cpplint') ? 'cpplint' : 'cpplint.py',
-        \ 'args': ['--verbose=1'],
+        \ 'args': ['--verbose=3'],
         \ 'errorformat':
         \     '%A%f:%l:  %m [%t],' .
         \     '%-G%.%#',
