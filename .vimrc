@@ -7,6 +7,7 @@ set title
 "enable very magic
 nnoremap / /\v
 nnoremap ? ?\v
+nnoremap <leader>a :qa<cr>
 set smartcase
 
 " lvdb
@@ -21,7 +22,7 @@ filetype indent on
 " tagbar
 nnoremap <localleader>t :TagbarToggle<CR>
 
-" deoplete 
+" deoplete
 if has("nvim")
     let g:deoplete#enable_at_startup = 1
 endif
@@ -36,6 +37,7 @@ nnoremap <leader>q :call ToggleQuickfixList()<cr>
 
 " lvdb settings  (always toggle line numbers)
 let g:lvdb_toggle_lines = 3
+let g:lvdb_close_tabs = 1
 
 " color setup
 " backspace/colors
@@ -173,7 +175,7 @@ function! MyTabLine()
     endif
 
     " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T' 
+    let s .= '%' . (i + 1) . 'T'
 
     " the label is made by MyTabLabel()
     let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
@@ -183,7 +185,7 @@ function! MyTabLine()
   let s .= '%#TabLineFill#%T'
 
   " right-align the label to close the current tab page
-  if tabpagenr('$') > 1 
+  if tabpagenr('$') > 1
     let s .= '%=%#TabLine#%999Xclose'
   endif
 
@@ -193,8 +195,8 @@ endfunction
 function! MyTabLabel(n)
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
-  let label =  bufname(buflist[winnr - 1]) 
-  return fnamemodify(label, ":t") 
+  let label =  bufname(buflist[winnr - 1])
+  return fnamemodify(label, ":t")
 endfunction
 
 let g:ct=0
@@ -203,7 +205,7 @@ function! PrefixStatusLine()
      set statusline+=%-4c
      set statusline+=%l/%-6L	"line number / total lines
      set statusline+=%-8y		"show the file-type
-endfunction 
+endfunction
 
 function! PostfixStatusLine()
      set statusline+=%=			"now go to the right side of the statusline
@@ -213,43 +215,43 @@ endfunction
 
 function! ToString(inp)
   return a:inp
-endfunction 
+endfunction
 
 function! MyNeomakeGoodContext(context)
     return has_key(a:context, "jobinfo") && has_key(a:context["jobinfo"], "name") && a:context["jobinfo"]["name"] == "makeprg"
-endfunction! 
+endfunction!
 
-function! MyOnNeomakeInit() 
+function! MyOnNeomakeInit()
     if MyNeomakeGoodContext(g:neomake_hook_context)
         call PrefixStatusLine()
-        set statusline+=building\ \ \ 
+        set statusline+=building\ \ \
         let g:ct=0
         call PostfixStatusLine()
-    endif 
+    endif
 endfunction
 
-function! MyOnNeomakeCountsChanged() 
+function! MyOnNeomakeCountsChanged()
     if MyNeomakeGoodContext(g:neomake_hook_context)
         let context = g:neomake_hook_context
         let g:ct = g:ct + 1
         call PrefixStatusLine()
-        set statusline+=makeprog...\ \ \ 
+        set statusline+=makeprog...\ \ \
         set statusline+=%{ToString(g:ct)}
         call PostfixStatusLine()
-    endif 
+    endif
 endfunction
 
-function! MyOnNeomakeFinished() 
+function! MyOnNeomakeFinished()
     if MyNeomakeGoodContext(g:neomake_hook_context)
       let context = g:neomake_hook_context
       call PrefixStatusLine()
       if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
-          set statusline+=success\ \ \ 
-      else 
-          set statusline+=failed\ \ \ 
-      endif 
+          set statusline+=success\ \ \
+      else
+          set statusline+=failed\ \ \
+      endif
       call PostfixStatusLine()
-    endif 
+    endif
 endfunction
 
 augroup my_neomake_hooks
