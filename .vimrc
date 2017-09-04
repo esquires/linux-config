@@ -137,7 +137,7 @@ let g:neomake_python_pylint_maker={
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/](git|hg|svn|build)$',
+\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|devel)$',
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
