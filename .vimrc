@@ -61,8 +61,7 @@ autocmd! BufWritePost * Neomake | Neomake!
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
-let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck'] ", 'cppclean', 'cppcheckall']
-" let g:neomake_cpp_enabled_makers=['cppcheckall']
+let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean']
 let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
@@ -92,21 +91,9 @@ let g:neomake_python_pylint_maker={
     \   function('neomake#makers#ft#python#PylintEntryProcess'),
     \ ]}
 
-
 let g:neomake_cpp_cppcheck_maker={
-        \ 'args': '--language=c++ --enable=warning,style,information,performance,portability,missingInclude',
-        \ 'errorformat' :
-        \   '[%f:%l]: (%trror) %m,' .
-        \   '[%f:%l]: (%tarning) %m,' .
-        \   '[%f:%l]: (%ttyle) %m,' .
-        \   '[%f:%l]: (%terformance) %m,' .
-        \   '[%f:%l]: (%tortability) %m,' .
-        \   '[%f:%l]: (%tnformation) %m,' .
-        \   '[%f:%l]: (%tnconclusive) %m,' .
-        \   '%-G%.%#'}
-let g:neomake_cpp_cppcheckall_maker={
         \ 'exe': 'cpp_static_wrapper.py',
-        \ 'args': 'cppcheck --quiet --language=c++ --enable=warning,style,information,performance,portability,missingInclude',
+        \ 'args': 'cppcheck',
         \ 'errorformat' :
         \   '[%f:%l]: (%trror) %m,' .
         \   '[%f:%l]: (%tarning) %m,' .
@@ -116,6 +103,7 @@ let g:neomake_cpp_cppcheckall_maker={
         \   '[%f:%l]: (%tnformation) %m,' .
         \   '[%f:%l]: (%tnconclusive) %m,' .
         \   '%-G%.%#'}
+
 let g:neomake_cpp_cpplint_maker={
         \ 'exe': executable('cpplint') ? 'cpplint' : 'cpplint.py',
         \ 'args': ['--verbose=3'],
