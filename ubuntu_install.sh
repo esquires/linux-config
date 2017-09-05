@@ -9,6 +9,7 @@ sudo apt install -y \
     mercurial \
     aptitude \
     exuberant-ctags \
+    global \
     htop \
     ipython \
     ipython3 \
@@ -77,6 +78,7 @@ add_vim_repo https://github.com/esquires/vim-map-medley
 add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
 add_vim_repo https://github.com/majutsushi/tagbar
 add_vim_repo https://github.com/tmhedberg/SimpylFold
+add_vim_repo https://github.com/jsfaint/gen_tags.vim
 
 #install neovim
 mkdir ~/repos/neovim

@@ -57,7 +57,6 @@ endif
 " neomake
 " errorformat for cppcheck copied from syntastic:
 "   https://github.com/vim-syntastic/syntastic/blob/master/syntax_checkers/c/cppcheck.vim
-autocmd! BufWritePost * Neomake | Neomake!
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
@@ -251,3 +250,5 @@ augroup END
 
 "making
 nnoremap <localleader>m :Neomake!<cr>
+
+autocmd! BufWritePost * Neomake | Neomake! | GenCtags
