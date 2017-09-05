@@ -76,7 +76,8 @@ let g:neomake_python_pylint_maker={
         \ '--rcfile=~/repos/linux-config/.pylintrc',
         \ '--output-format=text',
         \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
-        \ '--reports=no'
+        \ '--reports=no',
+        \ '--include-naming-hint=y'
     \ ],
     \ 'errorformat':
         \ '%A%f:%l:%c:%t: %m,' .
@@ -111,28 +112,6 @@ let g:neomake_cpp_cpplint_maker={
         \     '%-G%.%#',
         \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
         \ }
-
-let g:neomake_python_pylint_maker={
-        \ 'args': [
-            \ '--output-format=text',
-            \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
-            \ '--reports=no',
-            \ '--disable=import-error,no-member,invalid-name',
-            \ '--include-naming-hint=y'
-        \ ],
-        \ 'errorformat':
-            \ '%A%f:%l:%c:%t: %m,' .
-            \ '%A%f:%l: %m,' .
-            \ '%A%f:(%l): %m,' .
-            \ '%-Z%p^%.%#,' .
-            \ '%-G%.%#',
-        \ 'output_stream': 'stdout',
-        \ 'postprocess': [
-        \   function('neomake#postprocess#GenericLengthPostprocess'),
-        \   function('neomake#makers#ft#python#PylintEntryProcess'),
-        \ ]}
-
-
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
@@ -211,7 +190,7 @@ endfunction!
 function! MyOnNeomakeInit()
     if MyNeomakeGoodContext(g:neomake_hook_context)
         call PrefixStatusLine()
-        set statusline+=building\ \ \
+        set statusline+=building\ \ \ 
         let g:ct=0
         call PostfixStatusLine()
     endif
@@ -222,7 +201,7 @@ function! MyOnNeomakeCountsChanged()
         let context = g:neomake_hook_context
         let g:ct = g:ct + 1
         call PrefixStatusLine()
-        set statusline+=makeprog...\ \ \
+        set statusline+=makeprog...\ \ \ 
         set statusline+=%{ToString(g:ct)}
         call PostfixStatusLine()
     endif
@@ -233,9 +212,9 @@ function! MyOnNeomakeFinished()
       let context = g:neomake_hook_context
       call PrefixStatusLine()
       if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
-          set statusline+=success\ \ \
+          set statusline+=success\ \ \ 
       else
-          set statusline+=failed\ \ \
+          set statusline+=failed\ \ \ 
       endif
       call PostfixStatusLine()
     endif
