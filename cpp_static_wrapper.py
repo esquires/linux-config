@@ -64,7 +64,7 @@ def main():
     if executable == "cppclean":
         include_dirs.add('/usr/local/include')
         include_dirs.add('/usr/include')
-        include_arg = _add_arg_w_prefix('-In', include_dirs)
+        include_arg = _add_arg_w_prefix('-n', include_dirs)
 
         excludes = ['build', 'build_dependencies', 'build_resources']
         exclude_arg = _add_arg_w_prefix('--exclude', excludes)

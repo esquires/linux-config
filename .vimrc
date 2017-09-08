@@ -251,4 +251,5 @@ augroup END
 "making
 nnoremap <localleader>m :Neomake!<cr>
 
-autocmd! BufWritePost * Neomake | Neomake! | GenCtags
+autocmd! BufWritePost * Neomake | Neomake!
+let g:gen_tags#ctags_auto_gen = 1
