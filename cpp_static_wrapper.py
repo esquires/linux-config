@@ -15,6 +15,7 @@ def _get_cmakecache_files(directory):
 
 def _get_include_dirs(file_path):
     pwd = file_path if os.path.isdir(file_path) else os.path.dirname(file_path)
+    pwd = os.path.abspath(pwd)
 
     cmakecache_files = _get_cmakecache_files(pwd)
     while (not cmakecache_files and
