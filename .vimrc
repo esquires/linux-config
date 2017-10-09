@@ -60,7 +60,7 @@ endif
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
-let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean']
+let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean', 'flawfinder']
 let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
@@ -112,6 +112,14 @@ let g:neomake_cpp_cpplint_maker={
         \     '%-G%.%#',
         \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
         \ }
+
+let g:neomake_cpp_flawfinder_maker={
+        \ 'exe': 'flawfinder',
+        \ 'args': ['--quiet', '--dataonly', '--singleline'],
+        \ 'errorformat': '%f:%l:  %m,',
+        \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
+        \ }
+
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
