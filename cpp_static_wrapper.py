@@ -60,6 +60,10 @@ def main():
     executable = sys.argv[1]
     extra_args = sys.argv[2:-1]
 
+    print_cmd = '--no-print-cmd' not in extra_args
+    if not print_cmd:
+        extra_args.remove('--no-print-cmd')
+
     include_dirs = _get_include_dirs(file_path)
 
     if executable == "cppclean":
@@ -93,7 +97,8 @@ def main():
         cmd = ['cppcheck', '--quiet', '--language=c++', enable_arg] \
             + extra_args + include_arg + to_check
 
-    print(" ".join(cmd))
+    if print_cmd:
+        print(" ".join(cmd))
     sp.call(cmd)
 
 

@@ -67,7 +67,7 @@ let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
 
 let g:neomake_cpp_cppclean_maker={
         \ 'exe': "cpp_static_wrapper.py",
-        \ 'args': ['cppclean'],
+        \ 'args': ['cppclean', '--no-print-cmd'],
         \ 'errorformat': '%f:%l: %m, %f:%l %m'
         \ }
 
