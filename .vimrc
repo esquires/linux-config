@@ -123,7 +123,7 @@ let g:neomake_cpp_flawfinder_maker={
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|devel)$',
+\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|build_resources|devel)$',
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
