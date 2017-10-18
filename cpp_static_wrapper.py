@@ -38,7 +38,8 @@ def _get_include_dirs(file_path):
             for line in lines:
                 match = r.search(line)
                 if match:
-                    include_dirs.add(match.groups(1)[0])
+                    for d in match.groups(1)[0].split(';'):
+                        include_dirs.add(d)
 
     return include_dirs
 

@@ -4,6 +4,10 @@ let maplocalleader = "\\"
 let &titlestring=expand("%:t")
 set title
 
+" temporary fix until this works natively in the terminal
+set autoread
+au FocusGained * :checktime
+
 "enable very magic
 nnoremap / /\v
 nnoremap ? ?\v

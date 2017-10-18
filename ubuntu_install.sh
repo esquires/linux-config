@@ -35,6 +35,7 @@ ln -s $CONFIG_DIR/cpp_static_wrapper.sh ~/bin
 
 echo "export ZSH=~/.oh-my-zsh" >> ~/.zshrc
 echo "source $CONFIG_DIR/.zshrc" >> ~/.zshrc
+echo "source $CONFIG_DIR/.bashrc" >> ~/.bashrc
 
 mkdir ~/.vim
 mkdir ~/.vim/{bundle,autoload,swaps,backups}
