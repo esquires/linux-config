@@ -2,6 +2,7 @@ sudo apt update
 sudo apt upgrade
 sudo apt install -y \
     curl \
+    gnome-terminal \
     terminator \
     awesome \
     zsh \
@@ -83,19 +84,29 @@ add_vim_repo https://github.com/tmhedberg/SimpylFold
 add_vim_repo https://github.com/jsfaint/gen_tags.vim
 
 #install neovim
-mkdir ~/repos/neovim
-cd ~/repos/neovim
-sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
 
-sudo apt install -y cppcheck python{,3}-flake8 python{,3}-pylint
-touch ~/.pylintrc
+if [ "$1" != "--build-neovim" ]; then
+    sudo apt-get install software-properties-common python-dev python-pip python3-dev python3-pip
+    sudo add-apt-repository ppa:neovim-ppa/unstable
+    sudo apt-get update
+    sudo apt-get install neovim
 
-sudo pip3 install neovim cpplint pydocstyle
-git clone https://github.com/neovim/neovim.git
-cd neovim
-git checkout v0.2.0
-mkdir .deps && cd .deps && cmake ../third-party -G Ninja && ninja
-cd .. && mkdir build && cd build && cmake .. -G Ninja && ninja && sudo ninja install
+else 
+    mkdir ~/repos/neovim
+    cd ~/repos/neovim
+    sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
+
+    sudo apt install -y cppcheck python{,3}-flake8 python{,3}-pylint
+    touch ~/.pylintrc
+
+    sudo pip3 install neovim cpplint pydocstyle
+    git clone https://github.com/neovim/neovim.git
+    cd neovim
+    git checkout v0.2.0
+    mkdir .deps && cd .deps && cmake ../third-party -G Ninja && ninja
+    cd .. && mkdir build && cd build && cmake .. -G Ninja && ninja &&  ninja install
+
+fi 
 
 mkdir -p ~/.config/nvim
 echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after
