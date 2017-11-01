@@ -86,10 +86,10 @@ add_vim_repo https://github.com/jsfaint/gen_tags.vim
 #install neovim
 
 if [ "$1" != "--build-neovim" ]; then
-    sudo apt-get install software-properties-common python-dev python-pip python3-dev python3-pip
+    sudo apt-get install -y software-properties-common python-dev python-pip python3-dev python3-pip
     sudo add-apt-repository ppa:neovim-ppa/unstable
     sudo apt-get update
-    sudo apt-get install neovim
+    sudo apt-get -y install neovim
 
 else 
     mkdir ~/repos/neovim
