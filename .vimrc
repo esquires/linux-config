@@ -124,6 +124,8 @@ let g:neomake_cpp_flawfinder_maker={
         \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
         \ }
 
+" vimtex
+let g:vimtex_fold_enabled = 1
 
 " ctrlp
 let g:ctrlp_custom_ignore = {

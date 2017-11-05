@@ -82,6 +82,7 @@ add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
 add_vim_repo https://github.com/majutsushi/tagbar
 add_vim_repo https://github.com/tmhedberg/SimpylFold
 add_vim_repo https://github.com/jsfaint/gen_tags.vim
+add_vim_repo https://github.com/lervag/vimtex
 
 #install neovim
 
