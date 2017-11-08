@@ -103,7 +103,7 @@ else
     sudo pip3 install neovim cpplint pydocstyle
     git clone https://github.com/neovim/neovim.git
     cd neovim
-    git checkout v0.2.0
+    git checkout v0.2.1
     mkdir .deps && cd .deps && cmake ../third-party -G Ninja && ninja
     cd .. && mkdir build && cd build && cmake .. -G Ninja && ninja &&  ninja install
 
