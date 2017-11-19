@@ -176,7 +176,7 @@ function! MyTabLabel(n)
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
   let label =  bufname(buflist[winnr - 1])
-  return fnamemodify(label, ":t")
+  return fnamemodify(label, ":t")[:10]
 endfunction
 
 let g:ct=0
