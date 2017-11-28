@@ -90,6 +90,7 @@ let g:neomake_cpp_cppclean_maker={
         \ }
 
 let g:neomake_python_pylint_maker={
+    \ 'exe': 'pylint3',
     \ 'args': [
         \ '--rcfile=~/repos/linux-config/.pylintrc',
         \ '--output-format=text',

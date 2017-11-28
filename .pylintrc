@@ -67,7 +67,9 @@ disable=unused-argument,
     no-member,
     invalid-name,
     bad-builtin,
-    no-else-return
+    no-else-return,
+    locally-disabled
+
 
 
 [REPORTS]
