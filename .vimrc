@@ -4,6 +4,11 @@ let maplocalleader = "\\"
 let &titlestring=expand("%:t")
 set title
 
+" see https://github.com/neovim/neovim/issues/7663
+if has("nvim")
+    set guicursor=
+endif 
+
 " temporary fix until this works natively in the terminal
 set autoread
 au FocusGained * :checktime
