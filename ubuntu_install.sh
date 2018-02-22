@@ -97,7 +97,7 @@ else
     cd ~/repos/neovim
     sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
 
-    sudo apt install -y cppcheck python{,3}-flake8 python{,3}-pylint
+    sudo apt install -y python{,3}-flake8 python{,3}-pylint
     touch ~/.pylintrc
 
     sudo pip3 install neovim cpplint pydocstyle
@@ -115,6 +115,14 @@ let &packpath = &runtimepath
 source ~/.vimrc" > ~/.config/nvim/init.vim
 
 sudo chsh -s /usr/bin/zsh $USER
+
+# cppcheck
+cd ..
+git clone https://github.com/danmar/cppcheck
+cd cppcheck
+make SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
+sudo install cppcheck /usr/local/bin
+sudo install -D ./cfg/* /usr/local/share/cppcheck/cfg
 
 # setup python (and setup vim bindings for the shell)
 ipython profile create
