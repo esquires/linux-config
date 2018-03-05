@@ -90,7 +90,7 @@ let g:neomake_cpp_cppclean_maker={
         \ }
 
 let g:neomake_python_pylint_maker={
-    \ 'exe': 'pylint3',
+    \ 'exe': 'pylint',
     \ 'args': [
         \ '--rcfile=~/repos/linux-config/.pylintrc',
         \ '--output-format=text',
@@ -260,4 +260,3 @@ augroup END
 nnoremap <localleader>m :Neomake!<cr>
 
 autocmd! BufWritePost * Neomake | Neomake!
-let g:gen_tags#ctags_auto_gen = 1

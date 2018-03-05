@@ -83,6 +83,7 @@ add_vim_repo https://github.com/majutsushi/tagbar
 add_vim_repo https://github.com/tmhedberg/SimpylFold
 add_vim_repo https://github.com/jsfaint/gen_tags.vim
 add_vim_repo https://github.com/lervag/vimtex
+add_vim_repo https://github.com/tomtom/tcomment_vim.git
 
 #install neovim
 
@@ -122,6 +123,7 @@ git clone https://github.com/danmar/cppcheck
 cd cppcheck
 make SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
 sudo install cppcheck /usr/local/bin
+sudo mkdir /usr/local/share/cppcheck/cfg -p
 sudo install -D ./cfg/* /usr/local/share/cppcheck/cfg
 
 # setup python (and setup vim bindings for the shell)
