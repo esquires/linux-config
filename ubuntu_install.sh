@@ -84,6 +84,8 @@ add_vim_repo https://github.com/tmhedberg/SimpylFold
 add_vim_repo https://github.com/jsfaint/gen_tags.vim
 add_vim_repo https://github.com/lervag/vimtex
 add_vim_repo https://github.com/tomtom/tcomment_vim.git
+add_vim_repo https://github.com/esquires/neosnippet-snippets
+add_vim_repo https://github.com/Shougo/neosnippet.vim.git
 
 #install neovim
 

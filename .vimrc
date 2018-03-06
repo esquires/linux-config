@@ -260,3 +260,26 @@ augroup END
 nnoremap <localleader>m :Neomake!<cr>
 
 autocmd! BufWritePost * Neomake | Neomake!
+
+" neosnip
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+nnoremap <localleader>s :NeoSnippetMakeCache<cr>
+imap <c-k>     <Plug>(neosnippet_expand_or_jump)
+smap <c-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <c-k>     <Plug>(neosnippet_expand_target)
+let g:neosnippet#snippets_directory = "/home/esquires3/.vim/bundle/neosnippet-snippets/neosnippets"
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
