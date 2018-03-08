@@ -283,3 +283,30 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
+
+function! GetGitPath(fname)
+    let p = fnamemodify(a:fname, ':p:h')
+    let b = 0
+    while p != '/' && b < 30
+      let b += 1
+      if isdirectory(p . '/.git')
+          return a:fname[len(p) + 1:]
+      endif 
+      let p = fnamemodify(p, ':h')
+    endwhile 
+    return fnamemodify(a:fname, ':t')
+endfunction
+
+function! GetClass(fname)
+    return 'Class ' . fnamemodify(a:fname, ':r') . " {\npublic:\n    "
+endfunction
+
+function! GetHeaderGuard(fname)
+    let include_txt = GetGitPath(a:fname)
+    let include_txt = toupper(include_txt)
+    let include_txt = substitute(include_txt, "/", "_", "g")
+    let include_txt = substitute(include_txt, "-", "_", "g")
+    let include_txt = substitute(include_txt, "\\.", "_", "g")
+    let include_txt = include_txt . '_'
+    return include_txt
+endfunction
