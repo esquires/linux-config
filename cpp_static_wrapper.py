@@ -81,7 +81,7 @@ def main():
     elif executable == "cppcheck":
 
         def _is_excluded_dir(d):
-            to_exclude = ['usr', 'googletest', 'build', '.local']
+            to_exclude = ['usr', 'googletest', 'build', '.local', 'opt']
             return not any(True for e in to_exclude if e in d)
 
         include_dirs = filter(_is_excluded_dir, include_dirs)
@@ -94,8 +94,9 @@ def main():
             to_check = [file_path]
 
         enable_arg = ("--enable=warning,style,information,"
-                      "performance,portability,missingInclude")
-        cmd = ['cppcheck', '--quiet', '--language=c++', enable_arg] \
+                      "performance,portability")
+        cmd = ['cppcheck', '--quiet', '--language=c++',
+               '--inline-suppr', enable_arg] \
             + extra_args + include_arg + to_check
 
     if print_cmd:
