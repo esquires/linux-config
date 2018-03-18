@@ -86,7 +86,5 @@ function git_fetch_dirs {
 
 }
 
-#stuff whose error I don't want to see
-#alias gvim="gvim -p 2>/dev/null"
 alias vim="nvim"
 alias gvim="gnome-terminal -x nvim -p"

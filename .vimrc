@@ -259,7 +259,8 @@ augroup END
 "making
 nnoremap <localleader>m :Neomake!<cr>
 
-autocmd! BufWritePost * Neomake | Neomake!
+autocmd! BufWritePost *.py Neomake | Neomake!
+autocmd! BufWritePost *.cpp Neomake | Neomake!
 
 " neosnip
 " Plugin key-mappings.
@@ -310,3 +311,41 @@ function! GetHeaderGuard(fname)
     let include_txt = include_txt . '_'
     return include_txt
 endfunction
+
+" for latex
+function! Set_concealcursor()
+    if len(&concealcursor) == 0
+        setlocal concealcursor=n
+    else 
+        setlocal concealcursor=
+    endif 
+endfunction
+nnoremap <localleader>lc :call Set_concealcursor()<cr>
+
+"let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
+let g:vimtex_compiler_progname="nvr"
+
+let g:vimtex_compiler_latexmk = {
+    \ 'backend' : 'nvim',
+    \ 'background' : 1,
+    \ 'build_dir' : 'build',
+    \ 'callback' : 1,
+    \ 'continuous' : 1,
+    \ 'executable' : 'latexmk',
+    \ 'options' : [
+    \   '-pdf',
+    \   '-bibtex',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-synctex=1',
+    \   '-interaction=nonstopmode',
+    \ ],
+\}
+if !exists('g:deoplete#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
+endif
+let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+let g:tex_flavor = 'latex'

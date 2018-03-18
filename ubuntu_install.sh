@@ -81,7 +81,7 @@ add_vim_repo https://github.com/esquires/vim-map-medley
 add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
 add_vim_repo https://github.com/majutsushi/tagbar
 add_vim_repo https://github.com/tmhedberg/SimpylFold
-add_vim_repo https://github.com/jsfaint/gen_tags.vim
+add_vim_repo https://github.com/ludovicchabant/vim-gutentags
 add_vim_repo https://github.com/lervag/vimtex
 add_vim_repo https://github.com/tomtom/tcomment_vim.git
 add_vim_repo https://github.com/esquires/neosnippet-snippets
