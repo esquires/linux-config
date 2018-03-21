@@ -90,7 +90,7 @@ let g:neomake_cpp_cppclean_maker={
         \ }
 
 let g:neomake_python_pylint_maker={
-    \ 'exe': 'pylint',
+    \ 'exe': 'pylint3',
     \ 'args': [
         \ '--rcfile=~/repos/linux-config/.pylintrc',
         \ '--output-format=text',
@@ -257,10 +257,7 @@ augroup my_neomake_hooks
 augroup END
 
 "making
-nnoremap <localleader>m :Neomake!<cr>
-
-autocmd! BufWritePost *.py Neomake | Neomake!
-autocmd! BufWritePost *.cpp Neomake | Neomake!
+autocmd! BufWritePost * Neomake | Neomake!
 
 " neosnip
 " Plugin key-mappings.
@@ -312,20 +309,10 @@ function! GetHeaderGuard(fname)
     return include_txt
 endfunction
 
-" for latex
-function! Set_concealcursor()
-    if len(&concealcursor) == 0
-        setlocal concealcursor=n
-    else 
-        setlocal concealcursor=
-    endif 
-endfunction
-nnoremap <localleader>lc :call Set_concealcursor()<cr>
-
-"let g:vimtex_view_method = 'zathura'
-let g:vimtex_view_general_viewer = 'okular'
-let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-let g:vimtex_view_general_options_latexmk = '--unique'
+let g:vimtex_view_method = 'zathura'
+"let g:vimtex_view_general_viewer = 'okular'
+"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+"let g:vimtex_view_general_options_latexmk = '--unique'
 let g:vimtex_compiler_progname="nvr"
 
 let g:vimtex_compiler_latexmk = {
@@ -349,3 +336,6 @@ if !exists('g:deoplete#omni#input_patterns')
 endif
 let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
 let g:tex_flavor = 'latex'
+let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_fold_enabled=1
+au! BufRead * normal zR

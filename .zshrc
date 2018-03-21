@@ -88,3 +88,4 @@ function git_fetch_dirs {
 
 alias vim="nvim"
 alias gvim="gnome-terminal -x nvim -p"
+export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket

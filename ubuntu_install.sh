@@ -8,6 +8,7 @@ sudo apt install -y \
     zsh \
     vim-gnome \
     mercurial \
+    zathura \
     aptitude \
     exuberant-ctags \
     global \
