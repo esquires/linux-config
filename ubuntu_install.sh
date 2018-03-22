@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt upgrade
+sudo apt -y upgrade
 sudo apt install -y \
     curl \
     gnome-terminal \
@@ -33,7 +33,7 @@ echo "source $CONFIG_DIR/.bashrc" >> ~/.bashrc
 echo "PATH=$PATH:~/bin" >> ~/.bashrc
 mkdir ~/bin
 ln -s $CONFIG_DIR/glmb.sh ~/bin/glmb
-ln -s $CONFIG_DIR/cpp_static_wrapper.sh ~/bin
+ln -s $CONFIG_DIR/cpp_static_wrapper.py ~/bin
 
 echo "export ZSH=~/.oh-my-zsh" >> ~/.zshrc
 echo "source $CONFIG_DIR/.zshrc" >> ~/.zshrc
@@ -51,10 +51,12 @@ echo "set editing-mode vi" >> ~/.inputrc
 echo "set bind-tty-special-chars off" >> ~/.inputrc
 
 mkdir ~/repos
-cd repos
+cd ~/repos
 sudo apt install libnotify-dev libgtk-3-dev
 git clone https://github.com/valr/cbatticon.git
+git pull
 cd cbatticon
+git pull
 make PREFIX=/usr/local
 sudo make PREFIX=/usr/local install
 
@@ -65,29 +67,34 @@ cd $DIR
 
 function add_vim_repo {
     NAME=$(echo $1 | rev | cut -d '/' -f 1 | rev)
-    git clone $1
+    cd $DIR
+    git clone $1 $NAME
+    cd /$DIR/$NAME
+    git pull
     ln -s $DIR/$NAME $BUNDLE_DIR
 }
 
 git clone https://github.com/tpope/vim-pathogen.git
+cd vim-pathogen
+git pull
 ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
 
-add_vim_repo https://github.com/milkypostman/vim-togglelist
-add_vim_repo https://github.com/esquires/lvdb
-add_vim_repo https://github.com/Shougo/deoplete.nvim
-add_vim_repo https://github.com/neomake/neomake
-add_vim_repo https://github.com/tpope/vim-fugitive
-add_vim_repo https://github.com/esquires/tabcity
-add_vim_repo https://github.com/esquires/vim-map-medley
-add_vim_repo https://github.com/ctrlpvim/ctrlp.vim
-add_vim_repo https://github.com/majutsushi/tagbar
-add_vim_repo https://github.com/tmhedberg/SimpylFold
-add_vim_repo https://github.com/ludovicchabant/vim-gutentags
-add_vim_repo https://github.com/lervag/vimtex
-add_vim_repo https://github.com/tomtom/tcomment_vim.git
-add_vim_repo https://github.com/esquires/neosnippet-snippets
-add_vim_repo https://github.com/Shougo/neosnippet.vim.git
-add_vim_repo https://github.com/jlanzarotta/bufexplorer.git
+add_vim_repo 'https://github.com/milkypostman/vim-togglelist'
+add_vim_repo 'https://github.com/esquires/lvdb'
+add_vim_repo 'https://github.com/Shougo/deoplete.nvim'
+add_vim_repo 'https://github.com/neomake/neomake'
+add_vim_repo 'https://github.com/tpope/vim-fugitive'
+add_vim_repo 'https://github.com/esquires/tabcity'
+add_vim_repo 'https://github.com/esquires/vim-map-medley'
+add_vim_repo 'https://github.com/ctrlpvim/ctrlp.vim'
+add_vim_repo 'https://github.com/majutsushi/tagbar'
+add_vim_repo 'https://github.com/tmhedberg/SimpylFold'
+add_vim_repo 'https://github.com/ludovicchabant/vim-gutentags'
+add_vim_repo 'https://github.com/lervag/vimtex'
+add_vim_repo 'https://github.com/tomtom/tcomment_vim.git'
+add_vim_repo 'https://github.com/esquires/neosnippet-snippets'
+add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
+add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
 
 #install neovim
 
@@ -102,15 +109,19 @@ else
     cd ~/repos/neovim
     sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
 
-    sudo apt install -y python{,3}-flake8 python{,3}-pylint
+    sudo apt install -y python{,3}-flake8 pylint{,3}
     touch ~/.pylintrc
 
     sudo pip3 install neovim cpplint pydocstyle
     git clone https://github.com/neovim/neovim.git
+    git fetch
     cd neovim
-    git checkout v0.2.1
-    mkdir .deps && cd .deps && cmake ../third-party -G Ninja && ninja
-    cd .. && mkdir build && cd build && cmake .. -G Ninja && ninja &&  ninja install
+    git checkout v0.2.2
+    mkdir .deps
+    cd .deps && cmake ../third-party && make
+    cd .. 
+    mkdir build 
+    cd build && cmake .. -G Ninja && ninja &&  sudo ninja install
 
 fi 
 
@@ -125,6 +136,7 @@ sudo chsh -s /usr/bin/zsh $USER
 cd ..
 git clone https://github.com/danmar/cppcheck
 cd cppcheck
+git pull
 make SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
 sudo install cppcheck /usr/local/bin
 sudo mkdir /usr/local/share/cppcheck/cfg -p
