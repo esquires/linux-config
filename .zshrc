@@ -56,6 +56,7 @@ alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[
 git config --global alias.unstage 'reset HEAD --'
 git config --global --replace-all core.pager "less -F -X"
 alias gu='git unstage'
+compdef __git_branch_names glmb
 
 #see here: http://travisjeffery.com/b/2012/02/search-a-git-repo-like-a-ninja
 git config --global grep.extendRegexp true
