@@ -95,8 +95,7 @@ let g:neomake_python_pylint_maker={
         \ '--rcfile=~/repos/linux-config/.pylintrc',
         \ '--output-format=text',
         \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
-        \ '--reports=no',
-        \ '--include-naming-hint=y'
+        \ '--reports=no'
     \ ],
     \ 'errorformat':
         \ '%A%f:%l:%c:%t: %m,' .
@@ -106,7 +105,7 @@ let g:neomake_python_pylint_maker={
         \ '%-G%.%#',
     \ 'output_stream': 'stdout',
     \ 'postprocess': [
-    \   function('neomake#postprocess#GenericLengthPostprocess'),
+    \   function('neomake#postprocess#generic_length'),
     \   function('neomake#makers#ft#python#PylintEntryProcess'),
     \ ]}
 
