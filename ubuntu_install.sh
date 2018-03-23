@@ -6,8 +6,6 @@ sudo apt install -y \
     terminator \
     awesome \
     zsh \
-    vim-gnome \
-    mercurial \
     zathura \
     aptitude \
     exuberant-ctags \
@@ -52,7 +50,7 @@ echo "set bind-tty-special-chars off" >> ~/.inputrc
 
 mkdir ~/repos
 cd ~/repos
-sudo apt install libnotify-dev libgtk-3-dev
+sudo apt install -y libnotify-dev libgtk-3-dev
 git clone https://github.com/valr/cbatticon.git
 git pull
 cd cbatticon
@@ -97,33 +95,23 @@ add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
 add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
 
 #install neovim
+cd ~/repos
+sudo apt-get install -y libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
 
-if [ "$1" != "--build-neovim" ]; then
-    sudo apt-get install -y software-properties-common python-dev python-pip python3-dev python3-pip
-    sudo add-apt-repository ppa:neovim-ppa/unstable
-    sudo apt-get update
-    sudo apt-get -y install neovim
+sudo apt install -y python{,3}-flake8 pylint{,3}
+touch ~/.pylintrc
 
-else 
-    mkdir ~/repos/neovim
-    cd ~/repos/neovim
-    sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip python-pip python3-pip
+sudo pip3 install neovim cpplint pydocstyle
+git clone https://github.com/neovim/neovim.git
+git fetch
+cd neovim
+git checkout 9627325 # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
+mkdir .deps
+cd .deps && cmake ../third-party && make
+cd .. 
+mkdir build 
+cd build && cmake .. -G Ninja && ninja &&  sudo ninja install
 
-    sudo apt install -y python{,3}-flake8 pylint{,3}
-    touch ~/.pylintrc
-
-    sudo pip3 install neovim cpplint pydocstyle
-    git clone https://github.com/neovim/neovim.git
-    git fetch
-    cd neovim
-    git checkout v0.2.2
-    mkdir .deps
-    cd .deps && cmake ../third-party && make
-    cd .. 
-    mkdir build 
-    cd build && cmake .. -G Ninja && ninja &&  sudo ninja install
-
-fi 
 
 mkdir -p ~/.config/nvim
 echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after
@@ -133,7 +121,7 @@ source ~/.vimrc" > ~/.config/nvim/init.vim
 sudo chsh -s /usr/bin/zsh $USER
 
 # cppcheck
-cd ..
+cd ~/repos
 git clone https://github.com/danmar/cppcheck
 cd cppcheck
 git pull

@@ -8,8 +8,13 @@ This assumes a particular path for installation::
 
     mkdir ~/repos
     cd repos
-    bash ubuntu_install.sh --build-neovim
+    git clone https://github.com/esquires/linux-config.git
+    cd linux-config
+    bash ubuntu_install.sh
 
-If you want something other than `sudo pip install` run then
-then open `ubuntu_install.sh` and change the pip command accordingly.
+I also manually put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
 
+    [merge]
+        tool = nvimdiff
+    [difftool "nvimdiff"] 
+        cmd = nvim -d $LOCAL $REMOTE
