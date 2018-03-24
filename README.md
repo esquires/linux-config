@@ -18,3 +18,5 @@ I also manually put this in `~/.gitconfig`. See [here](https://github.com/neovim
         tool = nvimdiff
     [difftool "nvimdiff"] 
         cmd = nvim -d $LOCAL $REMOTE
+
+Then in nvim, run ':UpdateRemotePlugins' for deoplete to work. 
