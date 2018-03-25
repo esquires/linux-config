@@ -17,6 +17,16 @@ I also manually put this in `~/.gitconfig`. See [here](https://github.com/neovim
     [merge]
         tool = nvimdiff
     [difftool "nvimdiff"] 
-        cmd = nvim -d $LOCAL $REMOTE
+        cmd = terminator -x nvim -d $LOCAL $REMOTE
 
-Then in nvim, run ':UpdateRemotePlugins' for deoplete to work. 
+Then in nvim, run ':UpdateRemotePlugins' for deoplete to work. Finally, here are
+the changes from the default `rc.lua` for `awesome`
+
+    local layouts =
+        awful.layout.suit.tile.left,
+        awful.layout.suit.fair,
+        awful.layout.suit.max,
+        awful.layout.suit.magnifier
+    }
+    
+    terminal = "terminator -x nvim -c term -c \"normal A\""
