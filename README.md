@@ -30,3 +30,7 @@ the changes from the default `rc.lua` for `awesome`
     }
     
     terminal = "terminator -x nvim -c term -c \"normal A\""
+
+Other tips/tricks:
+
+* https://unix.stackexchange.com/a/254150

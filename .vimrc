@@ -7,6 +7,8 @@ set title
 " see https://github.com/neovim/neovim/issues/7663
 if has("nvim")
     set guicursor=
+    tnoremap <M-[> <C-\><C-n>
+    command! Newterm :tabnew | term
 endif 
 
 " temporary fix until this works natively in the terminal
