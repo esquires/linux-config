@@ -72,14 +72,13 @@ alias grep='grep --color=auto'
 alias find1='find -maxdepth 1 -mindepth 1'
 alias CLR='for i in {1..99}; do echo; done; clear'
 
-function git_fetch_dirs {
+function git_pull_dirs {
 
     TEMP_OLDPWD=$OLDPWD
 
     for d in $(dirname $(find -name "\.git")); do
         cd $d
-        echo "fetching " $d
-        git fetch
+        git pull
         cd $OLDPWD
     done
 
