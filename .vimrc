@@ -8,6 +8,8 @@ set title
 if has("nvim")
     set guicursor=
     tnoremap <M-[> <C-\><C-n>
+    tnoremap <C-h> <C-\><C-n>gT
+    tnoremap <C-l> <C-\><C-n>gt
     command! Newterm :tabnew | term
 endif 
 
@@ -16,12 +18,7 @@ set autoread
 au FocusGained * :checktime
 
 " terminal
-" https://www.reddit.com/r/neovim/comments/5usi1q/how_to_change_tab_or_window_once_in_terminal/
 if has("nvim")
-    tnoremap <C-w>h <C-\><C-n><C-w>h
-    tnoremap <C-w>j <C-\><C-n><C-w>j
-    tnoremap <C-w>k <C-\><C-n><C-w>k
-    tnoremap <C-w>l <C-\><C-n><C-w>l
 endif 
 
 "enable very magic
