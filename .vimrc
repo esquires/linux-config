@@ -5,11 +5,19 @@ let &titlestring=expand("%:t")
 set title
 
 " see https://github.com/neovim/neovim/issues/7663
+function! InsertOnTerm()
+    if expand('%f')[:3] == 'term'
+        startinsert
+    endif 
+endfunction
+
 if has("nvim")
     set guicursor=
     tnoremap <M-[> <C-\><C-n>
-    tnoremap <C-h> <C-\><C-n>gT
-    tnoremap <C-l> <C-\><C-n>gt
+    nnoremap <C-h> <C-\><C-n>gT:call InsertOnTerm()<cr>
+    tnoremap <C-h> <C-\><C-n>gT:call InsertOnTerm()<cr>
+    nnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
+    tnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
     command! Newterm :tabnew | term
 endif 
 
