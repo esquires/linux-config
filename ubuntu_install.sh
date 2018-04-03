@@ -101,16 +101,16 @@ sudo apt-get install -y libtool libtool-bin autoconf automake cmake g++ pkg-conf
 sudo apt install -y python{,3}-flake8 pylint{,3}
 touch ~/.pylintrc
 
-sudo pip3 install neovim cpplint pydocstyle
+sudo pip3 install neovim cpplint pydocstyle neovim-remote
 git clone https://github.com/neovim/neovim.git
 git fetch
 cd neovim
 git checkout 9627325 # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
 mkdir .deps
-cd .deps && cmake ../third-party && make
+cd .deps && cmake ../third-party -DCMAKE_BUILD_TYPE=Release && make
 cd .. 
 mkdir build 
-cd build && cmake .. -G Ninja && ninja &&  sudo ninja install
+cd build && cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release && ninja &&  sudo ninja install
 
 
 mkdir -p ~/.config/nvim
