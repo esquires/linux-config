@@ -107,10 +107,10 @@ git fetch
 cd neovim
 git checkout 9627325 # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
 mkdir .deps
-cd .deps && cmake ../third-party -DCMAKE_BUILD_TYPE=Release && make
+cd .deps && cmake ../third-party -DCMAKE_CXX_FLAGS=-march=native -DCMAKE_BUILD_TYPE=Release && make
 cd .. 
 mkdir build 
-cd build && cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release && ninja &&  sudo ninja install
+cd build && cmake .. -G Ninja -DCMAKE_CXX_FLAGS=-march=native -DCMAKE_BUILD_TYPE=Release && ninja &&  sudo ninja install
 
 
 mkdir -p ~/.config/nvim
@@ -125,7 +125,7 @@ cd ~/repos
 git clone https://github.com/danmar/cppcheck
 cd cppcheck
 git pull
-make SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
+make SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function -march=native"
 sudo install cppcheck /usr/local/bin
 sudo mkdir /usr/local/share/cppcheck/cfg -p
 sudo install -D ./cfg/* /usr/local/share/cppcheck/cfg
