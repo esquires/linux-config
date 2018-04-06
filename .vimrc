@@ -18,6 +18,7 @@ if has("nvim")
     tnoremap <C-h> <C-\><C-n>gT:call InsertOnTerm()<cr>
     nnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
     tnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
+    tnoremap <M-w> <C-\><C-n>w
     command! Newterm :tabnew | term
 endif 
 

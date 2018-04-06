@@ -130,6 +130,13 @@ sudo install cppcheck /usr/local/bin
 sudo mkdir /usr/local/share/cppcheck/cfg -p
 sudo install -D ./cfg/* /usr/local/share/cppcheck/cfg
 
+# cppclean
+cd ~/repos
+git clone https://github.com/myint/cppclean.git
+cd cppclean
+git pull
+sudo pip3 install -e .
+
 # setup python (and setup vim bindings for the shell)
 ipython profile create
 sed -i "s/#\(c.TerminalInteractiveShell.editing_mode = \)'emacs'/\1 'vi'/" ~/.ipython/profile_default/ipython_config.py
