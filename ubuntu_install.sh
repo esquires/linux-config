@@ -1,3 +1,4 @@
+PATCH=$PWD/patches/0001-open-tag-in-reverse_goto-when-indicated-by-switchbuf.patch
 sudo apt update
 sudo apt -y upgrade
 sudo apt install -y \
@@ -67,7 +68,8 @@ function add_vim_repo {
     NAME=$(echo $1 | rev | cut -d '/' -f 1 | rev)
     cd $DIR
     git clone $1 $NAME
-    cd /$DIR/$NAME
+    cd $DIR/$NAME
+    pwd
     git pull
     ln -s $DIR/$NAME $BUNDLE_DIR
 }
@@ -88,11 +90,16 @@ add_vim_repo 'https://github.com/ctrlpvim/ctrlp.vim'
 add_vim_repo 'https://github.com/majutsushi/tagbar'
 add_vim_repo 'https://github.com/tmhedberg/SimpylFold'
 add_vim_repo 'https://github.com/ludovicchabant/vim-gutentags'
-add_vim_repo 'https://github.com/lervag/vimtex'
 add_vim_repo 'https://github.com/tomtom/tcomment_vim.git'
 add_vim_repo 'https://github.com/esquires/neosnippet-snippets'
 add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
 add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
+add_vim_repo 'https://github.com/lervag/vimtex'
+
+cd $DIR/vimtex
+git checkout master
+git reset --hard origin/master
+git am -3 $PATCH
 
 #install neovim
 cd ~/repos
