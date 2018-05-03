@@ -33,6 +33,7 @@ echo "PATH=$PATH:~/bin" >> ~/.bashrc
 mkdir ~/bin
 ln -s $CONFIG_DIR/glmb.sh ~/bin/glmb
 ln -s $CONFIG_DIR/cpp_static_wrapper.py ~/bin
+ln -s $CONFIG_DIR/cmd_monitor.py ~/bin/cmd_monitor
 
 echo "export ZSH=~/.oh-my-zsh" >> ~/.zshrc
 echo "source $CONFIG_DIR/.zshrc" >> ~/.zshrc
@@ -112,7 +113,7 @@ sudo pip3 install neovim cpplint pydocstyle neovim-remote
 git clone https://github.com/neovim/neovim.git
 git fetch
 cd neovim
-git checkout 9627325 # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
+git checkout origin/master # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
 mkdir .deps
 cd .deps && cmake ../third-party -DCMAKE_CXX_FLAGS=-march=native -DCMAKE_BUILD_TYPE=Release && make
 cd .. 

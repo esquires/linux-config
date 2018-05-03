@@ -95,7 +95,9 @@ def main():
 
         enable_arg = ("--enable=warning,style,information,"
                       "performance,portability")
-        cmd = ['cppcheck', '--quiet', '--language=c++',
+        cmd = ['cppcheck',
+               '--template=[{file}:{line}:{column}]: ({severity}) ({id}) {message}',
+               '--quiet', '--language=c++',
                '--inline-suppr', enable_arg] \
             + extra_args + include_arg + to_check
 

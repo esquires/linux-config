@@ -123,13 +123,13 @@ let g:neomake_cpp_cppcheck_maker={
         \ 'exe': 'cpp_static_wrapper.py',
         \ 'args': 'cppcheck',
         \ 'errorformat' :
-        \   '[%f:%l]: (%trror) %m,' .
-        \   '[%f:%l]: (%tarning) %m,' .
-        \   '[%f:%l]: (%ttyle) %m,' .
-        \   '[%f:%l]: (%terformance) %m,' .
-        \   '[%f:%l]: (%tortability) %m,' .
-        \   '[%f:%l]: (%tnformation) %m,' .
-        \   '[%f:%l]: (%tnconclusive) %m,' .
+        \   '[%f:%l:%c]: (%trror) %m,' .
+        \   '[%f:%l:%c]: (%tarning) %m,' .
+        \   '[%f:%l:%c]: (%ttyle) %m,' .
+        \   '[%f:%l:%c]: (%terformance) %m,' .
+        \   '[%f:%l:%c]: (%tortability) %m,' .
+        \   '[%f:%l:%c]: (%tnformation) %m,' .
+        \   '[%f:%l:%c]: (%tnconclusive) %m,' .
         \   '%-G%.%#'}
 
 let g:neomake_cpp_cpplint_maker={
