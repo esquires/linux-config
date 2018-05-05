@@ -41,6 +41,23 @@ def _get_include_dirs(file_path):
                     for d in match.groups(1)[0].split(';'):
                         include_dirs.add(d)
 
+            # also try to find build.ninja
+            try:
+                ninja_file = \
+                    fname.replace("CMakeCache.txt", "build.ninja")
+                with open(ninja_file, 'r') as f:
+                    lines = f.read().splitlines()
+            except IOError:
+                continue
+
+            prefix = os.path.dirname(os.path.relpath(fname)) + "/"
+            for line in lines:
+                if 'INCLUDES' in line:
+                    for include in line.split('-I')[1:]:
+                        if include[0] != '/':
+                            include = prefix + include
+                        include_dirs.add(include.strip(' '))
+
     return include_dirs
 
 
