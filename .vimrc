@@ -101,7 +101,7 @@ let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_highlight_columns=1
 let g:neomake_place_signs=1
-let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
+let g:neomake_python_enabled_makers=['pylint', 'flake8']
 
 let g:neomake_cpp_cppclean_maker={
         \ 'exe': "cpp_static_wrapper.py",
