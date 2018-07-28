@@ -152,3 +152,14 @@ sed -i "s/#\(c.TerminalInteractiveShell.editing_mode = \)'emacs'/\1 'vi'/" ~/.ip
 cd ~/repos/vim/lvdb/python
 sudo python setup.py develop
 sudo python3 setup.py develop
+
+#see here: http://travisjeffery.com/b/2012/02/search-a-git-repo-like-a-ninja
+git config --global alias.unstage 'reset HEAD --'
+git config --global --replace-all core.pager "less -F -X"
+git config --global grep.extendRegexp true
+git config --global grep.lineNumber true
+git config --global alias.g "grep --break --heading --line-number"
+git config --global core.editor nvim
+git config --global merge.tool nvimdiff
+git config --global color.ui true
+git config --global core.whitespace trailing-space, space-before-tab

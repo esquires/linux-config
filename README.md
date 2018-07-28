@@ -23,6 +23,7 @@ Then in nvim, run ':UpdateRemotePlugins' for deoplete to work. Finally, here are
 the changes from the default `rc.lua` for `awesome`
 
     local layouts =
+        awful.layout.suit.floating,
         awful.layout.suit.tile.left,
         awful.layout.suit.fair,
         awful.layout.suit.max,
