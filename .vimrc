@@ -91,8 +91,10 @@ augroup my_neomake_signs
     au!
     autocmd ColorScheme *
         \ hi NeomakeErrorSign ctermfg=red ctermbg=black |
-        \ hi NeomakeWarningSign ctermfg=yellow ctermbg=black
+        \ hi NeomakeWarningSign ctermfg=yellow ctermbg=black |
+        \ hi NeomakeWarning ctermbg=darkblue
 augroup END
+
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
@@ -101,7 +103,7 @@ let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_highlight_columns=1
 let g:neomake_place_signs=1
-let g:neomake_python_enabled_makers=['pylint', 'flake8']
+let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
 
 let g:neomake_cpp_cppclean_maker={
         \ 'exe': "cpp_static_wrapper.py",
