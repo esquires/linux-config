@@ -12,16 +12,22 @@ This assumes a particular path for installation::
     cd linux-config
     bash ubuntu_install.sh
 
-I also manually put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
+Manual steps:
 
+* Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
+
+    ```
     [merge]
         tool = nvimdiff
     [difftool "nvimdiff"] 
         cmd = terminator -x nvim -d $LOCAL $REMOTE
+    ``` 
 
-Then in nvim, run ':UpdateRemotePlugins' for deoplete to work. Finally, here are
-the changes from the default `rc.lua` for `awesome`
+* nvim, run ``:UpdateRemotePlugins`` for deoplete to work
 
+* open ``/etc/xdg/awesome/rc.lua`` and change the following:
+
+    ```
     local layouts =
         awful.layout.suit.floating,
         awful.layout.suit.tile.left,
@@ -31,7 +37,11 @@ the changes from the default `rc.lua` for `awesome`
     }
     
     terminal = "terminator -x nvim -c term -c \"normal A\""
+    ```
 
-Other tips/tricks:
+* see ``notes/.gdbinit`` for an init file. You can run gdb linked to vim
+  by hitting ``\d`` in vim and running in a terminal.
 
-* https://unix.stackexchange.com/a/254150
+  ```gdb -x .gdbinit -f binary```
+
+  see [lvdb](https://github.com/esquires/lvdb) for details
