@@ -76,5 +76,5 @@ function git_pull_dirs {
 }
 
 alias vim="nvim"
-alias gvim="gnome-terminal -x nvim -p"
+alias gvim="gnome-terminal -- nvim -p"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket

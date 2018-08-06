@@ -21,6 +21,9 @@ Manual steps:
         tool = nvimdiff
     [difftool "nvimdiff"] 
         cmd = terminator -x nvim -d $LOCAL $REMOTE
+    [user]
+        name = your_name
+        email = your_email
     ``` 
 
 * nvim, run ``:UpdateRemotePlugins`` for deoplete to work

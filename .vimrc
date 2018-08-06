@@ -24,6 +24,7 @@ if has("nvim")
     tnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
     tnoremap <M-w> <C-\><C-n>w
     command! Newterm :tabnew | term
+    set scrollback=50000
 endif 
 
 " temporary fix until this works natively in the terminal
@@ -125,7 +126,7 @@ let g:neomake_python_pylint_maker={
         \ '%A%f:(%l): %m,' .
         \ '%-Z%p^%.%#,' .
         \ '%-G%.%#',
-    \ 'output_stream': 'stdout',
+    \ 'output_stream': 'both',
     \ 'postprocess': [
     \   function('neomake#postprocess#generic_length'),
     \   function('neomake#makers#ft#python#PylintEntryProcess'),
