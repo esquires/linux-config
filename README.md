@@ -48,3 +48,16 @@ Manual steps:
   ```gdb -x .gdbinit -f binary```
 
   see [lvdb](https://github.com/esquires/lvdb) for details
+
+* for clang static analysis, execute
+
+  ```
+  source ~/repos/CodeChecker/venv/bin/activate
+  cd build
+  rm CMakeCache.txt
+  cmake .. -G Ninja
+  CodeChecker log -b "ninja" -o compilation.json
+  CodeChecker analyze compilation.json -o ./reports
+  CodeChecker parse ./reports -i skipfile
+  ```
+  

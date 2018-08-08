@@ -71,8 +71,13 @@ disable=unused-argument,
     locally-disabled,
     missing-docstring,
     no-self-use,
-    bad-continuation
-
+    bad-continuation,
+    not-callable,
+    missing-docstring,
+    protected-access,
+    attribute-defined-outside-init,
+    redefined-variable-type,
+    too-many-lines
 
 
 [REPORTS]

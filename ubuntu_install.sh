@@ -164,3 +164,18 @@ git config --global core.editor nvim
 git config --global merge.tool nvimdiff
 git config --global color.ui true
 git config --global core.whitespace trailing-space, space-before-tab
+
+# CodeChecker
+sudo apt-get install clang build-essential curl doxygen gcc-multilib \
+  git python-virtualenv python-dev thrift-compiler
+cd ~/repos
+git clone https://github.com/Ericsson/CodeChecker.git
+cd CodeChecker
+git pull
+make venv
+
+make package
+echo 'export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin' >> ~/.zshrc
+echo 'export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin' >> ~/.bashrc
+
+ln -v -s $CONFIG_DIR/run_clang.py /home/$USER/bin/run_clang
