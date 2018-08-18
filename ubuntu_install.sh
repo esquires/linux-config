@@ -166,7 +166,7 @@ git config --global color.ui true
 git config --global core.whitespace trailing-space, space-before-tab
 
 # CodeChecker
-sudo apt-get install clang build-essential curl doxygen gcc-multilib \
+sudo apt-get install -y clang build-essential curl doxygen gcc-multilib \
   git python-virtualenv python-dev thrift-compiler
 cd ~/repos
 git clone https://github.com/Ericsson/CodeChecker.git
