@@ -98,6 +98,7 @@ add_vim_repo 'https://github.com/esquires/neosnippet-snippets'
 add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
 add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
 add_vim_repo 'https://github.com/lervag/vimtex'
+add_vim_repo 'https://github.com/vim-airline/vim-airline'
 
 cd $DIR/vimtex
 git checkout master

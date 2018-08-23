@@ -178,108 +178,55 @@ try
 catch
 endtry
 
-" copied from https://stackoverflow.com/a/7238791
-set tabline=%!MyTabLine()
-
-function! MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    " select the highlighting
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-
-    " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T'
-
-    " the label is made by MyTabLabel()
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let s .= '%#TabLineFill#%T'
-
-  " right-align the label to close the current tab page
-  if tabpagenr('$') > 1
-    let s .= '%=%#TabLine#%999Xclose'
-  endif
-
-  return s
-endfunction
-
-function! MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let label =  bufname(buflist[winnr - 1])
-  return fnamemodify(label, ":t")[:10]
-endfunction
-
-let g:ct=0
-function! PrefixStatusLine()
-     set statusline=
-     set statusline+=%-4c
-     set statusline+=%l/%-6L	"line number / total lines
-     set statusline+=%-8y		"show the file-type
-endfunction
-
-function! PostfixStatusLine()
-     set statusline+=%=			"now go to the right side of the statusline
-     set statusline+=%-3m
-     set statusline+=%<%f			"full path on the right side
-endfunction
-
-function! ToString(inp)
-  return a:inp
-endfunction
-
 function! MyNeomakeGoodContext(context)
     return has_key(a:context, "jobinfo") && has_key(a:context["jobinfo"], "name") && a:context["jobinfo"]["name"] == "makeprg"
 endfunction!
 
 function! MyOnNeomakeInit()
     if MyNeomakeGoodContext(g:neomake_hook_context)
-        call PrefixStatusLine()
-        set statusline+=building\ \ \ 
-        let g:ct=0
-        call PostfixStatusLine()
-    endif
-endfunction
-
-function! MyOnNeomakeCountsChanged()
-    if MyNeomakeGoodContext(g:neomake_hook_context)
         let context = g:neomake_hook_context
-        let g:ct = g:ct + 1
-        call PrefixStatusLine()
-        set statusline+=makeprog...\ \ \ 
-        set statusline+=%{ToString(g:ct)}
-        call PostfixStatusLine()
-    endif
+        let prefix = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+        let postfix = ' %#__accent_bold#building'
+        let g:airline_section_c = prefix . postfix
+    endif 
+    call airline#highlighter#reset_hlcache()
+    call airline#load_theme()
+    call airline#update_statusline()
+
 endfunction
 
 function! MyOnNeomakeFinished()
     if MyNeomakeGoodContext(g:neomake_hook_context)
-      let context = g:neomake_hook_context
-      call PrefixStatusLine()
-      if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
-          set statusline+=success\ \ \ 
-      else
-          set statusline+=failed\ \ \ 
-      endif
-      call PostfixStatusLine()
-    endif
+        let context = g:neomake_hook_context
+        let prefix = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+
+        if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
+            let postfix = ' %#__accent_bold#success'
+        else
+            let postfix = ' %#__accent_bold#failed'
+        endif
+        let g:airline_section_c = prefix . postfix
+    endif 
+    call airline#highlighter#reset_hlcache()
+    call airline#load_theme()
+    call airline#update_statusline()
+
 endfunction
 
 augroup my_neomake_hooks
     au!
-    autocmd User NeomakeCountsChanged nested call MyOnNeomakeCountsChanged()
     autocmd User NeomakeJobFinished nested call MyOnNeomakeFinished()
     autocmd User NeomakeJobInit nested call MyOnNeomakeInit()
 augroup END
 
 "making
-autocmd! BufWritePost * Neomake | Neomake!
+function! MyNeomakeCall()
+    execute "normal! :Neomake\<CR>"
+    if filereadable('Makefile') == 1
+        execute "normal! :Neomake!\<CR>"
+    endif
+endfunction
+autocmd! BufWritePost * :call MyNeomakeCall()
 
 " neosnip
 " Plugin key-mappings.
@@ -381,3 +328,10 @@ let g:tex_flavor = 'latex'
 let g:vimtex_quickfix_open_on_warning=1
 let g:vimtex_fold_enabled=1
 au! BufRead * normal zR
+
+" airline
+let g:airline_extensions = ['tabline']
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#show_splits = 0
