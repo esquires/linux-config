@@ -30,7 +30,7 @@ Manual steps:
 
     ```
     source ~/repos/linux-config/.zshrc
-    echo 'export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin' >> ~/.zshrc
+    export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
     ```
 
 * Put this in `~/.bashrc`:

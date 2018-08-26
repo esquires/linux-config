@@ -1,6 +1,10 @@
 export ZSH=~/.oh-my-zsh
+plugins=(
+  git
+  command-not-found 
+  wd
+  last-working-dir)
 ZSH_THEME="robbyrussell"
-plugins=(git)
 CASE_SENSITIVE="true"
 source $ZSH/oh-my-zsh.sh
 
