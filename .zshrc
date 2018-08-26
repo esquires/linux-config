@@ -1,5 +1,6 @@
+export ZSH=~/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-plugins=(git bundler osx rake ruby)
+plugins=(git)
 CASE_SENSITIVE="true"
 source $ZSH/oh-my-zsh.sh
 

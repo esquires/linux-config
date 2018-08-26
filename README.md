@@ -26,6 +26,21 @@ Manual steps:
         email = your_email
     ``` 
 
+* Put this in `~/.zshrc`.
+
+    ```
+    source ~/repos/linux-config/.zshrc
+    echo 'export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin' >> ~/.zshrc
+    ```
+
+* Put this in `~/.bashrc`:
+
+    ```
+    source ~/repos/linux-config/.bashrc
+    echo "PATH=$PATH:~/bin" >> ~/.bashrc
+    export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
+    ```
+
 * nvim, run ``:UpdateRemotePlugins`` for deoplete to work
 
 * open ``/etc/xdg/awesome/rc.lua`` and change the following:
