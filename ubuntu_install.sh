@@ -9,6 +9,7 @@ sudo apt install -y \
     awesome \
     zsh \
     zathura \
+    xdotool \
     aptitude \
     exuberant-ctags \
     global \
@@ -99,6 +100,7 @@ add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
 add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
 add_vim_repo 'https://github.com/lervag/vimtex'
 add_vim_repo 'https://github.com/vim-airline/vim-airline'
+add_vim_repo 'https://github.com/Shougo/echodoc.vim.git'
 
 cd $DIR/vimtex
 git checkout master
