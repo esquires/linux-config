@@ -105,7 +105,7 @@ add_vim_repo 'https://github.com/Shougo/echodoc.vim.git'
 cd $DIR/vimtex
 git checkout master
 git reset --hard origin/master
-git am -3 $PATCH
+git am -m "[PATCH] open tag in reverse_goto when indicated by switchbuf" -3 $PATCH
 
 #install neovim
 cd ~/repos
