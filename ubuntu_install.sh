@@ -112,7 +112,7 @@ sudo pip3 install neovim cpplint pydocstyle neovim-remote
 git clone https://github.com/neovim/neovim.git
 git fetch
 cd neovim
-git checkout origin/master # v0.2.2 has a lua build error. This is a later commit where the build worked but prior to v0.2.3 which has not been released yet
+git checkout v0.3.0
 mkdir .deps
 cd .deps && cmake ../third-party -DCMAKE_CXX_FLAGS=-march=native -DCMAKE_BUILD_TYPE=Release && make
 cd .. 
