@@ -19,7 +19,7 @@ def _get_include_dirs(file_path):
 
     cmakecache_files = _get_cmakecache_files(pwd)
     while (not cmakecache_files and
-           not os.path.exists(os.path.join(pwd, 'include')) and
+           not os.path.exists(os.path.join(pwd, 'build')) and
            pwd != '/'):
         pwd = os.path.dirname(pwd)
         cmakecache_files = _get_cmakecache_files(pwd)
