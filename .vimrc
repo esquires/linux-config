@@ -171,6 +171,7 @@ let g:ctrlp_custom_ignore = {
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
 nnoremap <localleader>f :CtrlP getcwd()<cr>
+nnoremap <localleader>b :CtrlPBuffer<cr>
 
 "in case there are system specific settings
 try
