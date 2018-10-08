@@ -174,3 +174,12 @@ make venv
 make package
 
 ln -v -s $CONFIG_DIR/run_clang.py /home/$USER/bin/run_clang
+
+# git-latexdiff
+cd ~/repos
+git clone https://gitlab.com/git-latexdiff/git-latexdiff
+cd git-latexdiff
+git pull
+sed -i -E 's:^gitexecdir = \$\{shell git --man-path\}$:gitexecdir = /usr/bin:' Makefile
+sudo make install
+

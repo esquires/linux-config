@@ -7,6 +7,7 @@ set title
 set cmdheight=2
 let g:echodoc_enable_at_startup = 1
 let g:echodoc#enable_force_overwrite = 1
+let spellfile=expand('%:p:h') . '.spellfile.utf-16.add'
 
 nnoremap <localleader>q :q<cr>
 
