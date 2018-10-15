@@ -8,6 +8,8 @@ set cmdheight=2
 let g:echodoc_enable_at_startup = 1
 let g:echodoc#enable_force_overwrite = 1
 
+nnoremap <localleader>q :q<cr>
+
 " see https://github.com/neovim/neovim/issues/7663
 function! InsertOnTerm()
     if expand('%f')[:3] == 'term'
@@ -100,11 +102,13 @@ nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
 let g:neomake_tex_enabled_makers=[]
 let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean', 'flawfinder']
+" let g:neomake_cpp_enabled_makers=['cppcheck']
 let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_highlight_columns=1
 let g:neomake_place_signs=1
 let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
+" let g:neomake_python_enabled_makers=[]
 
 let g:neomake_cpp_cppclean_maker={
         \ 'exe': "cpp_static_wrapper.py",
