@@ -1,0 +1,2 @@
+command script import ~/repos/linux-config/lvdb_lldbhelper.py
+set set interpreter.prompt-on-quit false

@@ -1,0 +1,25 @@
+From 9a8e0a48111699b3dad076e12be80c8fe43349aa Mon Sep 17 00:00:00 2001
+From: Eric Squires <eric.g.squires@gmail.com>
+Date: Wed, 17 Oct 2018 22:27:18 -0400
+Subject: [PATCH] use vim rather than emacs in editline
+
+---
+ source/Host/common/Editline.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/source/Host/common/Editline.cpp b/source/Host/common/Editline.cpp
+index 71b033245..7c6792e46 100644
+--- a/source/Host/common/Editline.cpp
++++ b/source/Host/common/Editline.cpp
+@@ -978,7 +978,7 @@ void Editline::ConfigureEditor(bool multiline) {
+   }
+   el_set(m_editline, EL_CLIENTDATA, this);
+   el_set(m_editline, EL_SIGNAL, 0);
+-  el_set(m_editline, EL_EDITOR, "emacs");
++  el_set(m_editline, EL_EDITOR, "vim");
+   el_set(m_editline, EL_PROMPT,
+          (EditlinePromptCallbackType)([](EditLine *editline) {
+            return Editline::InstanceFor(editline)->Prompt();
+-- 
+2.17.1
+

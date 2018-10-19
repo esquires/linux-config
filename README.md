@@ -41,6 +41,12 @@ Manual steps:
     export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
     ```
 
+* Put this in `~/.editrc`:
+
+    ```
+    bind -v
+    ```
+
 * nvim, run ``:UpdateRemotePlugins`` for deoplete to work
 
 * open ``/etc/xdg/awesome/rc.lua`` and change the following:
@@ -57,9 +63,10 @@ Manual steps:
     terminal = "terminator -x nvim -c term -c \"normal A\""
     ```
 
-* see ``notes/.gdbinit`` for an init file. You can run gdb linked to vim
-  by hitting ``\d`` in vim and running in a terminal.
+* see ``notes/.lldbinit`` and ``notes/.gdbinit`` for an init file. You can run
+  debuggers linked linked to vim by hitting ``\d`` in vim and running in a terminal.
 
+  ```lldb -x ~/.lldbinit -f binary```
   ```gdb -x .gdbinit -f binary```
 
   see [lvdb](https://github.com/esquires/lvdb) for details
