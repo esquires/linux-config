@@ -27,16 +27,12 @@ if has("nvim")
     tnoremap <C-l> <C-\><C-n>gt:call InsertOnTerm()<cr>
     tnoremap <M-w> <C-\><C-n>w
     command! Newterm :tabnew | term
-    set scrollback=50000
+    set scrollback=100000
 endif 
 
 " temporary fix until this works natively in the terminal
 set autoread
 au FocusGained * :checktime
-
-" terminal
-if has("nvim")
-endif 
 
 "enable very magic
 nnoremap / /\v

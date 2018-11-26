@@ -1,4 +1,3 @@
-PATCH=$PWD/patches/0001-open-tag-in-reverse_goto-when-indicated-by-switchbuf.patch
 sudo apt update
 sudo apt -y upgrade
 sudo apt install -y \
@@ -99,6 +98,7 @@ add_vim_repo 'https://github.com/Shougo/echodoc.vim.git'
 cd $DIR/vimtex
 git checkout master
 git reset --hard origin/master
+PATCH=$CONFIG_DIR/patches/0001-open-tag-in-reverse_goto-when-indicated-by-switchbuf.patch
 git am -m "[PATCH] open tag in reverse_goto when indicated by switchbuf" -3 $PATCH
 
 #install neovim
@@ -127,14 +127,19 @@ source ~/.vimrc" > ~/.config/nvim/init.vim
 sudo chsh -s /usr/bin/zsh $USER
 
 # cppcheck
+PATCH=$CONFIG_DIR/patches/0001-add-ccache.patch
 cd ~/repos
 git clone https://github.com/danmar/cppcheck
 cd cppcheck
 git pull
-make -j $(($(nproc --all) - 1)) SRCDIR=build CFGDIR=/usr/local/share/cppcheck/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function -march=native"
-sudo install cppcheck /usr/local/bin
-sudo mkdir /usr/local/share/cppcheck/cfg -p
-sudo install -D ./cfg/* /usr/local/share/cppcheck/cfg
+git reset --hard origin/master
+echo
+git am -3 $PATCH
+mkdir -p build
+cd build
+cmake .. -G Ninja -DCMAKE_CXX_FLAGS=" -march=native " -DCMAKE_BUILD_TYPE=Release
+ninja
+sudo ninja install
 
 # cppclean
 cd ~/repos

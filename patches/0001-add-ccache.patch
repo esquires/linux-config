@@ -1,0 +1,32 @@
+From 486c55616b3dc7dbdb097122e386580357b284c4 Mon Sep 17 00:00:00 2001
+From: Eric Squires <eric.squires@gtri.gatech.edu>
+Date: Mon, 26 Nov 2018 10:00:06 -0500
+Subject: [PATCH] add ccache
+
+---
+ CMakeLists.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 23540ef..c3537c3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,15 @@
+ project(Cppcheck)
++
+ cmake_minimum_required(VERSION 2.8.11)
+ 
++# see : https://crascit.com/2016/04/09/using-ccache-with-cmake/
++find_program(CCACHE_PROGRAM ccache)
++if(CCACHE_PROGRAM)
++  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
++else()
++  message("ccache not found, repeated builds will be faster if this program is installed")
++endif()
++
+ include(GNUInstallDirs)
+ 
+ include(cmake/versions.cmake REQUIRED)
+-- 
+2.7.4
+
