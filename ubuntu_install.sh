@@ -31,9 +31,9 @@ CONFIG_DIR="/home/$USER/repos/linux-config"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 mkdir ~/bin
-ln -v -s $CONFIG_DIR/glmb.sh /home/$USER/bin/glmb
-ln -v -s $CONFIG_DIR/cpp_static_wrapper.py /home/$USER/bin
-ln -v -s $CONFIG_DIR/cmd_monitor.py /home/$USER/bin/cmd_monitor
+ln -v -s $CONFIG_DIR/bin/glmb.sh /home/$USER/bin/glmb
+ln -v -s $CONFIG_DIR/bin/cpp_static_wrapper.py /home/$USER/bin
+ln -v -s $CONFIG_DIR/bin/cmd_monitor.py /home/$USER/bin/cmd_monitor
 
 mkdir ~/.vim
 mkdir ~/.vim/{bundle,autoload,swaps,backups}
@@ -61,7 +61,7 @@ BUNDLE_DIR=~/.vim/bundle
 mkdir $DIR
 cd $DIR
 
-function add_vim_repo {
+function add_repo {
     NAME=$(echo $1 | rev | cut -d '/' -f 1 | rev)
     cd $DIR
     git clone $1 $NAME
@@ -76,24 +76,33 @@ cd vim-pathogen
 git pull
 ln -s $DIR/vim-pathogen/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
 
-add_vim_repo 'https://github.com/milkypostman/vim-togglelist'
-add_vim_repo 'https://github.com/esquires/lvdb'
-add_vim_repo 'https://github.com/Shougo/deoplete.nvim'
-add_vim_repo 'https://github.com/neomake/neomake'
-add_vim_repo 'https://github.com/tpope/vim-fugitive'
-add_vim_repo 'https://github.com/esquires/tabcity'
-add_vim_repo 'https://github.com/esquires/vim-map-medley'
-add_vim_repo 'https://github.com/ctrlpvim/ctrlp.vim'
-add_vim_repo 'https://github.com/majutsushi/tagbar'
-add_vim_repo 'https://github.com/tmhedberg/SimpylFold'
-add_vim_repo 'https://github.com/ludovicchabant/vim-gutentags'
-add_vim_repo 'https://github.com/tomtom/tcomment_vim.git'
-add_vim_repo 'https://github.com/esquires/neosnippet-snippets'
-add_vim_repo 'https://github.com/Shougo/neosnippet.vim.git'
-add_vim_repo 'https://github.com/jlanzarotta/bufexplorer.git'
-add_vim_repo 'https://github.com/lervag/vimtex'
-add_vim_repo 'https://github.com/vim-airline/vim-airline'
-add_vim_repo 'https://github.com/Shougo/echodoc.vim.git'
+add_repo 'https://github.com/milkypostman/vim-togglelist'
+add_repo 'https://github.com/esquires/lvdb'
+add_repo 'https://github.com/Shougo/deoplete.nvim'
+add_repo 'https://github.com/neomake/neomake'
+add_repo 'https://github.com/tpope/vim-fugitive'
+add_repo 'https://github.com/esquires/tabcity'
+add_repo 'https://github.com/esquires/vim-map-medley'
+add_repo 'https://github.com/ctrlpvim/ctrlp.vim'
+add_repo 'https://github.com/majutsushi/tagbar'
+add_repo 'https://github.com/tmhedberg/SimpylFold'
+add_repo 'https://github.com/ludovicchabant/vim-gutentags'
+add_repo 'https://github.com/tomtom/tcomment_vim.git'
+add_repo 'https://github.com/esquires/neosnippet-snippets'
+add_repo 'https://github.com/Shougo/neosnippet.vim.git'
+add_repo 'https://github.com/jlanzarotta/bufexplorer.git'
+add_repo 'https://github.com/lervag/vimtex'
+add_repo 'https://github.com/vim-airline/vim-airline'
+add_repo 'https://github.com/Shougo/echodoc.vim.git'
+
+# orgmode and its dependencies
+add_repo 'https://github.com/jceb/vim-orgmode'
+add_repo 'https://github.com/vim-scripts/utl.vim'
+add_repo 'https://github.com/tpope/vim-repeat'
+add_repo 'https://github.com/tpope/vim-speeddating'
+add_repo 'https://github.com/chrisbra/NrrwRgn'
+add_repo 'https://github.com/mattn/calendar-vim'
+add_repo 'https://github.com/inkarkat/vim-SyntaxRange'
 
 cd $DIR/vimtex
 git checkout master
@@ -175,3 +184,11 @@ git pull
 sed -i -E 's:^gitexecdir = \$\{shell git --man-path\}$:gitexecdir = /usr/bin:' Makefile
 sudo make install
 
+# emacs dependencies
+DIR=~/repos/emacs
+mkdir $DIR
+cd $DIR
+add_repo 'https://github.com/magnars/dash.el'
+add_repo 'https://github.com/emacs-evil/evil'
+add_repo 'https://github.com/GuiltyDolphin/monitor'
+add_repo 'https://github.com/GuiltyDolphin/org-evil'

@@ -83,3 +83,16 @@ Manual steps:
   CodeChecker parse ./reports -i skipfile
   ```
   
+* put into  `~/.emacs.d/init.el`:
+
+    (add-to-list 'load-path "~/repos/emacs/evil/")
+    (add-to-list 'load-path "~/repos/emacs/dash.el/")
+    (add-to-list 'load-path "~/repos/emacs/monitor/")
+    (add-to-list 'load-path "~/repos/emacs/org-evil/")
+    (require 'evil)
+    (evil-mode 1)
+    (require 'dash)
+    (require 'monitor)
+
+    (require 'org-evil)
+
