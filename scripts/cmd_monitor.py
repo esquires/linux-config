@@ -2,6 +2,7 @@
 """Run a command and give auditory feedback."""
 import argparse
 import subprocess as sp
+import sys
 
 
 def is_make_cmd(cmd):
@@ -49,6 +50,7 @@ def main():
             not has_make_output(stdout)):
         print(('not notifying because it is a '
                'make command without anything built'))
+        sys.exit(process.returncode)
         return
 
     if process.returncode == 0:
@@ -68,6 +70,7 @@ def main():
          title,
          '"{}" {}'.format(args.cmd, result)])
     sp.Popen(['paplay', sound])
+    sys.exit(process.returncode)
 
 
 if __name__ == '__main__':
