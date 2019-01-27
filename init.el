@@ -2,6 +2,8 @@
 (add-to-list 'load-path "~/repos/emacs/dash.el/")
 (add-to-list 'load-path "~/repos/emacs/monitor/")
 (add-to-list 'load-path "~/repos/emacs/org-evil/")
+(add-to-list 'load-path "~/repos/emacs/evil/lib")
+(require 'undo-tree)
 (require 'evil)
 (evil-mode 1)
 (require 'dash)
