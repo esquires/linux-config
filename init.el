@@ -16,3 +16,4 @@
 (setq org-highest-priority ?1)
 (setq org-lowest-priority ?5)
 (setq org-default-priority ?1)
+(define-key global-map "\C-ca" 'org-agenda) 
