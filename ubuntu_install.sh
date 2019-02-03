@@ -28,6 +28,8 @@ sudo apt install -y \
 curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 
+sudo pip3 install cmd_monitor
+
 CONFIG_DIR="/home/$USER/repos/linux-config"
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -35,7 +37,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 mkdir ~/bin
 ln -v -fs $CONFIG_DIR/scripts/glmb.sh /home/$USER/bin/glmb
 ln -v -fs $CONFIG_DIR/scripts/cpp_static_wrapper.py /home/$USER/bin
-ln -v -fs $CONFIG_DIR/scripts/cmd_monitor.py /home/$USER/bin/cmd_monitor
 
 mkdir ~/.vim
 mkdir ~/.vim/{bundle,autoload,swaps,backups}
