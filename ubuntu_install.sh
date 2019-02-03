@@ -21,7 +21,8 @@ sudo apt install -y \
     libnotify-dev \
     ninja-build \
     flake8 \
-    notify-osd \
+    notify-osd \ 
+    ubuntu-sounds \
     flawfinder
 
 curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
