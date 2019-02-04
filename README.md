@@ -12,6 +12,20 @@ This assumes a particular path for installation::
     cd linux-config
     bash ubuntu_install.sh
 
+Alternative installation (experimental):
+
+    mkdir ~/repos
+    cd repos
+    git clone https://github.com/esquires/linux-config.git
+    cd linux-config
+    python3 ubuntu_install.py
+
+    # install oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+    # default to zsh
+    sudo chsh -s /usr/bin/zsh $USER
+
 Manual steps:
 
 * Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)

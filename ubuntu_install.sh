@@ -28,8 +28,6 @@ sudo apt install -y \
 curl -o ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 
-sudo pip3 install cmd_monitor
-
 CONFIG_DIR="/home/$USER/repos/linux-config"
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -146,12 +144,20 @@ cd cppcheck
 git pull
 git reset --hard origin/master
 echo
-git am -3 $PATCH
+git am -3 $PATCH -m "add-ccache"
 mkdir -p build
 cd build
 cmake .. -G Ninja -DCMAKE_CXX_FLAGS=" -march=native " -DCMAKE_BUILD_TYPE=Release
 ninja
 sudo ninja install
+
+# cmd_monitor
+cd ~/repos
+git clone https://github.com/esquires/cmd_monitor
+cd cmd_monitor
+git pull
+git reset --hard origin/master
+sudo pip3 install -e .
 
 # cppclean
 cd ~/repos

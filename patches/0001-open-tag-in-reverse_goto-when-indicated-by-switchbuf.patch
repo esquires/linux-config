@@ -1,14 +1,13 @@
-From 1e3c9649c33f9979927a26bb5827a9c0982c36c6 Mon Sep 17 00:00:00 2001
-From: Eric Squires <eric.g.squires@gmail.com>
-Date: Mon, 28 May 2018 13:09:13 -0400
+From f42afd7512fbf3dd9b5703a99b7aabb18c7831c9 Mon Sep 17 00:00:00 2001
+From: Eric Squires <eric.squires@gtri.gatech.edu>
+Date: Sun, 3 Feb 2019 23:35:48 -0500
 Subject: [PATCH] open tag in reverse_goto when indicated by switchbuf
 
 ---
  .gitignore                       |  1 +
- autoload/vimtex/index.vim        | 15 ++++++---------
  autoload/vimtex/view.vim         | 14 +++++++-------
  autoload/vimtex/view/zathura.vim |  2 +-
- 4 files changed, 15 insertions(+), 17 deletions(-)
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/.gitignore b/.gitignore
 index dc87ae0..c79e3e4 100644
@@ -18,43 +17,11 @@ index dc87ae0..c79e3e4 100644
  doc/tags
  test/*
 +tags
-diff --git a/autoload/vimtex/index.vim b/autoload/vimtex/index.vim
-index 4bfc68a..299d444 100644
---- a/autoload/vimtex/index.vim
-+++ b/autoload/vimtex/index.vim
-@@ -178,21 +178,18 @@ function! s:index.activate(close) abort dict "{{{1
-   "   the &switchbuf option to either 'useopen' or 'usetab'
-   let cmd = 'buffer! '
-   if &switchbuf =~# 'usetab'
--    for i in range(tabpagenr('$'))
--      if index(tabpagebuflist(i + 1), bnr) >= 0
--        let cmd = 'sbuffer! '
--        break
--      endif
--    endfor
-+    let f = resolve(entry.file)
-+    if tags#Look_for_matching_tab(f) == 0
-+        execute 'tabnew ' . f
-+    endif 
-+
-   elseif &switchbuf =~# 'useopen'
-     if bufwinnr(bnr) > 0
-       let cmd = 'sbuffer! '
-+      execute 'keepalt' cmd bnr
-     endif
-   endif
- 
--  " Open file buffer
--  execute 'keepalt' cmd bnr
--
-   " Go to entry line
-   if has_key(entry, 'line')
-     call vimtex#pos#set_cursor(entry.line, 0)
 diff --git a/autoload/vimtex/view.vim b/autoload/vimtex/view.vim
-index f27b2a8..3627863 100644
+index ae3fec8..6c41a6a 100644
 --- a/autoload/vimtex/view.vim
 +++ b/autoload/vimtex/view.vim
-@@ -69,18 +69,17 @@ function! vimtex#view#reverse_goto(line, filename) " {{{1
+@@ -69,18 +69,17 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
  
    if !bufexists(l:file)
      if filereadable(l:file)
@@ -79,17 +46,17 @@ index f27b2a8..3627863 100644
  
    execute 'normal!' a:line . 'G'
    normal! zMzvzz
-@@ -101,4 +100,5 @@ function! vimtex#view#reverse_goto(line, filename) " {{{1
+@@ -101,4 +100,5 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
    endif
  endfunction
  
 +command! -nargs=+ VimtexReverseGoto :call vimtex#view#reverse_goto(<f-args>)<cr>
  " }}}1
 diff --git a/autoload/vimtex/view/zathura.vim b/autoload/vimtex/view/zathura.vim
-index c07d0df..97007d3 100644
+index 45dad61..7ab73b3 100644
 --- a/autoload/vimtex/view/zathura.vim
 +++ b/autoload/vimtex/view/zathura.vim
-@@ -122,7 +122,7 @@ function! s:zathura.latexmk_append_argument() dict " {{{1
+@@ -122,7 +122,7 @@ function! s:zathura.latexmk_append_argument() dict abort " {{{1
      if self.has_synctex
        let zathura .= ' -x \"' . g:vimtex_compiler_progname
            \ . ' --servername ' . v:servername
