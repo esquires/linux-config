@@ -75,6 +75,10 @@ Manual steps:
     }
     
     terminal = "terminator -x nvim -c term -c \"normal A\""
+    awful.util.spawn("cbatticon")
+    awful.util.spawn("workrave")
+    awful.util.spawn("nm-applet")
+
     ```
 
 * see ``notes/.lldbinit`` and ``notes/.gdbinit`` for an init file. You can run

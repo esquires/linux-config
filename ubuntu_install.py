@@ -80,6 +80,7 @@ def run_apt():
         "flake8",
         "notify-osd",
         "ubuntu-sounds",
+        "workrave",
         "flawfinder"]
 
     sp.check_call(['sudo', 'apt', 'update'])
