@@ -2,6 +2,7 @@ import argparse
 import subprocess as sp
 import os.path as op
 import os
+import pathlib
 
 HOME = os.environ['HOME']
 
@@ -15,6 +16,7 @@ def install_git_bash_completion():
 
 
 def add_lines(fname, lines_to_add):
+    pathlib.Path(fname).touch()  # make sure the file exists
     with open(fname, 'r') as f:
         lines = f.read().splitlines()
 
@@ -37,7 +39,7 @@ def install_scripts():
 
 def setup_vimrc(config_dir):
     for d in ['bundle', 'autoload', 'swaps', 'backups']:
-        os.makedirs(op.join(HOME, d), exist_ok=True)
+        os.makedirs(op.join(HOME, ".vim", d), exist_ok=True)
 
     lines_to_add = [
         'source ' + op.join(config_dir, '.vimrc'),
@@ -62,7 +64,6 @@ def run_apt():
         "curl",
         "gnome-terminal",
         "terminator",
-        "awesome",
         "zsh",
         "zathura",
         "xdotool",
@@ -71,6 +72,8 @@ def run_apt():
         "global",
         "htop",
         "ipython",
+        "python-pip",
+        "python3-pip",
         "ipython3",
         "python-ipdb",
         "xclip",
@@ -107,37 +110,53 @@ def install_cbatticon(repos_dir):
         ['sudo', 'apt', 'install', '-y', 'libnotify-dev', 'libgtk-3-dev'])
     update_repo('https://github.com/valr/cbatticon.git', repos_dir)
     sp.check_call(['make', 'prefix=/usr/local'], cwd=cbatticon_dir)
-    sp.check_call(['sudo', 'make', 'prefix=/usr/local', 'install'], cwd=cbatticon_dir)
+    sp.check_call(['sudo', 'make', 'prefix=/usr/local', 'install'],
+                  cwd=cbatticon_dir)
 
 
 def install_vim_plugins(config_dir, repos_dir):
     vim_dir = op.join(repos_dir, 'vim')
     os.makedirs(vim_dir, exist_ok=True)
+    os.makedirs(op.join(HOME, '.vim', 'autoload'), exist_ok=True)
+    os.makedirs(op.join(HOME, '.vim', 'bundle'), exist_ok=True)
     update_repo('https://github.com/tpope/vim-pathogen.git', vim_dir)
     try:
         os.symlink(
             op.join(vim_dir, 'vim-pathogen', 'autoload', 'pathogen.vim'),
-            op.join(HOME, '.vim', 'autoload', 'pathogen'))
+            op.join(HOME, '.vim', 'autoload', 'pathogen.vim'))
     except FileExistsError:
         pass
 
-    update_repo('https://github.com/milkypostman/vim-togglelist', vim_dir)
-    update_repo('https://github.com/Shougo/deoplete.nvim', vim_dir)
-    update_repo('https://github.com/neomake/neomake', vim_dir)
-    update_repo('https://github.com/tpope/vim-fugitive', vim_dir)
-    update_repo('https://github.com/esquires/tabcity', vim_dir)
-    update_repo('https://github.com/esquires/vim-map-medley', vim_dir)
-    update_repo('https://github.com/ctrlpvim/ctrlp.vim', vim_dir)
-    update_repo('https://github.com/majutsushi/tagbar', vim_dir)
-    update_repo('https://github.com/tmhedberg/SimpylFold', vim_dir)
-    update_repo('https://github.com/ludovicchabant/vim-gutentags', vim_dir)
-    update_repo('https://github.com/tomtom/tcomment_vim.git', vim_dir)
-    update_repo('https://github.com/esquires/neosnippet-snippets', vim_dir)
-    update_repo('https://github.com/Shougo/neosnippet.vim.git', vim_dir)
-    update_repo('https://github.com/jlanzarotta/bufexplorer.git', vim_dir)
-    update_repo('https://github.com/lervag/vimtex', vim_dir)
-    update_repo('https://github.com/vim-airline/vim-airline', vim_dir)
-    update_repo('https://github.com/Shougo/echodoc.vim.git', vim_dir)
+    def _update(repo):
+        update_repo(repo, vim_dir)
+        repo_name = repo.split('/')[-1]
+        if repo_name.split('.')[-1] == 'git':
+            repo_name = ''.join(repo_name.split('.')[:-1])
+        try:
+            os.symlink(op.join(vim_dir, repo_name),
+                       op.join(HOME, '.vim', 'bundle', repo_name))
+        except FileExistsError:
+            pass
+
+    _update('https://github.com/milkypostman/vim-togglelist')
+    _update('https://github.com/neomake/neomake')
+    _update('https://github.com/tpope/vim-fugitive')
+    _update('https://github.com/esquires/tabcity')
+    _update('https://github.com/esquires/vim-map-medley')
+    _update('https://github.com/ctrlpvim/ctrlp.vim')
+    _update('https://github.com/majutsushi/tagbar')
+    _update('https://github.com/tmhedberg/SimpylFold')
+    _update('https://github.com/ludovicchabant/vim-gutentags')
+    _update('https://github.com/tomtom/tcomment_vim.git')
+    _update('https://github.com/esquires/neosnippet-snippets')
+    _update('https://github.com/Shougo/neosnippet.vim.git')
+    _update('https://github.com/jlanzarotta/bufexplorer.git')
+    _update('https://github.com/lervag/vimtex')
+    _update('https://github.com/vim-airline/vim-airline')
+    _update('https://github.com/Shougo/echodoc.vim.git')
+    _update('https://github.com/Shougo/deoplete.nvim')
+    
+    sp.check_call(['nvim', '-c', 'UpdateRemotePlugins', '-c', 'q'])
 
     # lvdb
     lvdb_python_dir = op.join(vim_dir, 'lvdb', 'python')
@@ -201,7 +220,7 @@ def install_neovim(repos_dir):
     sp.check_call(['make'], cwd=deps_dir)
 
     build_dir = op.join(neovim_dir, 'build')
-    os.makedirs('build', exist_ok=True)
+    os.makedirs(build_dir, exist_ok=True)
     sp.check_call([
         'cmake', '..', '-G', 'Ninja', "-DCMAKE_CXX_FLAGS='-march=native'",
         '-DCMAKE_BUILD_TYPE=Release'], cwd=build_dir)
@@ -251,6 +270,13 @@ def setup_ipython():
     add_lines(config, ["c.TerminalInteractiveShell.editing_mode =  'vi'"])
 
 
+def install_awesome(config_dir):
+    sp.check_call(['sudo', 'apt', 'install', '-y', 'awesome'])
+    awesome_dir = op.join(HOME, '.config', 'awesome')
+    os.makedirs(awesome_dir, exist_ok=True)
+    os.symlink(op.join(config_dir, 'rc.lua'), op.join(awesome_dir, 'rc.lua'))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -268,12 +294,13 @@ def main():
     setup_vimrc(args.config_dir)
     setup_inputrc()
     install_cbatticon(args.repos_dir)
-    install_vim_plugins(args.config_dir, args.repos_dir)
     install_neovim(args.repos_dir)
+    install_vim_plugins(args.config_dir, args.repos_dir)
     install_cppcheck(args.config_dir, args.repos_dir)
     install_cppclean(args.repos_dir)
     install_cmd_monitor(args.repos_dir)
     setup_ipython()
+    install_awesome(args.config_dir)
 
 
 if __name__ == '__main__':

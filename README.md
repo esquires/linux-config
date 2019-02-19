@@ -4,6 +4,11 @@ Linux Config
 Installation
 ---
 
+setup git
+    sudo apt install git
+    git config --global user.name your_name
+    git config --global user.email your_email
+
 This assumes a particular path for installation::
 
     mkdir ~/repos
@@ -62,24 +67,6 @@ Manual steps:
     ```
 
 * nvim, run ``:UpdateRemotePlugins`` for deoplete to work
-
-* open ``/etc/xdg/awesome/rc.lua`` and change the following:
-
-    ```
-    local layouts =
-        awful.layout.suit.floating,
-        awful.layout.suit.tile.left,
-        awful.layout.suit.fair,
-        awful.layout.suit.max,
-        awful.layout.suit.magnifier
-    }
-    
-    terminal = "terminator -x nvim -c term -c \"normal A\""
-    awful.util.spawn("cbatticon")
-    awful.util.spawn("workrave")
-    awful.util.spawn("nm-applet")
-
-    ```
 
 * see ``notes/.lldbinit`` and ``notes/.gdbinit`` for an init file. You can run
   debuggers linked linked to vim by hitting ``\d`` in vim and running in a terminal.
