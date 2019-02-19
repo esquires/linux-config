@@ -4,23 +4,22 @@ Linux Config
 Installation
 ---
 
-setup git
+Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
+    ```
+    [merge]
+        tool = nvimdiff
+    [difftool "nvimdiff"] 
+        cmd = terminator -x nvim -d $LOCAL $REMOTE
+    [user]
+        name = your_name
+        email = your_email
+    ``` 
+
+Installation:
+
+    mkdir ~/repos
+    cd repos
     sudo apt install git
-    git config --global user.name your_name
-    git config --global user.email your_email
-
-This assumes a particular path for installation::
-
-    mkdir ~/repos
-    cd repos
-    git clone https://github.com/esquires/linux-config.git
-    cd linux-config
-    bash ubuntu_install.sh
-
-Alternative installation (experimental):
-
-    mkdir ~/repos
-    cd repos
     git clone https://github.com/esquires/linux-config.git
     cd linux-config
     python3 ubuntu_install.py
@@ -32,18 +31,6 @@ Alternative installation (experimental):
     sudo chsh -s /usr/bin/zsh $USER
 
 Manual steps:
-
-* Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
-
-    ```
-    [merge]
-        tool = nvimdiff
-    [difftool "nvimdiff"] 
-        cmd = terminator -x nvim -d $LOCAL $REMOTE
-    [user]
-        name = your_name
-        email = your_email
-    ``` 
 
 * Put this in `~/.zshrc`.
 
@@ -65,8 +52,6 @@ Manual steps:
     ```
     bind -v
     ```
-
-* nvim, run ``:UpdateRemotePlugins`` for deoplete to work
 
 * see ``notes/.lldbinit`` and ``notes/.gdbinit`` for an init file. You can run
   debuggers linked linked to vim by hitting ``\d`` in vim and running in a terminal.
