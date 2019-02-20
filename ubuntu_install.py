@@ -83,12 +83,12 @@ def run_apt():
         "flake8",
         "notify-osd",
         "ubuntu-sounds",
-        "workrave",
-        "flawfinder"]
+        "workrave"]
 
     sp.check_call(['sudo', 'apt', 'update'])
     sp.check_call(['sudo', 'apt', '-y', 'upgrade'])
     sp.check_call(['sudo', 'apt', 'install', '-y'] + pkgs)
+
 
 def update_repo(url, parent_dir):
     tail = url.split('/')[-1]
@@ -277,6 +277,10 @@ def install_awesome(config_dir):
     os.symlink(op.join(config_dir, 'rc.lua'), op.join(awesome_dir, 'rc.lua'))
 
 
+def install_pip_packages():
+    sp.check_call(["sudo", "pip3", "install", "flawfinder"])
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -290,6 +294,7 @@ def main():
 
     run_apt()
     install_git_bash_completion()
+    install_pip_packages()
     install_scripts()
     setup_vimrc(args.config_dir)
     setup_inputrc()
