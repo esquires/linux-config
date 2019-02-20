@@ -6,11 +6,10 @@ import subprocess as sp
 import re
 import sys
 
-
 def _get_cmakecache_files(directory):
     return sp.check_output(
-        ["find", directory, "-maxdepth", "4",
-         "-name", "CMakeCache.txt"]).split('\n')[:-1]
+        ["find", directory, "-maxdepth", "4", "-name", "CMakeCache.txt"],
+        universal_newlines=True).split('\n')[:-1]
 
 
 def _get_include_dirs(file_path):
@@ -27,8 +26,8 @@ def _get_include_dirs(file_path):
     r = re.compile(r'INCLUDE_DIR[S]?:PATH=(.*)')
     include_dirs = \
         set(sp.check_output(
-            ["find", pwd, "-maxdepth", "4", "-type", "d",
-             "-name", "include"]).split('\n')[:-1])
+            ["find", pwd, "-maxdepth", "4", "-type", "d", "-name", "include"],
+            universal_newlines=True).split('\n')[:-1])
 
     if cmakecache_files:
         for fname in cmakecache_files:
@@ -62,7 +61,7 @@ def _get_include_dirs(file_path):
 
 
 def _add_arg_w_prefix(prefix, arg_list):
-    prefixes = [prefix] * len(arg_list)
+    prefixes = [prefix] * len(list(arg_list))
     return [val for pair in zip(prefixes, arg_list) for val in pair]
 
 
@@ -117,6 +116,9 @@ def main():
                '--quiet', '--language=c++',
                '--inline-suppr', enable_arg] \
             + extra_args + include_arg + to_check
+
+    else:
+        raise RuntimeError("{} not recognized".format(executable))
 
     if print_cmd:
         print(" ".join(cmd))
