@@ -4,8 +4,8 @@ Linux Config
 Installation
 ---
 
-Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377)
-    ```
+Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377):
+    
     [merge]
         tool = nvimdiff
     [difftool "nvimdiff"] 
@@ -13,7 +13,6 @@ Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2
     [user]
         name = your_name
         email = your_email
-    ``` 
 
 Installation:
 
@@ -22,7 +21,7 @@ Installation:
     sudo apt install git
     git clone https://github.com/esquires/linux-config.git
     cd linux-config
-    python3 ubuntu_install.py
+    python3 ubuntu_install.py . ..
 
     # install oh-my-zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
