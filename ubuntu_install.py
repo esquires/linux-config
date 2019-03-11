@@ -86,7 +86,7 @@ def run_apt():
         "workrave"]
 
     sp.check_call(['sudo', 'apt', 'update'])
-    sp.check_call(['sudo', 'apt', '-y', 'upgrade'])
+    # sp.check_call(['sudo', 'apt', '-y', 'upgrade'])
     sp.check_call(['sudo', 'apt', 'install', '-y'] + pkgs)
 
 
@@ -274,7 +274,11 @@ def install_awesome(config_dir):
     sp.check_call(['sudo', 'apt', 'install', '-y', 'awesome'])
     awesome_dir = op.join(HOME, '.config', 'awesome')
     os.makedirs(awesome_dir, exist_ok=True)
-    os.symlink(op.join(config_dir, 'rc.lua'), op.join(awesome_dir, 'rc.lua'))
+    try:
+        os.symlink(
+            op.join(config_dir, 'rc.lua'), op.join(awesome_dir, 'rc.lua'))
+    except FileExistsError:
+        pass
 
 
 def install_pip_packages():
