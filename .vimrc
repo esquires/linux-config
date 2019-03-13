@@ -368,3 +368,4 @@ let g:airline#extensions#tabline#show_splits = 0
 " fugitive
 nnoremap <localleader>gs :Gstatus<cr>}jj
 nnoremap <localleader>gb :Gblame<cr>
+nnoremap <localleader>gd :Gdiff<cr>
