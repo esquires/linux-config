@@ -3,6 +3,7 @@ import subprocess as sp
 import os.path as op
 import os
 import pathlib
+import lvdb
 
 HOME = os.environ['HOME']
 
@@ -91,17 +92,22 @@ def run_apt():
     sp.check_call(['sudo', 'apt', 'install', '-y'] + pkgs)
 
 
-def update_repo(url, parent_dir):
+def update_repo(url, parent_dir, sha=None):
     tail = url.split('/')[-1]
     if tail[-4:] == '.git':
         tail = tail[:-4]
     repo_dir = op.join(parent_dir, tail)
     if not op.isdir(repo_dir):
         sp.check_call(['git', 'clone', url], cwd=parent_dir)
-    try:
-        sp.check_call(['git', 'pull'], cwd=repo_dir)
-    except sp.CalledProcessError:
+
+    if sha:
         sp.check_call(['git', 'fetch'], cwd=repo_dir)
+        sp.check_call(['git', 'checkout', sha], cwd=repo_dir)
+    else:
+        try:
+            sp.check_call(['git', 'pull'], cwd=repo_dir)
+        except sp.CalledProcessError:
+            sp.check_call(['git', 'fetch'], cwd=repo_dir)
 
 
 
@@ -128,11 +134,11 @@ def install_vim_plugins(config_dir, repos_dir):
     except FileExistsError:
         pass
 
-    def _update(repo):
-        update_repo(repo, vim_dir)
+    def _update(repo, sha=None):
+        update_repo(repo, vim_dir, sha)
         repo_name = repo.split('/')[-1]
         if repo_name.split('.')[-1] == 'git':
-            repo_name = ''.join(repo_name.split('.')[:-1])
+            repo_name = '.'.join(repo_name.split('.')[:-1])
         try:
             os.symlink(op.join(vim_dir, repo_name),
                        op.join(HOME, '.vim', 'bundle', repo_name))
@@ -155,7 +161,7 @@ def install_vim_plugins(config_dir, repos_dir):
     _update('https://github.com/lervag/vimtex')
     _update('https://github.com/vim-airline/vim-airline')
     _update('https://github.com/Shougo/echodoc.vim.git')
-    _update('https://github.com/Shougo/deoplete.nvim')
+    _update('https://github.com/Shougo/deoplete.nvim', '7853113')
     _update('https://github.com/Shougo/neco-syntax.git')
     _update('https://github.com/autozimu/LanguageClient-neovim')
 
@@ -163,7 +169,7 @@ def install_vim_plugins(config_dir, repos_dir):
 
     # lvdb
     lvdb_python_dir = op.join(vim_dir, 'lvdb', 'python')
-    update_repo('https://github.com/esquires/lvdb', vim_dir)
+    _update('https://github.com/esquires/lvdb')
     sp.check_call(['sudo', 'pip2', 'install', '-e', '.'], cwd=lvdb_python_dir)
     sp.check_call(['sudo', 'pip3', 'install', '-e', '.'], cwd=lvdb_python_dir)
 
