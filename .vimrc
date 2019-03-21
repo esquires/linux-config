@@ -369,3 +369,15 @@ let g:airline#extensions#tabline#show_splits = 0
 nnoremap <localleader>gs :Gstatus<cr>}jj
 nnoremap <localleader>gb :Gblame<cr>
 nnoremap <localleader>gd :Gdiff<cr>
+
+" LanguageClient-neovim
+" Required for operations modifying multiple buffers like rename.
+set hidden
+let g:LanguageClient_serverCommands = {
+  \ 'cpp': ['/usr/lib/llvm-6.0/bin/clangd'],
+  \ 'python': ['pyls'],
+  \ }
+nnoremap <localleader>s :call LanguageClient_contextMenu()<CR>
+call deoplete#custom#source('LanguageClient',
+            \ 'min_pattern_length',
+            \ 2)

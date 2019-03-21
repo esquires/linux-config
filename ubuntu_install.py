@@ -83,7 +83,8 @@ def run_apt():
         "flake8",
         "notify-osd",
         "ubuntu-sounds",
-        "workrave"]
+        "workrave",
+        "clang-tools-6.0"]
 
     sp.check_call(['sudo', 'apt', 'update'])
     # sp.check_call(['sudo', 'apt', '-y', 'upgrade'])
@@ -155,7 +156,9 @@ def install_vim_plugins(config_dir, repos_dir):
     _update('https://github.com/vim-airline/vim-airline')
     _update('https://github.com/Shougo/echodoc.vim.git')
     _update('https://github.com/Shougo/deoplete.nvim')
-    
+    _update('https://github.com/Shougo/neco-syntax.git')
+    _update('https://github.com/autozimu/LanguageClient-neovim')
+
     sp.check_call(['nvim', '-c', 'UpdateRemotePlugins', '-c', 'q'])
 
     # lvdb
@@ -163,6 +166,11 @@ def install_vim_plugins(config_dir, repos_dir):
     update_repo('https://github.com/esquires/lvdb', vim_dir)
     sp.check_call(['sudo', 'pip2', 'install', '-e', '.'], cwd=lvdb_python_dir)
     sp.check_call(['sudo', 'pip3', 'install', '-e', '.'], cwd=lvdb_python_dir)
+
+    # LanguageClient-neovim dependencies
+    languageclient_dir = op.join(vim_dir, 'LanguageClient-neovim')
+    sp.check_call(['bash', 'install.sh'], cwd=languageclient_dir)
+    sp.check_call(['sudo', 'pip3', 'install', 'python-language-server[all]'])
 
     # orgmode and its dependencies
     update_repo('https://github.com/jceb/vim-orgmode', vim_dir)
