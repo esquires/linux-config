@@ -1,3 +1,7 @@
+;; https://stackoverflow.com/a/5533251
+(global-set-key [C-mouse-4] 'text-scale-increase)
+(global-set-key [C-mouse-5] 'text-scale-decrease)
+
 (add-to-list 'load-path "~/repos/emacs/evil/")
 (add-to-list 'load-path "~/repos/emacs/dash.el/")
 (add-to-list 'load-path "~/repos/emacs/monitor/")
