@@ -3,6 +3,7 @@ import subprocess as sp
 import os.path as op
 import os
 import pathlib
+import re
 import lvdb
 
 HOME = os.environ['HOME']
@@ -288,9 +289,14 @@ def install_awesome(config_dir):
     sp.check_call(['sudo', 'apt', 'install', '-y', 'awesome'])
     awesome_dir = op.join(HOME, '.config', 'awesome')
     os.makedirs(awesome_dir, exist_ok=True)
+
+    awesome_version = \
+        sp.Popen(['awesome', '-v'], stdout=sp.PIPE).communicate()[0].decode()
+    awesome_version = int(re.search(r' v(\d+).\d+ ', awesome_version).group(1))
+    rc_lua = 'rc4.lua' if awesome_version == 4 else 'rc.lua'
     try:
         os.symlink(
-            op.join(config_dir, 'rc.lua'), op.join(awesome_dir, 'rc.lua'))
+            op.join(config_dir, rc_lua), op.join(awesome_dir, 'rc.lua'))
     except FileExistsError:
         pass
 
@@ -310,19 +316,19 @@ def main():
 
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
-    run_apt()
-    install_git_bash_completion()
-    install_pip_packages()
-    install_scripts()
-    setup_vimrc(args.config_dir)
-    setup_inputrc()
-    install_cbatticon(args.repos_dir)
-    install_neovim(args.repos_dir)
-    install_vim_plugins(args.config_dir, args.repos_dir)
-    install_cppcheck(args.config_dir, args.repos_dir)
-    install_cppclean(args.repos_dir)
-    install_cmd_monitor(args.repos_dir)
-    setup_ipython()
+    # run_apt()
+    # install_git_bash_completion()
+    # install_pip_packages()
+    # install_scripts()
+    # setup_vimrc(args.config_dir)
+    # setup_inputrc()
+    # install_cbatticon(args.repos_dir)
+    # install_neovim(args.repos_dir)
+    # install_vim_plugins(args.config_dir, args.repos_dir)
+    # install_cppcheck(args.config_dir, args.repos_dir)
+    # install_cppclean(args.repos_dir)
+    # install_cmd_monitor(args.repos_dir)
+    # setup_ipython()
     install_awesome(args.config_dir)
 
 
