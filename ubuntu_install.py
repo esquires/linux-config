@@ -3,8 +3,8 @@ import subprocess as sp
 import os.path as op
 import os
 import pathlib
+import sys
 import re
-import lvdb
 
 HOME = os.environ['HOME']
 
@@ -162,7 +162,12 @@ def install_vim_plugins(config_dir, repos_dir):
     _update('https://github.com/lervag/vimtex')
     _update('https://github.com/vim-airline/vim-airline')
     _update('https://github.com/Shougo/echodoc.vim.git')
-    _update('https://github.com/Shougo/deoplete.nvim', '7853113')
+    _update('https://github.com/tpope/vim-surround')
+    _update('https://github.com/tpope/vim-repeat')
+
+    # deoplete has a 3.6 dependency after the below commit
+    deoplete_sha = 'origin/master' if sys.version_info >= (3, 6) else '7853113'
+    _update('https://github.com/Shougo/deoplete.nvim', deoplete_sha)
     _update('https://github.com/Shougo/neco-syntax.git')
     _update('https://github.com/autozimu/LanguageClient-neovim')
 
@@ -316,19 +321,19 @@ def main():
 
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
-    # run_apt()
-    # install_git_bash_completion()
-    # install_pip_packages()
-    # install_scripts()
-    # setup_vimrc(args.config_dir)
-    # setup_inputrc()
-    # install_cbatticon(args.repos_dir)
-    # install_neovim(args.repos_dir)
-    # install_vim_plugins(args.config_dir, args.repos_dir)
-    # install_cppcheck(args.config_dir, args.repos_dir)
-    # install_cppclean(args.repos_dir)
-    # install_cmd_monitor(args.repos_dir)
-    # setup_ipython()
+    run_apt()
+    install_git_bash_completion()
+    install_pip_packages()
+    install_scripts()
+    setup_vimrc(args.config_dir)
+    setup_inputrc()
+    install_cbatticon(args.repos_dir)
+    install_neovim(args.repos_dir)
+    install_vim_plugins(args.config_dir, args.repos_dir)
+    install_cppcheck(args.config_dir, args.repos_dir)
+    install_cppclean(args.repos_dir)
+    install_cmd_monitor(args.repos_dir)
+    setup_ipython()
     install_awesome(args.config_dir)
 
 
