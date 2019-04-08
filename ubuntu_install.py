@@ -203,7 +203,7 @@ def install_vim_plugins(config_dir, repos_dir):
 
 
 def apply_patch(patch_file, patch_msg, d):
-    sp.check_call(['git', 'checkout', 'master'], cwd=d)
+    sp.check_call(['git', 'checkout', '-f', 'master'], cwd=d)
     sp.check_call(['git', 'reset', '--hard', 'origin/master'], cwd=d)
     sp.check_call(['git', 'am', '-3', patch_file], cwd=d)
 
@@ -297,7 +297,7 @@ def install_awesome(config_dir):
 
     awesome_version = \
         sp.Popen(['awesome', '-v'], stdout=sp.PIPE).communicate()[0].decode()
-    awesome_version = int(re.search(r' v(\d+).\d+ ', awesome_version).group(1))
+    awesome_version = int(re.search(r' v(\d+).\d+', awesome_version).group(1))
     rc_lua = 'rc4.lua' if awesome_version == 4 else 'rc.lua'
     try:
         os.symlink(

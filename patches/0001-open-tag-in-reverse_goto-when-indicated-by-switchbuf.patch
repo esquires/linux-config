@@ -1,4 +1,4 @@
-From f42afd7512fbf3dd9b5703a99b7aabb18c7831c9 Mon Sep 17 00:00:00 2001
+From c1c58a3064f8c57a0f8777c1d3fa467e48617b0e Mon Sep 17 00:00:00 2001
 From: Eric Squires <eric.squires@gtri.gatech.edu>
 Date: Sun, 3 Feb 2019 23:35:48 -0500
 Subject: [PATCH] open tag in reverse_goto when indicated by switchbuf
@@ -18,11 +18,11 @@ index dc87ae0..c79e3e4 100644
  test/*
 +tags
 diff --git a/autoload/vimtex/view.vim b/autoload/vimtex/view.vim
-index ae3fec8..6c41a6a 100644
+index 0b2d8ee..6a6eeed 100644
 --- a/autoload/vimtex/view.vim
 +++ b/autoload/vimtex/view.vim
-@@ -69,18 +69,17 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
- 
+@@ -72,19 +72,18 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
+   " Open file if necessary
    if !bufexists(l:file)
      if filereadable(l:file)
 -      execute 'silent edit' l:file
@@ -36,7 +36,8 @@ index ae3fec8..6c41a6a 100644
        return
      endif
    endif
--
+ 
+-  " Go to correct buffer and line
 -  let l:bufnr = bufnr(l:file)
 -  let l:winnr = bufwinnr(l:file)
 -  execute l:winnr >= 0
@@ -46,7 +47,7 @@ index ae3fec8..6c41a6a 100644
  
    execute 'normal!' a:line . 'G'
    normal! zMzvzz
-@@ -101,4 +100,5 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
+@@ -106,4 +105,5 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
    endif
  endfunction
  
