@@ -1,5 +1,15 @@
 define skipstdcxxheaders
 python
+
+# https://sourceware.org/gdb/wiki/STLSupport
+import sys
+sys.path.insert(0, '~/repos/temp/python')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+try:
+  register_libstdcxx_printers (None)
+except RuntimeError:
+  pass
+
 def skipAllIn(root):
     import os
     for root, dirs, files in os.walk(root, topdown=False):
@@ -9,6 +19,8 @@ def skipAllIn(root):
 # do this for C++ only
 if 'c++' in gdb.execute('show language', to_string=True):
     skipAllIn('/usr/include/c++')
+    skipAllIn('/usr/include/boost')
+    skipAllIn('/opt/scrimmage/x86_64-linux-gnu/include')
 end
 end
 
