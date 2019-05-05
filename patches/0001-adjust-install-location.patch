@@ -1,0 +1,22 @@
+From 23669dec6483f64019dd1b5a005fafcda3a3236f Mon Sep 17 00:00:00 2001
+From: Eric Squires <eric.g.squires@gmail.com>
+Date: Mon, 29 Apr 2019 21:39:31 -0400
+Subject: [PATCH] adjust install location
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index f30e299..733b23e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-gitexecdir = ${shell git --exec-path}
++gitexecdir = /usr/bin
+ gitmanpath = ${shell git --man-path}
+ 
+ -include ./config.mak
+-- 
+2.17.1
+

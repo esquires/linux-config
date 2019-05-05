@@ -310,6 +310,15 @@ def install_pip_packages():
     sp.check_call(["sudo", "pip3", "install", "flawfinder"])
 
 
+def install_latexdiff(repos_dir, config_dir):
+
+    update_repo('https://gitlab.com/git-latexdiff/git-latexdiff', repos_dir)
+    d = op.join(repos_dir, 'git-latexdiff')
+    patch = \
+        op.join(config_dir, 'patches', '0001-adjust-install-location.patch')
+    apply_patch(patch, 'adjust install loc', d)
+    sp.check_call(['sudo', 'make', 'install'], cwd=d)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -322,6 +331,7 @@ def main():
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
     run_apt()
+    install_latexdiff(args.repos_dir, args.config_dir)
     install_git_bash_completion()
     install_pip_packages()
     install_scripts()
