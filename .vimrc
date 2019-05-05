@@ -348,7 +348,7 @@ let g:vimtex_quickfix_latexlog = {
       \   'titlesec' : 1,
       \ },
 \}
-let g:vimtex_quickfix_autoclose_after_keystrokes=2
+let g:vimtex_quickfix_autoclose_after_keystrokes=1
 
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
