@@ -9,8 +9,8 @@ CASE_SENSITIVE="true"
 source $ZSH/oh-my-zsh.sh
 
 export HISTFILE=~/.zsh_history
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=100000
+export SAVEHIST=100000
 
 setopt sharehistory
 setopt extendedhistory
