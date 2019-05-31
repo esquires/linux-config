@@ -10,6 +10,9 @@ Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2
         tool = nvimdiff
     [difftool "nvimdiff"] 
         cmd = terminator -x nvim -d $LOCAL $REMOTE
+    [core]
+        editor = nvim
+        pager = less -F -X
     [user]
         name = your_name
         email = your_email
@@ -42,7 +45,7 @@ Manual steps:
 
     ```
     source ~/repos/linux-config/.bashrc
-    echo "PATH=$PATH:~/bin" >> ~/.bashrc
+    export PATH=$PATH:~/bin
     export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
     ```
 
