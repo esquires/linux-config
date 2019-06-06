@@ -319,6 +319,12 @@ def install_latexdiff(repos_dir, config_dir):
     apply_patch(patch, 'adjust install loc', d)
     sp.check_call(['sudo', 'make', 'install'], cwd=d)
 
+
+def install_fzf(repos_dir):
+    update_repo('https://github.com/junegunn/fzf', repos_dir)
+    sp.check_call(['./install', '--all'], cwd=op.join(repos_dir, 'fzf'))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -331,7 +337,8 @@ def main():
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
     run_apt()
-    install_latexdiff(args.repos_dir, args.config_dir)
+    # install_latexdiff(args.repos_dir, args.config_dir)
+    install_fzf(args.repos_dir)
     install_git_bash_completion()
     install_pip_packages()
     install_scripts()
