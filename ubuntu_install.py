@@ -325,6 +325,19 @@ def install_fzf(repos_dir):
     sp.check_call(['./install', '--all'], cwd=op.join(repos_dir, 'fzf'))
 
 
+def install_emacs(config_dir, repos_dir):
+    emacs_dir = op.join(repos_dir, 'emacs')
+    os.makedirs(emacs_dir, exist_ok=True)
+    os.makedirs(op.join(HOME, 'emacs.d'), exist_ok=True)
+    sp.check_call(['sudo', 'apt', 'install', '-y', 'emacs'])
+    update_repo('https://github.com/emacs-evil/evil', emacs_dir)
+    update_repo('https://github.com/GuiltyDolphin/org-evil.git', emacs_dir)
+    update_repo('https://github.com/magnars/dash.el', emacs_dir)
+    update_repo('https://github.com/GuiltyDolphin/monitor', emacs_dir)
+    os.symlink(op.join(config_dir, 'init.el'),
+               op.join(HOME, 'emacs.d', 'init.el'))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -339,6 +352,7 @@ def main():
     run_apt()
     # install_latexdiff(args.repos_dir, args.config_dir)
     install_fzf(args.repos_dir)
+    install_emacs(args.config_dir, args.repos_dir)
     install_git_bash_completion()
     install_pip_packages()
     install_scripts()
