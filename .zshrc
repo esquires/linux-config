@@ -11,6 +11,12 @@ source $ZSH/oh-my-zsh.sh
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=100000
+setopt PUSHD_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
 
 setopt sharehistory
 setopt extendedhistory
@@ -84,3 +90,5 @@ alias ld="git-latexdiff --quiet --ignore-latex-errors --bibtex --latexpand --mak
 alias vim="nvim"
 alias gvim="gnome-terminal -- nvim -p"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+
+complete -F "ahoy --generate-bash-completion" ahoy

@@ -1,8 +1,6 @@
-Linux Config
-===
+# Linux Config
 
-Installation
----
+## Installation
 
 Put this in `~/.gitconfig`. See [here](https://github.com/neovim/neovim/issues/2377):
     
@@ -76,3 +74,23 @@ Manual steps:
   ```
   
 * `ln ~/repos/linux-config/init.el ~/.emacs.d/init.el`
+
+## General Notes
+
+For zotero, you can get math equation rendering in MathJax as follows:
+
+* render the report
+* save the report
+* open it and put the following lines inside the `head` tag
+    
+    ```[html]
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    ```
+* open the file in firefox

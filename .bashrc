@@ -123,10 +123,10 @@ fi
 git config --global grep.extendRegexp true
 git config --global grep.lineNumber true
 git config --global alias.g "grep --break --heading --line-number"
-git config --global core.editor vim
+# git config --global core.editor vim
 # git config --global merge.tool gvimdiff
 git config --global color.ui true
-git config --global core.whitespace trailing-space, space-before-tab
+# git config --global core.whitespace trailing-space, space-before-tab
 
 #other aliases
 alias cb='xclip -selection clipboard'

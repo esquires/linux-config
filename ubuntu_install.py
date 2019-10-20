@@ -334,8 +334,20 @@ def install_emacs(config_dir, repos_dir):
     update_repo('https://github.com/GuiltyDolphin/org-evil.git', emacs_dir)
     update_repo('https://github.com/magnars/dash.el', emacs_dir)
     update_repo('https://github.com/GuiltyDolphin/monitor', emacs_dir)
-    os.symlink(op.join(config_dir, 'init.el'),
-               op.join(HOME, 'emacs.d', 'init.el'))
+    try:
+        os.symlink(op.join(config_dir, 'init.el'),
+                   op.join(HOME, 'emacs.d', 'init.el'))
+    except FileExistsError:
+        pass
+
+
+def install_ahoy():
+    ahoy_bin = op.join(HOME, 'bin', 'ahoy')
+    sp.check_call([
+        'wget', '-q',
+        'https://github.com/ahoy-cli/ahoy/releases/download/2.0.0/ahoy-bin-linux-amd64',
+        '-O', ahoy_bin])
+    sp.check_call(['chmod', '+x', ahoy_bin])
 
 
 def main():
@@ -351,6 +363,7 @@ def main():
 
     run_apt()
     # install_latexdiff(args.repos_dir, args.config_dir)
+    install_ahoy()
     install_fzf(args.repos_dir)
     install_emacs(args.config_dir, args.repos_dir)
     install_git_bash_completion()
