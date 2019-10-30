@@ -160,6 +160,17 @@ let g:neomake_python_pylint_maker={
     \   function('neomake#makers#ft#python#PylintEntryProcess'),
     \ ]}
 
+let g:neomake_python_pydocstyle_maker={
+        \ 'exe': 'pydocstyle',
+        \ 'args': [
+          \ '--ignore=D100,D101,D102,D103,D104,D107,D203,D213,D416'
+        \ ],
+        \ 'errorformat':
+        \   '%W%f:%l %.%#:,' .
+        \   '%+C        %m',
+        \ 'postprocess': function('neomake#postprocess#compress_whitespace'),
+        \ }
+
 let g:neomake_cpp_cppcheck_maker={
         \ 'exe': 'cpp_static_wrapper.py',
         \ 'args': 'cppcheck',
@@ -308,6 +319,7 @@ function! GetHeaderGuard(fname)
 endfunction
 
 let g:vimtex_view_method = 'zathura'
+let g:vimtex_log_ignore = ['*']
 "let g:vimtex_view_general_viewer = 'okular'
 "let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 "let g:vimtex_view_general_options_latexmk = '--unique'
@@ -378,6 +390,8 @@ let g:LanguageClient_serverCommands = {
   \ 'cpp': ['/usr/lib/llvm-6.0/bin/clangd'],
   \ 'python': ['pyls'],
   \ }
+let g:LanguageClient_diagnosticsList = "Disabled"
+let g:LanguageClient_diagnosticsEnable = 0
 nnoremap <localleader>s :call LanguageClient_contextMenu()<CR>
 call deoplete#custom#source('LanguageClient',
             \ 'min_pattern_length',

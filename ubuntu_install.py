@@ -365,7 +365,7 @@ def main():
     # install_latexdiff(args.repos_dir, args.config_dir)
     install_ahoy()
     install_fzf(args.repos_dir)
-    install_emacs(args.config_dir, args.repos_dir)
+    # install_emacs(args.config_dir, args.repos_dir)
     install_git_bash_completion()
     install_pip_packages()
     install_scripts()
