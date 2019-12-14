@@ -318,11 +318,12 @@ function! GetHeaderGuard(fname)
     return include_txt
 endfunction
 
-let g:vimtex_view_method = 'zathura'
+" let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
 let g:vimtex_log_ignore = ['*']
-"let g:vimtex_view_general_viewer = 'okular'
-"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-"let g:vimtex_view_general_options_latexmk = '--unique'
+
 let g:vimtex_compiler_progname="nvr"
 
 let g:vimtex_compiler_latexmk = {
@@ -349,6 +350,7 @@ let g:vimtex_quickfix_latexlog = {
       \ 'overfull' : 1,
       \ 'underfull' : 0,
       \ 'font' : 1,
+      \ 'ignore_filters': ['Package caption Warning'],
       \ 'packages' : {
       \   'default' : 1,
       \   'natbib' : 1,

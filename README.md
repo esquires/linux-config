@@ -30,6 +30,9 @@ Installation:
     # default to zsh
     sudo chsh -s /usr/bin/zsh $USER
 
+    # install okular and set editor to 
+    # nvr --remote-silent +%l "%f"
+
 Manual steps:
 
 * Put this in `~/.zshrc`.

@@ -228,24 +228,16 @@ def install_neovim(repos_dir):
 
     pip_packages = ['neovim', 'cpplint', 'pydocstyle', 'neovim-remote']
     sp.check_call(['sudo', 'pip3', 'install'] + pip_packages)
+
     update_repo('https://github.com/neovim/neovim.git', repos_dir)
     neovim_dir = op.join(repos_dir, 'neovim')
-    sp.check_call(['git', 'checkout', 'v0.3.0'], cwd=neovim_dir)
+    sp.check_call(['git', 'checkout', 'v0.4.3'], cwd=neovim_dir)
 
     deps_dir = op.join(neovim_dir, '.deps')
     os.makedirs(deps_dir, exist_ok=True)
-    sp.check_call([
-        'cmake', '../third-party', "-DCMAKE_CXX_FLAGS='-march=native'",
-        '-DCMAKE_BUILD_TYPE=Release'], cwd=deps_dir)
-    sp.check_call(['make'], cwd=deps_dir)
-
-    build_dir = op.join(neovim_dir, 'build')
-    os.makedirs(build_dir, exist_ok=True)
-    sp.check_call([
-        'cmake', '..', '-G', 'Ninja', "-DCMAKE_CXX_FLAGS='-march=native'",
-        '-DCMAKE_BUILD_TYPE=Release'], cwd=build_dir)
-    sp.check_call(['ninja'], cwd=build_dir)
-    sp.check_call(['sudo', 'ninja', 'install'], cwd=build_dir)
+    sp.check_call(
+        ['make', 'CMAKE_BUILD_TYPE=Release'], cwd=neovim_dir)
+    sp.check_call(['sudo', 'make', 'install'], cwd=neovim_dir)
 
     os.makedirs(op.join(HOME, '.config', 'nvim'), exist_ok=True)
     lines_to_add = [
