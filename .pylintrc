@@ -78,7 +78,8 @@ disable=unused-argument,
     attribute-defined-outside-init,
     redefined-variable-type,
     too-many-lines,
-    multiple-statements
+    multiple-statements,
+    c-extension-no-member
 
 
 [REPORTS]

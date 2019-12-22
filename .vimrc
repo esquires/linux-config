@@ -163,7 +163,7 @@ let g:neomake_python_pylint_maker={
 let g:neomake_python_pydocstyle_maker={
         \ 'exe': 'pydocstyle',
         \ 'args': [
-          \ '--ignore=D100,D101,D102,D103,D104,D107,D203,D213,D416'
+          \ '--ignore=D100,D101,D102,D103,D104,D105,D107,D203,D213,D416'
         \ ],
         \ 'errorformat':
         \   '%W%f:%l %.%#:,' .
@@ -205,7 +205,7 @@ let g:vimtex_fold_enabled = 1
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|build_resources|devel)$',
+\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|build_resources|devel|tmp)$',
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
@@ -383,6 +383,7 @@ let g:airline#extensions#tabline#show_splits = 0
 " fugitive
 nnoremap <localleader>gs :Gstatus<cr>}jj
 nnoremap <localleader>gb :Gblame<cr>
+nnoremap <localleader>gt :Gcommit<cr>
 nnoremap <localleader>gd :Gdiff<cr>
 
 " LanguageClient-neovim
