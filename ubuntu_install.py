@@ -304,6 +304,7 @@ def install_pip_packages():
 
 def install_latexdiff(repos_dir, config_dir):
 
+    sp.check_call(['sudo', 'apt', 'install', '-y', 'asciidoc-base'])
     update_repo('https://gitlab.com/git-latexdiff/git-latexdiff', repos_dir)
     d = op.join(repos_dir, 'git-latexdiff')
     patch = \
@@ -354,7 +355,7 @@ def main():
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
     run_apt()
-    # install_latexdiff(args.repos_dir, args.config_dir)
+    install_latexdiff(args.repos_dir, args.config_dir)
     install_ahoy()
     install_fzf(args.repos_dir)
     # install_emacs(args.config_dir, args.repos_dir)

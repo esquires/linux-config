@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+import argparse
+import functools
+import os
+import os.path as op
+import shutil
+import subprocess as sp
+import re
+
+
+def get_subfiles(fname):
+    out = sp.check_output(
+        ['grep', '-E', r'^\\subfile', fname], encoding='utf-8')
+
+    r = re.compile(r'\\subfile\{(.*)\}')
+    return {r.match(ln).group(1) for ln in out.splitlines()}
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('ref1')
+    parser.add_argument('ref2', nargs='?')
+    parser.add_argument('main')
+    parser.add_argument('-q', '--quiet', action='store_true')
+    parser.add_argument('--tmp_dir', default='/tmp')
+    parser.add_argument('--skip_copy', action='store_true')
+    parser.add_argument('--pdf_viewer', default='okular')
+    args = parser.parse_args()
+
+    tmp_dir = op.join(args.tmp_dir, 'tmp_ld')
+    old_dir = op.join(tmp_dir, 'old')
+    new_dir = op.join(tmp_dir, 'new')
+    diff_dir = op.join(tmp_dir, 'diff')
+
+    repo_root = os.getcwd()
+    if not op.isdir(op.join(repo_root, '.git')):
+        raise RuntimeError((
+            'This command should be executed from the root directory of '
+            'a git repo'))
+
+    if not args.skip_copy:
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        shutil.copytree(repo_root, old_dir)
+        shutil.copytree(repo_root, new_dir)
+        shutil.copytree(repo_root, diff_dir)
+
+    _call = sp.check_call if not args.quiet else \
+        functools.partial(sp.check_call, stderr=sp.DEVNULL, stdout=sp.DEVNULL)
+
+    _call(['git', 'checkout', args.ref1], cwd=old_dir)
+    if args.ref2:
+        _call(['git', 'checkout', args.ref2], cwd=new_dir)
+
+    diff_main = op.join(diff_dir, args.main)
+
+    def run_latexdiff(fname):
+        src_old = op.join(old_dir, fname)
+        src_new = op.join(new_dir, fname)
+        dst = op.join(diff_dir, fname)
+        os.makedirs(op.dirname(dst), exist_ok=True)
+        with open(dst, 'w') as f:
+            _call(['latexdiff', src_old, src_new], stdout=f)
+
+    # build the tex diff
+    rel_main = op.relpath(args.main, repo_root)
+    run_latexdiff(rel_main)
+
+    subfiles = [op.join(op.dirname(rel_main), f)
+                for f in get_subfiles(diff_main)]
+    for subfile in subfiles:
+        run_latexdiff(subfile)
+        sp.check_call(['sed', r'/%DIF /d', '-i', op.join(diff_dir, subfile)])
+
+    # build the pdf
+    main_basename = op.basename(args.main)
+    main_basename_no_ext = op.splitext(main_basename)[0]
+    diff_main_dir = op.dirname(diff_main)
+    _call(['pdflatex', main_basename], cwd=diff_main_dir)
+    _call(['bibtex', main_basename_no_ext], cwd=diff_main_dir)
+    _call(['pdflatex', main_basename], cwd=diff_main_dir)
+    _call(['pdflatex', main_basename], cwd=diff_main_dir)
+
+    diff_pdf = op.splitext(diff_main)[0] + '.pdf'
+    if shutil.which(args.pdf_viewer):
+        sp.Popen([args.pdf_viewer, diff_pdf])
+    else:
+        viewers = [vwr for vwr in ['okular', 'evince'] if shutil.which(vwr)]
+        if viewers:
+            sp.Popen([viewers[0], diff_pdf])
+        else:
+            print((
+                f'could not find pdf viewer. File available at {diff_pdf}'))
+
+
+if __name__ == '__main__':
+    main()

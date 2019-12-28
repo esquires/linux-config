@@ -86,7 +86,7 @@ function git_pull_dirs {
 
 }
 
-alias ld="git-latexdiff --quiet --ignore-latex-errors --bibtex --latexpand --makeatletter "
+alias ld="latexdiff-wrapper"
 alias vim="nvim"
 alias gvim="gnome-terminal -- nvim -p"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
