@@ -131,7 +131,7 @@ let g:neomake_open_list=0
 let g:neomake_highlight_lines=1
 let g:neomake_highlight_columns=1
 let g:neomake_place_signs=1
-let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8']
+let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8', 'mypy']
 " let g:neomake_python_enabled_makers=[]
 
 let g:neomake_cpp_cppclean_maker={
@@ -170,6 +170,70 @@ let g:neomake_python_pydocstyle_maker={
         \   '%+C        %m',
         \ 'postprocess': function('neomake#postprocess#compress_whitespace'),
         \ }
+
+" copied from neomake: autoload/neomake/makers/ft/python.vim
+function! CustomMypy() abort
+    " NOTE: uses defaults suitable for using it without any config.
+    " ignore_missing_imports cannot be disabled in a config then though
+    let args = [
+                \ '--show-column-numbers',
+                \ '--check-untyped-defs',
+                \ '--ignore-missing-imports',
+                \ '--disallow-untyped-defs',
+                \ ]
+
+    " Append '--py2' to args with Python 2 for Python 2 mode.
+    if !exists('s:python_version')
+        call neomake#makers#ft#python#DetectPythonVersion()
+    endif
+
+    let maker = {
+        \ 'args': args,
+        \ 'output_stream': 'stdout',
+        \ 'errorformat':
+            \ '%E%f:%l:%c: error: %m,' .
+            \ '%W%f:%l:%c: warning: %m,' .
+            \ '%I%f:%l:%c: note: %m,' .
+            \ '%E%f:%l: error: %m,' .
+            \ '%W%f:%l: warning: %m,' .
+            \ '%I%f:%l: note: %m,' .
+            \ '%-GSuccess%.%#,' .
+            \ '%-GFound%.%#,'
+        \ }
+    function! maker.InitForJob(jobinfo) abort
+        let maker = deepcopy(self)
+        let file_mode = a:jobinfo.file_mode
+        if file_mode
+            " Follow imports, but do not emit errors/issues for it, which
+            " would result in errors for other buffers etc.
+            " XXX: dmypy requires "skip" or "error"
+            call insert(maker.args, '--follow-imports=silent')
+        else
+            let project_root = neomake#utils#get_project_root(a:jobinfo.bufnr)
+            if empty(project_root)
+                call add(maker.args, '.')
+            else
+                call add(maker.args, project_root)
+            endif
+        endif
+        return maker
+    endfunction
+    function! maker.supports_stdin(jobinfo) abort
+        if !has_key(self, 'tempfile_name')
+            let self.tempfile_name = self._get_default_tempfilename(a:jobinfo)
+        endif
+        let self.args += ['--shadow-file', '%', self.tempfile_name]
+        return 0
+    endfunction
+    function! maker.postprocess(entry) abort
+        if a:entry.text =~# '\v^Need type (annotation|comment) for'
+            let a:entry.type = 'I'
+        endif
+    endfunction
+    return maker
+endfunction
+
+let g:neomake_python_mypy_maker=CustomMypy()
 
 let g:neomake_cpp_cppcheck_maker={
         \ 'exe': 'cpp_static_wrapper.py',

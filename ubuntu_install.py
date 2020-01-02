@@ -280,6 +280,9 @@ def setup_ipython():
     sp.check_call(['ipython', 'profile', 'create'])
     config = op.join(HOME, '.ipython', 'profile_default', 'ipython_config.py')
     add_lines(config, ["c.TerminalInteractiveShell.editing_mode =  'vi'"])
+    add_lines(config, ["c.InteractiveShellApp.extensions = ['autoreload']"])
+    exec_lines = ['%autoreload 2', 'import numpy as np']
+    add_lines(config, [f"c.InteractiveShellApp.exec_lines = {exec_lines}"])
 
 
 def install_awesome(config_dir):
