@@ -11,6 +11,7 @@ fi
 
 #stuff whose error I don't want to see
 alias vim="nvim"
+alias vimt="nvim -c term"
 alias gvim="gnome-terminal -x nvim -p"
 
 #set editor to vi
