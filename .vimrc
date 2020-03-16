@@ -273,6 +273,7 @@ let g:ctrlp_custom_ignore = {
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
 nnoremap <localleader>f :CtrlP getcwd()<cr>
 nnoremap <localleader>b :CtrlPBuffer<cr>
 
