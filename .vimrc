@@ -449,6 +449,7 @@ let g:airline#extensions#tabline#show_splits = 0
 nnoremap <localleader>gs :Gstatus<cr>}jj
 nnoremap <localleader>gb :Gblame<cr>
 nnoremap <localleader>gt :Gcommit<cr>
+nnoremap <localleader>gl :Glog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>
 nnoremap <localleader>gd :Gdiffsplit<cr>
 
 " LanguageClient-neovim
