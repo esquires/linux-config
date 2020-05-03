@@ -24,7 +24,7 @@ def main():
     parser.add_argument('-q', '--quiet', action='store_true')
     parser.add_argument('--tmp_dir', default='/tmp')
     parser.add_argument('--skip_copy', action='store_true')
-    parser.add_argument('--pdf_viewer', default='okular')
+    parser.add_argument('--pdf_viewer')
     args = parser.parse_args()
 
     tmp_dir = op.join(args.tmp_dir, 'tmp_ld')
@@ -47,8 +47,11 @@ def main():
     _call = sp.check_call if not args.quiet else \
         functools.partial(sp.check_call, stderr=sp.DEVNULL, stdout=sp.DEVNULL)
 
+    _call(['git', 'stash'], cwd=old_dir)
     _call(['git', 'checkout', args.ref1], cwd=old_dir)
+
     if args.ref2:
+        _call(['git', 'stash'], cwd=new_dir)
         _call(['git', 'checkout', args.ref2], cwd=new_dir)
 
     diff_main = op.join(diff_dir, args.main)
@@ -73,23 +76,21 @@ def main():
 
     # build the pdf
     main_basename = op.basename(args.main)
-    main_basename_no_ext = op.splitext(main_basename)[0]
+    main_basename_no_ext, ext = op.splitext(main_basename)
     diff_main_dir = op.dirname(diff_main)
-    _call(['pdflatex', main_basename], cwd=diff_main_dir)
-    _call(['bibtex', main_basename_no_ext], cwd=diff_main_dir)
-    _call(['pdflatex', main_basename], cwd=diff_main_dir)
-    _call(['pdflatex', main_basename], cwd=diff_main_dir)
 
-    diff_pdf = op.splitext(diff_main)[0] + '.pdf'
-    if shutil.which(args.pdf_viewer):
+    main_basename_diff = main_basename_no_ext + "_diff" + ext
+    main_basename_diff_no_ext = main_basename_no_ext + "_diff"
+
+    shutil.copyfile(diff_main, op.join(diff_main_dir, main_basename_diff))
+    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
+    _call(['bibtex', main_basename_diff_no_ext], cwd=diff_main_dir)
+    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
+    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
+
+    diff_pdf = op.join(diff_main_dir, main_basename_diff_no_ext) + '.pdf'
+    if args.pdf_viewer:
         sp.Popen([args.pdf_viewer, diff_pdf])
-    else:
-        viewers = [vwr for vwr in ['okular', 'evince'] if shutil.which(vwr)]
-        if viewers:
-            sp.Popen([viewers[0], diff_pdf])
-        else:
-            print((
-                f'could not find pdf viewer. File available at {diff_pdf}'))
 
 
 if __name__ == '__main__':
