@@ -25,6 +25,7 @@ def main():
     parser.add_argument('--tmp_dir', default='/tmp')
     parser.add_argument('--skip_copy', action='store_true')
     parser.add_argument('--pdf_viewer')
+    parser.add_argument('--diff_file')
     args = parser.parse_args()
 
     tmp_dir = op.join(args.tmp_dir, 'tmp_ld')
@@ -83,6 +84,13 @@ def main():
     main_basename_diff_no_ext = main_basename_no_ext + "_diff"
 
     shutil.copyfile(diff_main, op.join(diff_main_dir, main_basename_diff))
+
+    _call(['git', 'add', '.'], cwd=diff_dir)
+    _call(['git', 'commit', '-m', 'apply diff'], cwd=diff_dir)
+
+    if args.diff_file:
+        _call(['git', 'apply', args.diff_file], cwd=diff_dir)
+
     _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
     _call(['bibtex', main_basename_diff_no_ext], cwd=diff_main_dir)
     _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
