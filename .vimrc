@@ -270,7 +270,7 @@ let g:vimtex_fold_enabled = 1
 " ctrlp
 let g:ctrlp_custom_ignore = {
 \ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|build_resources|devel|tmp)$',
-\ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc)$',
+\ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc|pdf|png)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
