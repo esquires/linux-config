@@ -124,7 +124,7 @@ augroup END
 
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
-let g:neomake_tex_enabled_makers=[]
+let g:neomake_tex_enabled_makers=['lacheck_wrapper', 'proselint', 'textidote']
 let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean', 'flawfinder']
 " let g:neomake_cpp_enabled_makers=['cppcheck']
 let g:neomake_open_list=0
@@ -133,6 +133,19 @@ let g:neomake_highlight_columns=1
 let g:neomake_place_signs=1
 let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8', 'mypy']
 " let g:neomake_python_enabled_makers=[]
+
+let g:neomake_tex_lacheck_wrapper_maker={
+    \ 'exe': 'lacheck_wrapper.py',
+    \ 'errorformat':
+    \ '%-G** %f:,' .
+    \ '%E"%f"\, line %l: %m'}
+
+let g:neomake_tex_textidote_maker={
+        \ 'exe': "java",
+        \ 'args': ['-jar', '~/bin/textidote.jar', '--no-color', '--ignore', 'sh:c:noin,sh:d:001,sh:nobreak,sh:capperiod,sh:figref,sh:d:003', '--output', 'singleline'],
+        \ 'errorformat': '%f:%l:%m'
+        \ }
+
 
 let g:neomake_cpp_cppclean_maker={
         \ 'exe': "cpp_static_wrapper.py",

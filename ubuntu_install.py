@@ -1,6 +1,7 @@
 import argparse
 import subprocess as sp
 import os.path as op
+import shutil
 import os
 import pathlib
 import sys
@@ -303,7 +304,7 @@ def install_awesome(config_dir):
 
 
 def install_pip_packages():
-    sp.check_call(["sudo", "pip3", "install", "flawfinder"])
+    sp.check_call(["sudo", "pip3", "install", "flawfinder", "proselint"])
 
 
 def install_latexdiff(repos_dir, config_dir):
@@ -347,6 +348,26 @@ def install_ahoy():
     sp.check_call(['chmod', '+x', ahoy_bin])
 
 
+def install_textidote(config_dir, repos_dir):
+    pkgs = ["openjdk-8-jdk", "openjdk-8-jre-headless", "ant"]
+    sp.check_call(['sudo', 'apt', 'install', '-y'] + pkgs)
+
+    update_repo("https://github.com/sylvainhalle/textidote", repos_dir)
+
+    patch_file = op.join(
+        config_dir, 'patches',
+        '0001-adjust-output-so-it-is-easier-to-parse-with-neomake.patch')
+
+    textidote_dir = op.join(repos_dir, "textidote")
+    apply_patch(patch_file, "[PATCH] adjust output so it is easier to parse",
+                textidote_dir)
+
+    sp.check_call(['ant', 'download-deps'], cwd=textidote_dir)
+    sp.check_call(['ant'], cwd=textidote_dir)
+    shutil.copy2(op.join(textidote_dir, 'textidote.jar'),
+                 op.join(op.expanduser('~'), 'bin', 'textidote.jar'))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
@@ -360,7 +381,7 @@ def main():
 
     run_apt()
     install_latexdiff(args.repos_dir, args.config_dir)
-    install_ahoy()
+    # install_ahoy()
     install_fzf(args.repos_dir)
     # install_emacs(args.config_dir, args.repos_dir)
     install_git_bash_completion()
@@ -376,6 +397,7 @@ def main():
     install_cmd_monitor(args.repos_dir)
     setup_ipython()
     install_awesome(args.config_dir)
+    install_textidote(args.config_dir, args.repos_dir)
 
 
 if __name__ == '__main__':
