@@ -459,7 +459,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#show_splits = 0
 
 " fugitive
-nnoremap <localleader>gs :Gstatus<cr>}jj
+nnoremap <localleader>gs :G<cr>}jj<c-w>H
 nnoremap <localleader>gb :Gblame<cr>
 nnoremap <localleader>gt :Gcommit<cr>
 nnoremap <localleader>gl :Glog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>
