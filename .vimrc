@@ -289,6 +289,11 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
 nnoremap <localleader>f :CtrlP getcwd()<cr>
 nnoremap <localleader>b :CtrlPBuffer<cr>
+  let g:ctrlp_prompt_mappings = {
+    \ 'PrtClearCache()':      ['<up>'],
+    \ 'PrtDeleteEnt()':       ['<down>'],
+    \ }
+
 
 "in case there are system specific settings
 try
