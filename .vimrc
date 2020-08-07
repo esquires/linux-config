@@ -282,13 +282,24 @@ let g:vimtex_fold_enabled = 1
 
 " ctrlp
 let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/](git|hg|svn|build|build_dependencies|build_resources|devel|tmp)$',
+\ 'dir':  '\v[\/](git|hg|svn|build|devel|tmp)$',
 \ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc|pdf|png)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
-nnoremap <localleader>f :CtrlP getcwd()<cr>
-nnoremap <localleader>b :CtrlPBuffer<cr>
+
+function SetCtrlPIgnore(rm_submodules)
+    if a:rm_submodules
+        let g:ctrlp_custom_ignore['dir'] = '\v[\/](git|hg|svn|build|devel|tmp|submodules)$'
+    else
+        echom 'bar'
+        let g:ctrlp_custom_ignore['dir'] = '\v[\/](git|hg|svn|build|devel|tmp)$'
+    endif
+endfunction
+
+nnoremap <c-p> :call SetCtrlPIgnore(1)<cr>:cal ctrlp#init(0, {})<cr>
+nnoremap <localleader>f :call SetCtrlPIgnore(0)<cr>:CtrlP getcwd()<cr>
+nnoremap <localleader>b :call SetCtrlPIgnore(0)<cr>:CtrlPBuffer<cr>
   let g:ctrlp_prompt_mappings = {
     \ 'PrtClearCache()':      ['<up>'],
     \ 'PrtDeleteEnt()':       ['<down>'],
@@ -485,4 +496,4 @@ call deoplete#custom#source('LanguageClient',
             \ 2)
 
 " vim-wordmapping
-let g:wordmotion_mappings = {'W': '', 'B': ''}
+let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}
