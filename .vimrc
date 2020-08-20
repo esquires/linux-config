@@ -300,11 +300,6 @@ endfunction
 nnoremap <c-p> :call SetCtrlPIgnore(1)<cr>:cal ctrlp#init(0, {})<cr>
 nnoremap <localleader>f :call SetCtrlPIgnore(0)<cr>:CtrlP getcwd()<cr>
 nnoremap <localleader>b :call SetCtrlPIgnore(0)<cr>:CtrlPBuffer<cr>
-  let g:ctrlp_prompt_mappings = {
-    \ 'PrtClearCache()':      ['<up>'],
-    \ 'PrtDeleteEnt()':       ['<down>'],
-    \ }
-
 
 "in case there are system specific settings
 try
