@@ -233,7 +233,7 @@ def install_neovim(repos_dir):
 
     update_repo('https://github.com/neovim/neovim.git', repos_dir)
     neovim_dir = op.join(repos_dir, 'neovim')
-    sp.check_call(['git', 'checkout', 'v0.4.3'], cwd=neovim_dir)
+    sp.check_call(['git', 'checkout', 'v0.4.4'], cwd=neovim_dir)
 
     deps_dir = op.join(neovim_dir, '.deps')
     os.makedirs(deps_dir, exist_ok=True)
