@@ -283,7 +283,7 @@ let g:vimtex_fold_enabled = 1
 " ctrlp
 let g:ctrlp_custom_ignore = {
 \ 'dir':  '\v[\/](git|hg|svn|build|devel|tmp)$',
-\ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc|pdf|png)$',
+\ 'file': '\v\.(exe|so(\.\d\.\d\.\d)?|dll|pyc|pdf|png|npy)$',
 \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 \ }
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
@@ -475,6 +475,9 @@ nnoremap <localleader>gb :Gblame<cr>
 nnoremap <localleader>gt :Gcommit<cr>
 nnoremap <localleader>gl :Glog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>
 nnoremap <localleader>gd :Gdiffsplit<cr>
+nnoremap <localleader>gco :Git checkout 
+" push current branch
+nnoremap <localleader>gp :Gpush origin HEAD<cr>
 
 " LanguageClient-neovim
 " Required for operations modifying multiple buffers like rename.
