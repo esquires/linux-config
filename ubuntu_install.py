@@ -166,6 +166,7 @@ def install_vim_plugins(config_dir, repos_dir):
     _update('https://github.com/tpope/vim-surround')
     _update('https://github.com/tpope/vim-repeat')
     _update('https://github.com/chaoren/vim-wordmotion')
+    _update('https://github.com/dhruvasagar/vim-table-mode')
     _update('https://github.com/plasticboy/vim-markdown')
 
     # deoplete has a 3.6 dependency after the below commit

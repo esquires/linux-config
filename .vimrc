@@ -495,3 +495,8 @@ call deoplete#custom#source('LanguageClient',
 
 " vim-wordmapping
 let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}
+
+set concealcursor=
+
+" vim-markdown
+let g:vim_markdown_auto_insert_bullets = 0

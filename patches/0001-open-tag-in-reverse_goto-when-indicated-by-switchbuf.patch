@@ -1,32 +1,28 @@
-From 13a798b03ac0017313fc70150362edbeeb5d849b Mon Sep 17 00:00:00 2001
+From ad6caea0f79cd94f449e0c140e1daddc3c88a7eb Mon Sep 17 00:00:00 2001
 From: Eric Squires <eric.squires@gtri.gatech.edu>
 Date: Thu, 28 May 2020 23:01:57 -0400
 Subject: [PATCH] open tag in reverse_goto when indicated by switchbuf
 
 ---
- .gitignore                       |  3 ++-
+ .gitignore                       |  1 +
  autoload/vimtex/view.vim         | 14 +++++++-------
  autoload/vimtex/view/zathura.vim |  2 +-
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/.gitignore b/.gitignore
-index b3308abe..c7f2dbf2 100644
+index 8c76510c..ea3dc080 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -1,6 +1,7 @@
- doc/tags
--
- test/issues/*
- test/tests/test-compiler/latexrun
- test/tests/test-syntax/syntax/
- test/tests/test-textobj-targets/targets.vim/
-+test/*
+@@ -4,3 +4,4 @@ test/test-compiler/latexrun
+ test/test-syntax/syntax/
+ test/test-textobj-targets/targets.vim/
+ test/issues
 +tags
 diff --git a/autoload/vimtex/view.vim b/autoload/vimtex/view.vim
-index 6929f781..26392dfe 100644
+index 0c92aae5..5be11e26 100644
 --- a/autoload/vimtex/view.vim
 +++ b/autoload/vimtex/view.vim
-@@ -74,19 +74,18 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
+@@ -66,19 +66,18 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
    " Open file if necessary
    if !bufexists(l:file)
      if filereadable(l:file)
@@ -52,17 +48,17 @@ index 6929f781..26392dfe 100644
  
    execute 'normal!' a:line . 'G'
    normal! zMzvzz
-@@ -108,4 +107,5 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
+@@ -100,4 +99,5 @@ function! vimtex#view#reverse_goto(line, filename) abort " {{{1
    endif
  endfunction
  
 +command! -nargs=+ VimtexReverseGoto :call vimtex#view#reverse_goto(<f-args>)<cr>
  " }}}1
 diff --git a/autoload/vimtex/view/zathura.vim b/autoload/vimtex/view/zathura.vim
-index edbcbd36..2a05d587 100644
+index c99df0cf..f2fa17fe 100644
 --- a/autoload/vimtex/view/zathura.vim
 +++ b/autoload/vimtex/view/zathura.vim
-@@ -121,7 +121,7 @@ function! s:zathura.latexmk_append_argument() dict abort " {{{1
+@@ -117,7 +117,7 @@ function! s:zathura.latexmk_append_argument() dict abort " {{{1
      if self.has_synctex
        let zathura .= ' -x \"' . g:vimtex_compiler_progname
            \ . ' --servername ' . v:servername
