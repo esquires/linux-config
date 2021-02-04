@@ -1,20 +1,19 @@
-From 486c55616b3dc7dbdb097122e386580357b284c4 Mon Sep 17 00:00:00 2001
-From: Eric Squires <eric.squires@gtri.gatech.edu>
-Date: Mon, 26 Nov 2018 10:00:06 -0500
+From a98b420a5fe3901a38fa9512c9ba3aaba536c898 Mon Sep 17 00:00:00 2001
+From: Eric Squires <eric.g.squires@gmail.com>
+Date: Thu, 4 Feb 2021 09:30:28 -0500
 Subject: [PATCH] add ccache
 
 ---
- CMakeLists.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ CMakeLists.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 23540ef..c3537c3 100644
+index e52750ace..6ae7919ba 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,6 +1,15 @@
- project(Cppcheck)
-+
- cmake_minimum_required(VERSION 2.8.11)
+@@ -3,6 +3,14 @@ project(Cppcheck)
+ 
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
  
 +# see : https://crascit.com/2016/04/09/using-ccache-with-cmake/
 +find_program(CCACHE_PROGRAM ccache)
@@ -26,7 +25,7 @@ index 23540ef..c3537c3 100644
 +
  include(GNUInstallDirs)
  
- include(cmake/versions.cmake REQUIRED)
+ include(cmake/versions.cmake)
 -- 
-2.7.4
+2.17.1
 

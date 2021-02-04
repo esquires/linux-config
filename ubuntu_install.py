@@ -206,9 +206,9 @@ def install_vim_plugins(config_dir, repos_dir):
     apply_patch(patch_file, patch_msg, vimtex_dir)
 
 
-def apply_patch(patch_file, patch_msg, d):
-    sp.check_call(['git', 'checkout', '-f', 'master'], cwd=d)
-    sp.check_call(['git', 'reset', '--hard', 'origin/master'], cwd=d)
+def apply_patch(patch_file, patch_msg, d, branch='master'):
+    sp.check_call(['git', 'checkout', '-f', branch], cwd=d)
+    sp.check_call(['git', 'reset', '--hard', f'origin/{branch}'], cwd=d)
     sp.check_call(['git', 'am', '-3', patch_file], cwd=d)
 
 
@@ -257,7 +257,7 @@ def install_cppcheck(config_dir, repos_dir):
     cppcheck_dir = op.join(repos_dir, 'cppcheck')
     patch_msg = '[PATCH] add ccache'
     patch_file = op.join(config_dir, 'patches', '0001-add-ccache.patch')
-    apply_patch(patch_file, patch_msg, cppcheck_dir)
+    apply_patch(patch_file, patch_msg, cppcheck_dir, 'main')
 
     build_dir = op.join(cppcheck_dir, 'build')
     os.makedirs(build_dir, exist_ok=True)
