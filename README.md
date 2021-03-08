@@ -31,7 +31,7 @@ Installation:
     sudo chsh -s /usr/bin/zsh $USER
 
     # install okular and set editor to 
-    # nvr --remote-silent +%l "%f"
+    # nvr --servername /tmp/vimlatexserver --remote-silent +%l "%f"
 
 Manual steps:
 

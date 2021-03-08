@@ -453,10 +453,11 @@ let g:vimtex_quickfix_latexlog = {
 \}
 let g:vimtex_quickfix_autoclose_after_keystrokes=1
 
-if !exists('g:deoplete#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
-endif
-let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+" configure deoplete to work with vimtex
+call deoplete#custom#var('omni', 'input_patterns', {
+      \ 'tex': g:vimtex#re#deoplete
+      \})
+
 let g:tex_flavor = 'latex'
 let g:vimtex_quickfix_open_on_warning=1
 let g:vimtex_fold_enabled=1

@@ -89,7 +89,7 @@ function git_pull_dirs {
 alias ld="latexdiff-wrapper"
 alias vim="nvim"
 alias vimt="nvim -c term"
+alias vimlatex="NVIM_LISTEN_ADDRESS=/tmp/vimlatexserver nvim"
 alias gvim="gnome-terminal -- nvim -p"
-export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 
 complete -F "ahoy --generate-bash-completion" ahoy

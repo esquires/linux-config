@@ -325,31 +325,6 @@ def install_fzf(repos_dir):
     sp.check_call(['./install', '--all'], cwd=op.join(repos_dir, 'fzf'))
 
 
-def install_emacs(config_dir, repos_dir):
-    emacs_dir = op.join(repos_dir, 'emacs')
-    os.makedirs(emacs_dir, exist_ok=True)
-    os.makedirs(op.join(HOME, 'emacs.d'), exist_ok=True)
-    sp.check_call(['sudo', 'apt', 'install', '-y', 'emacs'])
-    update_repo('https://github.com/emacs-evil/evil', emacs_dir)
-    update_repo('https://github.com/GuiltyDolphin/org-evil.git', emacs_dir)
-    update_repo('https://github.com/magnars/dash.el', emacs_dir)
-    update_repo('https://github.com/GuiltyDolphin/monitor', emacs_dir)
-    try:
-        os.symlink(op.join(config_dir, 'init.el'),
-                   op.join(HOME, 'emacs.d', 'init.el'))
-    except FileExistsError:
-        pass
-
-
-def install_ahoy():
-    ahoy_bin = op.join(HOME, 'bin', 'ahoy')
-    sp.check_call([
-        'wget', '-q',
-        'https://github.com/ahoy-cli/ahoy/releases/download/2.0.0/ahoy-bin-linux-amd64',
-        '-O', ahoy_bin])
-    sp.check_call(['chmod', '+x', ahoy_bin])
-
-
 def install_textidote(config_dir, repos_dir):
     pkgs = ["openjdk-8-jdk", "openjdk-8-jre-headless", "ant"]
     sp.check_call(['sudo', 'apt', 'install', '-y'] + pkgs)
@@ -370,7 +345,17 @@ def install_textidote(config_dir, repos_dir):
                  op.join(op.expanduser('~'), 'bin', 'textidote.jar'))
 
 
-def main():
+def install_inkscape(repos_dir: str) -> None:
+    # install inkscape and dependencies for LaTexText project
+    sp.check_call(
+        ['sudo', 'apt', 'install', '-y', 'inkscape',
+         'pdf2svg', 'python-lxml', 'python-gi'])
+    update_repo('https://github.com/seebk/LaTeXText', repos_dir)
+    sp.check_call(
+        ['bash', 'install.sh'], cwd=op.join(repos_dir, 'LaTeXText'))
+
+
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('config_dir')
     parser.add_argument('repos_dir')
@@ -382,10 +367,9 @@ def main():
     os.makedirs(op.join(HOME, 'repos'), exist_ok=True)
 
     run_apt()
+    install_inkscape(args.repos_dir)
     install_latexdiff(args.repos_dir, args.config_dir)
-    # install_ahoy()
     install_fzf(args.repos_dir)
-    # install_emacs(args.config_dir, args.repos_dir)
     install_git_bash_completion()
     install_pip_packages()
     install_scripts()
