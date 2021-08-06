@@ -136,6 +136,7 @@ alias find1='find -maxdepth 1 -mindepth 1'
 alias l='ls -lh'
 alias CLR='for i in {1..99}; do echo; done; clear'
 alias g="gnome-terminal -x nvim -p"
+alias rm='echo "use trash-put!"'
 
 #machine specific operations
 if [ -f ~/.bash_specific ]; then

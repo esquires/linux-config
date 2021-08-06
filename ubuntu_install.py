@@ -71,6 +71,7 @@ def run_apt():
         "zathura",
         "xdotool",
         "aptitude",
+        "trash-cli",
         "exuberant-ctags",
         "global",
         "htop",
