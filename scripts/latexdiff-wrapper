@@ -9,11 +9,14 @@ import re
 
 
 def get_subfiles(fname):
-    out = sp.check_output(
-        ['grep', '-E', r'^\\subfile', fname], encoding='utf-8')
+    try:
+        out = sp.check_output(
+            ['grep', '-E', r'^\\subfile', fname], encoding='utf-8')
 
-    r = re.compile(r'\\subfile\{(.*)\}')
-    return {r.match(ln).group(1) for ln in out.splitlines()}
+        r = re.compile(r'\\subfile\{(.*)\}')
+        return {r.match(ln).group(1) for ln in out.splitlines()}
+    except sp.CalledProcessError:
+        return set()
 
 
 def main():
@@ -26,6 +29,8 @@ def main():
     parser.add_argument('--skip_copy', action='store_true')
     parser.add_argument('--pdf_viewer')
     parser.add_argument('--diff_file')
+    parser.add_argument('--latexengine', default='xelatex')
+    parser.add_argument('--no_run_bibtex', action='store_true')
     args = parser.parse_args()
 
     tmp_dir = op.join(args.tmp_dir, 'tmp_ld')
@@ -91,10 +96,12 @@ def main():
     if args.diff_file:
         _call(['git', 'apply', args.diff_file], cwd=diff_dir)
 
-    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
-    _call(['bibtex', main_basename_diff_no_ext], cwd=diff_main_dir)
-    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
-    _call(['pdflatex', main_basename_diff], cwd=diff_main_dir)
+    _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
+
+    if not args.no_run_bibtex:
+        _call(['bibtex', main_basename_diff_no_ext], cwd=diff_main_dir)
+        _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
+        _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
 
     diff_pdf = op.join(diff_main_dir, main_basename_diff_no_ext) + '.pdf'
     if args.pdf_viewer:
