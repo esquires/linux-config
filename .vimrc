@@ -58,7 +58,7 @@ if has("nvim")
 endif
 
 "pathogen plugin
-call pathogen#infect()
+"call pathogen#infect()
 
 " togglelist settings
 function! s:GetBufferList() 
@@ -472,13 +472,13 @@ let g:airline#extensions#tabline#show_splits = 0
 
 " fugitive
 nnoremap <localleader>gs :G<cr>}jj<c-w>H
-nnoremap <localleader>gb :Gblame<cr>
-nnoremap <localleader>gt :Gcommit<cr>
-nnoremap <localleader>gl :Glog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>
+nnoremap <localleader>gb :Git blame<cr>
+nnoremap <localleader>gt :Git commit<cr>
+nnoremap <localleader>gl :Gclog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>
 nnoremap <localleader>gd :Gdiffsplit<cr>
 nnoremap <localleader>gco :Git checkout 
 " push current branch
-nnoremap <localleader>gp :Gpush origin HEAD<cr>
+nnoremap <localleader>gp :Git push origin HEAD<cr>
 
 " LanguageClient-neovim
 " Required for operations modifying multiple buffers like rename.
@@ -500,4 +500,6 @@ let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}
 set concealcursor=
 
 " vim-markdown
-let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_auto_insert_bullets = 1
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_math = 1

@@ -3,10 +3,19 @@ plugins=(
   git
   command-not-found 
   wd
-  last-working-dir)
+  last-working-dir
+  docker
+  docker-compose
+  autojump
+  colorize
+)
 ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true"
 source $ZSH/oh-my-zsh.sh
+
+ZSH_COLORIZE_STYLE="fruity"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
@@ -50,6 +59,9 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 zle -N zle-history-line-set
 export KEYTIMEOUT=1
+
+alias d='docker'
+alias dr="docker run --rm -ti $(docker images | head -2 | tail -1 | tr -s ' ' | cut -d ' ' -f 3) /bin/bash "
 
 #git aliases
 alias gs='git status'
