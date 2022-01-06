@@ -80,10 +80,11 @@ cmd("let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}")
 -- https://dev.to/dlains/create-your-own-vim-commands-415b
 require('telescope').load_extension('fzf')
 keymap('n', '<leader>ff', ":FindFiles ")
-keymap('n', '<leader>fg', ":lua require('telescope.builtin').git_files({cwd=vim.fn.expand('%:p:h')})<cr>")
-keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers()<cr>")
+keymap('n', '<leader>fg', ":lua GitFindFilesHelper()<cr>")
+keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>")
 -- keymap('n', '<leader>fr', ":lua require('telescope.builtin').live_grep()<cr>")
 keymap('n', '<leader>fr', ":LiveGrep ")
+keymap('n', '=', "za")
 
 local function GetCwdHelper(cwd)
   if cwd == 'pwd' then
@@ -112,8 +113,33 @@ local function GetCwdHelper(cwd)
 end
 
 function FindFilesHelper(cwd)
-  require('telescope.builtin').find_files({cwd=GetCwdHelper(cwd)})
+  -- calculate the current path relative to the currently open file
+  local curr_file_path = vim.fn.expand('%:p')
+  local cwd = GetCwdHelper(cwd)
+  local find_command = {'rg', '--files'}
+
+  if vim.startswith(curr_file_path, cwd) then
+    local ignore = string.sub(curr_file_path, -(#curr_file_path - #cwd))
+    table.insert(find_command, '-g')
+    table.insert(find_command, '!' .. ignore)
+  end
+
+  require('telescope.builtin').find_files({cwd=cwd, find_command = find_command})
 end
+
+function GitFindFilesHelper(cwd)
+  local curr_file_path = vim.fn.expand('%:p')
+  local cwd = vim.fn.expand('%:p:h')
+  local git_command = {"git","ls-files","--exclude-standard","--cached"}
+  if vim.startswith(curr_file_path, cwd) then
+    -- https://stackoverflow.com/a/36754216
+    local ignore = string.sub(curr_file_path, -(#curr_file_path - #cwd - 1))
+    table.insert(git_command, ':!:' .. ignore)
+  end
+
+  require('telescope.builtin').git_files({cwd=cwd, git_command = git_command})
+end
+
 
 function LiveGrepHelper(cwd)
   require('telescope.builtin').live_grep({cwd=GetCwdHelper(cwd)})
@@ -166,11 +192,64 @@ vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
 -- fixme: others yet to be updated
 cmd('source ~/.config/nvim/old-cfg.vim')
 
+function _G.put(...)
+  -- https://github.com/nanotee/nvim-lua-guide
+  local objects = {}
+  for i = 1, select('#', ...) do
+    local v = select(i, ...)
+    table.insert(objects, vim.inspect(v))
+  end
+
+  print(table.concat(objects, '\n'))
+  return ...
+end
+
 -- neorg
+local parser_configs = require('nvim-treesitter.parsers').get_parser_configs()
+
+parser_configs.norg = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg",
+    files = { "src/parser.c", "src/scanner.cc" },
+    branch = "main"
+  },
+}
+
+parser_configs.norg_meta = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg-meta",
+    files = { "src/parser.c" },
+    branch = "main"
+  },
+}
+
+parser_configs.norg_table = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg-table",
+    files = { "src/parser.c" },
+    branch = "main"
+  },
+}
+
+require('nvim-treesitter.configs').setup {
+    ensure_installed = { "norg", "cpp", "c", "python" },
+    highlight = { -- Be sure to enable highlights if you haven't!
+        enable = true,
+    },
+    indent = {
+        enable = true,
+    }
+}
+
+vim.api.nvim_exec([[
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+]], true)
+
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Load all the default modules
-    ["core.norg.concealer"] = {}, -- Allows for use of icons
+    -- ["core.norg.concealer"] = {}, -- Allows for use of icons
     ["core.norg.dirman"] = { -- Manage your directories with Neorg
       config = {
         workspaces = {
@@ -201,27 +280,12 @@ require('neorg').setup {
             neorg_leader = "<Leader>o" 
         }
     },
-    -- ["utilities.dateinserter"] = { config = {enable_auto_insertenter = false } }
-    -- ["utilities.dateinserter"] = {}
+    -- ["utilities.dateinserter"] = { config = {enable_auto_insertenter = false } },
+    -- ["utilities.dateinserter"] = {},
+    ["external.gtd-project-tags"] = {}
   },
 }
 
-local parser_configs = require('nvim-treesitter.parsers').get_parser_configs()
-
-parser_configs.norg = {
-    install_info = {
-        url = "https://github.com/nvim-neorg/tree-sitter-norg",
-        files = { "src/parser.c", "src/scanner.cc" },
-        branch = "main"
-    },
-}
-
-require('nvim-treesitter.configs').setup {
-    ensure_installed = { "norg", "cpp", "c", "python" },
-    highlight = { -- Be sure to enable highlights if you haven't!
-        enable = true,
-    }
-}
 
 -- local neorg_callbacks = require('neorg.callbacks')
 
@@ -232,4 +296,12 @@ require('nvim-treesitter.configs').setup {
 -- 		},
 -- 	}, { silent = true, noremap = true })
 -- end)
-
+-- local neorg_callbacks = require('neorg.callbacks')
+-- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+-- 	keybinds.map_event_to_mode("norg", {
+--       n = {
+--         { "<Leader>o" .. "p", "utilities.gtd_project_tags.views" },
+--       },
+--     }, { silent = true, noremap = true })
+-- end)
+cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')

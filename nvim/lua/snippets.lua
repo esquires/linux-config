@@ -89,5 +89,42 @@ ls.snippets = {
       i(3),
       t({"","}", ""})
     }),
+    s("cout value", {
+      t('std::cout << "'),
+      i(1),
+      t('" << '),
+      f(function(args, snip, user_arg_1) return args[1][1] end, {1}),
+      t(' << std::endl;')
+    }),
+  },
+  lua = {
+    s("forloop", {
+      t("for "),
+      i(1, "_"),
+      t(", "),
+      i(2, "_"),
+      t(" in pairs("),
+      i(3),
+      t({") do", "\t"}),
+      i(4),
+      t({"", "end"})
+    }),
+    s("if", {
+      t("if "),
+      i(1),
+      t({" then", "\t"}),
+      i(2),
+      t({"", "end"})
+    }),
+  },
+  norg = {
+    s("task", {
+      t("#project "), i(1),
+      t({"", "#waiting.for "}), i(2),
+      t({"", "#time.start "}), i(3),
+      t({"", "#time.due "}), i(4),
+      t({"", "#contexts "}), i(5),
+      t({"", "- [ ] "})
+    }),
   }
 }

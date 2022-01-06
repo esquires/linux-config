@@ -47,8 +47,10 @@ return require('packer').startup(function()
 
   -- neorg
   use {
-    'nvim-neorg/neorg', branch = 'unstable', requires = { {'nvim-lua/plenary.nvim'} }
-    -- requires =     '~/repos/temp/neorg-dateinserter'
+    'nvim-neorg/neorg', branch = 'main', requires = { {'nvim-lua/plenary.nvim', } }
   }
+  -- use {'~/repos/temp/neorg-dateinserter'}
+  use {'~/repos/temp/neorg-gtd-project-tags'}
+  use {'mattn/calendar-vim'}
 
 end)
