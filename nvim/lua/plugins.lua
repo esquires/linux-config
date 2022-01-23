@@ -44,6 +44,7 @@ return require('packer').startup(function()
   use 'tomtom/tcomment_vim'
   use 'neomake/neomake'
   use 'tmhedberg/SimpylFold'
+  use 'ludovicchabant/vim-gutentags'
 
   -- neorg
   use {
@@ -51,6 +52,7 @@ return require('packer').startup(function()
   }
   -- use {'~/repos/temp/neorg-dateinserter'}
   use {'~/repos/temp/neorg-gtd-project-tags'}
+  use {'nvim-neorg/neorg-telescope'}
   use {'mattn/calendar-vim'}
 
 end)

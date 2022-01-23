@@ -82,15 +82,11 @@ require('telescope').load_extension('fzf')
 keymap('n', '<leader>ff', ":FindFiles ")
 keymap('n', '<leader>fg', ":lua GitFindFilesHelper()<cr>")
 keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>")
--- keymap('n', '<leader>fr', ":lua require('telescope.builtin').live_grep()<cr>")
 keymap('n', '<leader>fr', ":LiveGrep ")
 keymap('n', '=', "za")
 
 local function GetCwdHelper(cwd)
-  if cwd == 'pwd' then
-    cwd = vim.loop.cwd()
-
-  elseif cwd == nil then
+  if cwd == nil then
     -- use the file's directory
     cwd = vim.fn.expand('%:p:h')
 
@@ -108,7 +104,6 @@ local function GetCwdHelper(cwd)
       cwd = vim.loop.cwd()
   end
 
-  print('searching ' .. cwd .. ' use argument "pwd" for current directory')
   return cwd
 end
 
@@ -249,40 +244,30 @@ vim.api.nvim_exec([[
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Load all the default modules
-    -- ["core.norg.concealer"] = {}, -- Allows for use of icons
+    ["core.norg.concealer"] = { config = { markup_preset = "brave" } },
     ["core.norg.dirman"] = { -- Manage your directories with Neorg
       config = {
-        workspaces = {
-          my_workspace = "~/norg"
-        },
+        workspaces = { my_workspace = "~/norg" },
         autochdir = true,
       }
     },
-    ["core.norg.completion"] = {
-      config = {
-        engine = "nvim-cmp"
-      }
-    },
+    ["core.norg.completion"] = { config = { engine = "nvim-cmp" } },
     ["core.gtd.base"] = {
       config = {
-        displayers = {
-          projects = {
-            show_completed_projects = false,
-            show_projects_without_tasks = false,
-          },
-        },
+        displayers = { projects = { }, },
+        workspace = "my_workspace"
       },
     },
     ["core.gtd.ui"] = {},
     ["core.keybinds"] = { -- Configure core.keybinds
-        config = {
-            default_keybinds = true, -- Generate the default keybinds
-            neorg_leader = "<Leader>o" 
-        }
+      config = {
+        default_keybinds = true, -- Generate the default keybinds
+        neorg_leader = "<Leader>o" 
+      }
     },
-    -- ["utilities.dateinserter"] = { config = {enable_auto_insertenter = false } },
-    -- ["utilities.dateinserter"] = {},
-    ["external.gtd-project-tags"] = {}
+    ["core.norg.qol.toc"] = {},
+    ["external.gtd-project-tags"] = {},
+    ["core.integrations.telescope"] = {}
   },
 }
 
