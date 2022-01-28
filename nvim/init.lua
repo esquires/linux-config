@@ -244,7 +244,7 @@ vim.api.nvim_exec([[
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Load all the default modules
-    ["core.norg.concealer"] = { config = { markup_preset = "brave" } },
+    ["core.norg.concealer"] = { config = { markup_preset = "dimmed" } },
     ["core.norg.dirman"] = { -- Manage your directories with Neorg
       config = {
         workspaces = { my_workspace = "~/norg" },
