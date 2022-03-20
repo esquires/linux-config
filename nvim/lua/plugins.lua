@@ -45,11 +45,19 @@ return require('packer').startup(function()
   use 'neomake/neomake'
   use 'tmhedberg/SimpylFold'
   use 'ludovicchabant/vim-gutentags'
+  use 'lervag/vimtex'
 
   -- neorg
   use {
-    'nvim-neorg/neorg', branch = 'main', requires = { {'nvim-lua/plenary.nvim', } }
+    'nvim-neorg/neorg',
+    branch = 'main',
+    requires = { {
+        'nvim-lua/plenary.nvim', 'folke/zen-mode.nvim', 'Pocco81/TrueZen.nvim'
+    } }
   }
+  use 'folke/zen-mode.nvim'
+  use 'Pocco81/TrueZen.nvim'
+
   -- use {'~/repos/temp/neorg-dateinserter'}
   use {'~/repos/temp/neorg-gtd-project-tags'}
   use {'nvim-neorg/neorg-telescope'}

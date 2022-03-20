@@ -80,7 +80,8 @@ cmd("let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}")
 -- https://dev.to/dlains/create-your-own-vim-commands-415b
 require('telescope').load_extension('fzf')
 keymap('n', '<leader>ff', ":FindFiles ")
-keymap('n', '<leader>fg', ":lua GitFindFilesHelper()<cr>")
+keymap('n', '<leader>fg', ":lua GitFindFilesHelper(false)<cr>")
+keymap('n', '<leader>fG', ":lua GitFindFilesHelper(true)<cr>")
 keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>")
 keymap('n', '<leader>fr', ":LiveGrep ")
 keymap('n', '=', "za")
@@ -122,7 +123,7 @@ function FindFilesHelper(cwd)
   require('telescope.builtin').find_files({cwd=cwd, find_command = find_command})
 end
 
-function GitFindFilesHelper(cwd)
+function GitFindFilesHelper(recurse_submodules)
   local curr_file_path = vim.fn.expand('%:p')
   local cwd = vim.fn.expand('%:p:h')
   local git_command = {"git","ls-files","--exclude-standard","--cached"}
@@ -132,7 +133,7 @@ function GitFindFilesHelper(cwd)
     table.insert(git_command, ':!:' .. ignore)
   end
 
-  require('telescope.builtin').git_files({cwd=cwd, git_command = git_command})
+  require('telescope.builtin').git_files({cwd=cwd, git_command = git_command, recurse_submodules = recurse_submodules, show_untracked = not recurse_submodules})
 end
 
 
@@ -244,7 +245,15 @@ vim.api.nvim_exec([[
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Load all the default modules
-    ["core.norg.concealer"] = { config = { markup_preset = "dimmed" } },
+    ["core.norg.concealer"] = { config = { markup_preset = "conceal" } },
+    ["core.norg.esupports.metagen"] = {config = {type = "auto"}},
+    ["core.presenter"] = {config = {zen_mode = "zen-mode"}},
+    ["core.export"] = {config = {extensions = "all"}},
+    ["core.export.markdown"] = {
+        config = {
+            extensions = "all",
+        }
+    },
     ["core.norg.dirman"] = { -- Manage your directories with Neorg
       config = {
         workspaces = { my_workspace = "~/norg" },
