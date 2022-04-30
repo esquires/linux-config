@@ -5,21 +5,16 @@ local cmp = require'cmp'
 local lspkind = require "lspkind"
 
 cmp.setup({
-  mapping = {
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-e>"] = cmp.mapping.close(),
-    ["<C-y>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    },
-    ["<C-q>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-
-    ["<C-space>"] = cmp.mapping.complete(),
-  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<c-k>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    -- https://githubmemory.com/index.php/repo/hrsh7th/nvim-cmp/issues/809
+    ['<c-n>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    ['<c-p>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+  }),
 
   sources = cmp.config.sources({
     { name = 'luasnip' }, -- For luasnip users.
@@ -90,19 +85,38 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- setup snippets
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
 lspconfig.pylsp.setup {
+  filetypes = {"python"},
+  capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
   settings = {
+    -- https://github.com/neovim/nvim-lspconfig/issues/903
+    formatCommand = {"black"},
     pylsp = {
       plugins = {
         jedi_completion = {
           include_params = true,
           enable = true,
         },
-        pyls_mypy = {
+        pylsp_mypy = {
           enabled = true,
-          live_mode = false
+          live_mode = false,
+          dmypy = true,
+          strict = true,
+          overrides = {'--disallow-untyped-defs', '--ignore-missing-imports', true},
+        },
+        pydocstyle = {
+          enabled = true,
+          ignore = {'D1', 'D203', 'D213', 'D416'},
+        },
+        pylint = {
+          enabled = true,
+          args = {'--rcfile=' .. os.getenv("HOME") .. '/repos/linux-config/.pylintrc'}
+        },
+        black = {
+          enabled = true,
+          cache_config = true,
+          line_length = 79,
         }
       },
     },
@@ -118,3 +132,8 @@ vim.cmd [[
   snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(1)<CR>
   snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(-1)<CR>
 ]]
+
+-- other settings
+cmd('nnoremap <localleader>f :lua vim.lsp.buf.formatting()<cr>')
+cmd('nnoremap <C-]> :lua vim.lsp.buf.definition()<cr>')
+

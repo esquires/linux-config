@@ -3,6 +3,8 @@ return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
   use 'tpope/vim-fugitive'
 
+  use 'Vimjas/vim-python-pep8-indent'
+
   -- For luasnip users.
   use 'L3MON4D3/LuaSnip'
   use 'saadparwaiz1/cmp_luasnip'
@@ -44,7 +46,7 @@ return require('packer').startup(function()
   use 'tomtom/tcomment_vim'
   use 'neomake/neomake'
   use 'tmhedberg/SimpylFold'
-  use 'ludovicchabant/vim-gutentags'
+  -- use 'ludovicchabant/vim-gutentags'
   use 'lervag/vimtex'
 
   -- neorg

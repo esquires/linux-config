@@ -106,3 +106,4 @@ alias gvim="gnome-terminal -- nvim -p"
 alias rm='echo "use trash-put!"'
 
 complete -F "ahoy --generate-bash-completion" ahoy
+# alias vim='source ~/anaconda3/bin/activate && conda activate vim && nvim '

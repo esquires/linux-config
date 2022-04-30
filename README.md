@@ -36,7 +36,10 @@ ln -s $THIS_REPO/nvim/old-cfg.vim ~/.config/nvim
 ln -s $THIS_REPO/nvim/lua ~/.config/nvim
 
 # in virtual env if desired
-sudo pip3 install 'python-lsp-server[all]'
+source ~/anaconda3/bin/activate
+conda create -n vim python=3.8
+conda activate vim
+pip install "python-lsp-server[all]" pyls-flake8 pylsp-mypy flake8 pydocstyle pylint mypy
 
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

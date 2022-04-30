@@ -184,7 +184,6 @@ vim.api.nvim_set_keymap("s", "<C-n>", "<Plug>luasnip-next-choice", {})
 vim.api.nvim_set_keymap("i", "<C-p>", "<Plug>luasnip-prev-choice", {})
 vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
 
-
 -- fixme: others yet to be updated
 cmd('source ~/.config/nvim/old-cfg.vim')
 
@@ -234,6 +233,7 @@ require('nvim-treesitter.configs').setup {
     },
     indent = {
         enable = true,
+        disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
     }
 }
 

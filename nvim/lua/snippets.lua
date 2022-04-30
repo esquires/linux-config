@@ -39,8 +39,7 @@ ls.config.set_config({
     enable_autosnippets = true,
 })
 
-
-ls.snippets = {
+ls.add_snippets(nil, {
   python = {
     s("parser", {
       t({"parser = argparse.ArgumentParser()", "parser.add_argument("}),
@@ -80,6 +79,13 @@ ls.snippets = {
       i(1),
       t(" << std::endl;")
     }),
+    s("for", {
+      t("for (uint32_t i = 0; i < "),
+      i(1),
+      t({".size(); i++) {", "\t"}),
+      i(2),
+      t({"","}"})
+    }),
     s("for range", {
       t("for (auto &"),
       i(1),
@@ -89,13 +95,23 @@ ls.snippets = {
       i(3),
       t({"","}", ""})
     }),
-    s("cout value", {
-      t('std::cout << "'),
+    s("lambda", {
+      t('auto '),
       i(1),
-      t('" << '),
-      f(function(args, snip, user_arg_1) return args[1][1] end, {1}),
-      t(' << std::endl;')
+      t(' = [&]('),
+      i(2, "auto& "),
+      i(3),
+      t("){return "),
+      i(4),
+      t(";};")
     }),
+    s("if", {
+      t("if ("),
+      i(1),
+      t({") {", "\t"}),
+      i(2),
+      t({"", "}"})
+    })
   },
   lua = {
     s("forloop", {
@@ -127,4 +143,4 @@ ls.snippets = {
       t({"", "- [ ] "})
     }),
   }
-}
+})
