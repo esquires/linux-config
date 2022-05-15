@@ -54,7 +54,7 @@ return require('packer').startup(function()
     'nvim-neorg/neorg',
     branch = 'main',
     requires = { {
-        'nvim-lua/plenary.nvim', 'folke/zen-mode.nvim', 'Pocco81/TrueZen.nvim'
+        'nvim-lua/plenary.nvim', 'folke/zen-mode.nvim', 'Pocco81/TrueZen.nvim', "nvim-neorg/neorg-telescope"
     } }
   }
   use 'folke/zen-mode.nvim'
@@ -64,5 +64,14 @@ return require('packer').startup(function()
   use {'~/repos/temp/neorg-gtd-project-tags'}
   use {'nvim-neorg/neorg-telescope'}
   use {'mattn/calendar-vim'}
+
+  use {
+    'nvim-treesitter/playground',
+    requires = {'nvim-treesitter/nvim-treesitter'},
+    cmd = 'TSPlaygroundToggle',
+    config = function()
+      R'nvim-treesitter.configs'.setup({})
+    end
+  }
 
 end)

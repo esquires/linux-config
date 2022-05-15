@@ -227,14 +227,24 @@ parser_configs.norg_table = {
 }
 
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "norg", "cpp", "c", "python" },
-    highlight = { -- Be sure to enable highlights if you haven't!
-        enable = true,
+  ensure_installed = { "norg", "cpp", "c", "python", "lua" },
+  highlight = { -- Be sure to enable highlights if you haven't!
+    enable = true,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gs",
+      node_incremental = "gni",
+      node_decremental = "gnd",
+      scope_incremental = "gsi",
+      scope_decremental = "gsd",
     },
-    indent = {
-        enable = true,
-        disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
-    }
+  },
+  indent = {
+    enable = true,
+    disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
+  }
 }
 
 vim.api.nvim_exec([[
@@ -279,6 +289,24 @@ require('neorg').setup {
     ["core.integrations.telescope"] = {}
   },
 }
+
+local neorg_callbacks = require("neorg.callbacks")
+
+neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+    -- Map all the below keybinds only when the "norg" mode is active
+    keybinds.map_event_to_mode("norg", {
+        n = { -- Bind keys in normal mode
+            { "<C-s>", "core.integrations.telescope.find_linkable" },
+        },
+
+        i = { -- Bind in insert mode
+            { "<C-l>", "core.integrations.telescope.insert_link" },
+        },
+    }, {
+        silent = true,
+        noremap = true,
+    })
+end)
 
 
 -- local neorg_callbacks = require('neorg.callbacks')
