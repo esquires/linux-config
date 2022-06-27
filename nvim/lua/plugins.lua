@@ -46,7 +46,7 @@ return require('packer').startup(function()
   use 'tomtom/tcomment_vim'
   use 'neomake/neomake'
   use 'tmhedberg/SimpylFold'
-  -- use 'ludovicchabant/vim-gutentags'
+  use 'ludovicchabant/vim-gutentags'
   use 'lervag/vimtex'
 
   -- neorg
@@ -62,16 +62,17 @@ return require('packer').startup(function()
 
   -- use {'~/repos/temp/neorg-dateinserter'}
   use {'~/repos/temp/neorg-gtd-project-tags'}
+  -- use {'~/repos/temp/neorg-math'}
   use {'nvim-neorg/neorg-telescope'}
   use {'mattn/calendar-vim'}
 
-  use {
-    'nvim-treesitter/playground',
-    requires = {'nvim-treesitter/nvim-treesitter'},
-    cmd = 'TSPlaygroundToggle',
-    config = function()
-      R'nvim-treesitter.configs'.setup({})
-    end
-  }
+  use 'nvim-treesitter/playground'
+  use 'p00f/nvim-ts-rainbow'
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
+
+  use 'tjdevries/colorbuddy.vim'
+  use 'tjdevries/gruvbuddy.nvim'
+
+  -- use 'jbyuki/nabla.nvim'
 
 end)

@@ -40,6 +40,7 @@ source ~/anaconda3/bin/activate
 conda create -n vim python=3.8
 conda activate vim
 pip install "python-lsp-server[all]" pyls-flake8 pylsp-mypy flake8 pydocstyle pylint mypy
+conda install clangdev clang
 
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

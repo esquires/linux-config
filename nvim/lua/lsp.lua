@@ -12,8 +12,8 @@ cmp.setup({
     ['<C-e>'] = cmp.mapping.abort(),
     ['<c-k>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     -- https://githubmemory.com/index.php/repo/hrsh7th/nvim-cmp/issues/809
-    ['<c-n>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
-    ['<c-p>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+    ['<c-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+    ['<c-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
   }),
 
   sources = cmp.config.sources({
@@ -76,8 +76,8 @@ cmp.setup.cmdline(':', {
 -- Setup lspconfig.
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- local servers = { 'clangd', 'rust_analyzer', 'pylsp', 'tsserver' }
-local servers = { 'pylsp' }
+-- local servers = { 'clangd', 'pyright'}
+local servers = { 'clangd', 'pylsp' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     -- on_attach = my_custom_on_attach,
@@ -113,6 +113,9 @@ lspconfig.pylsp.setup {
           enabled = true,
           args = {'--rcfile=' .. os.getenv("HOME") .. '/repos/linux-config/.pylintrc'}
         },
+        flake8 = {
+          enabled = true,
+        },
         black = {
           enabled = true,
           cache_config = true,
@@ -121,6 +124,16 @@ lspconfig.pylsp.setup {
       },
     },
   },
+}
+
+require('lspconfig').clangd.setup {
+  cmd = {
+    "clangd",
+    "--clang-tidy",
+    "--enable-config",
+    "--suggest-missing-includes",
+  },
+  filetypes = {"c", "cpp", "objc", "objcpp"},
 }
 
 vim.cmd [[
@@ -135,5 +148,5 @@ vim.cmd [[
 
 -- other settings
 cmd('nnoremap <localleader>f :lua vim.lsp.buf.formatting()<cr>')
-cmd('nnoremap <C-]> :lua vim.lsp.buf.definition()<cr>')
+-- cmd('nnoremap <localleader>s :lua vim.lsp.buf.definition()<cr>')
 

@@ -14,7 +14,7 @@ require('lsp')
 require("snippets")
 
 -- colors
-cmd('colorscheme wombat256A')
+-- cmd('colorscheme wombat256A')
 
 -- leaders
 vim.g.mapleader = " "
@@ -45,6 +45,8 @@ cmd('nnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
 cmd('tnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
 cmd('tnoremap <M-w> <C-\\><C-n>w')
 cmd('command! Newterm :tabnew | term')
+cmd('nnoremap <localleader>o :tabo<cr>')
+
 vim.opt.scrollback = 100000
 
 -- lvdb
@@ -227,24 +229,45 @@ parser_configs.norg_table = {
 }
 
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { "norg", "cpp", "c", "python", "lua" },
+  ensure_installed = "all",
   highlight = { -- Be sure to enable highlights if you haven't!
     enable = true,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gs",
-      node_incremental = "gni",
-      node_decremental = "gnd",
-      scope_incremental = "gsi",
-      scope_decremental = "gsd",
-    },
   },
   indent = {
     enable = true,
     disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
-  }
+  },
+  rainbow = {
+    enable = true,
+    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+            colors = {
+                "#ffffff", -- white
+                "#cece32", -- dark yellow
+                "#ff4040", -- red
+                "#00ff00", -- green
+                "#00ffff", -- blue
+            },
+    -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
+  },
+
+  textobjects = {
+    select = {
+      enable = true,
+
+      -- Automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+
+      keymaps = {
+        -- You can use the capture groups defined in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
+  },
 }
 
 vim.api.nvim_exec([[
@@ -286,6 +309,7 @@ require('neorg').setup {
     },
     ["core.norg.qol.toc"] = {},
     ["external.gtd-project-tags"] = {},
+    -- ["external.math"] = {},
     ["core.integrations.telescope"] = {}
   },
 }
@@ -327,3 +351,99 @@ end)
 --     }, { silent = true, noremap = true })
 -- end)
 cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')
+
+-- require'lualine'.setup {
+--   options = {
+--     theme = 'sonokai'
+--   }
+-- }
+-- vim.g.sonokai_style = "shusia"
+-- vim.g.sonokai_better_performance = 1
+-- colorscheme sonokai
+-- cmd('colorscheme sonokai')
+-- vim.g.lightline.colorscheme = 'sonokai'
+cmd('colorscheme wombat256A')
+-- require('colorbuddy').colorscheme('gruvbuddy')
+
+require "nvim-treesitter.configs".setup {
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+  }
+}
+
+
+function FindExistingBuffer(bufnr, tabnum_start)
+
+  local tabpage_handles = vim.api.nvim_list_tabpages()
+
+  for _, tabpage_handle in pairs(tabpage_handles) do
+    for _, winnr in pairs(vim.api.nvim_tabpage_list_wins(tabpage_handle)) do
+      local win_bufnr = vim.api.nvim_win_get_buf(winnr)
+      if bufnr == win_bufnr then
+        return {tabpage_handle, winnr}
+      end
+    end
+  end
+
+  return nil
+end
+
+function GoToDefinitionInNewTab()
+  local winnr = vim.api.nvim_get_current_win()
+  local row = vim.api.nvim_win_get_cursor(winnr)[1]
+  local bufnr = vim.api.nvim_get_current_buf()
+
+  vim.lsp.buf.definition()
+  vim.cmd("sleep 100m")
+
+  local new_winnr = vim.api.nvim_get_current_win()
+  local new_row, new_col = unpack(vim.api.nvim_win_get_cursor(new_winnr))
+  local new_bufnr = vim.api.nvim_get_current_buf()
+
+  if bufnr == new_bufnr then
+    if row == new_row then
+      -- default to tags
+      print('lsp did not find definition, reverting to ctags')
+      vim.cmd("call tags#Open_tag_in_new_tab()")
+    else
+      -- opened in same file don't do anything else
+    end
+    
+  else
+    -- opened new file so move it to a new tab
+    local bufnr = vim.api.nvim_get_current_buf()
+    vim.cmd("pop")
+
+    local info = FindExistingBuffer(bufnr, vim.api.nvim_tabpage_get_number(0))
+    if info == nil then
+      vim.cmd("tabnew")
+      vim.api.nvim_win_set_buf(0, bufnr)
+    else
+      local tabpage_handle, winnr = unpack(info)
+
+      while tabpage_handle ~= vim.api.nvim_get_current_tabpage() do
+        vim.cmd("tabnext")
+      end
+      while new_bufnr ~= vim.api.nvim_get_current_buf() do
+        vim.cmd([[execute "normal \<c-w>\<c-w>"]])
+      end
+    end
+    vim.api.nvim_win_set_cursor(0, {new_row, new_col})
+  end
+end
+cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
