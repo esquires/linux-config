@@ -37,7 +37,7 @@ ln -s $THIS_REPO/nvim/lua ~/.config/nvim
 
 # in virtual env if desired
 source ~/anaconda3/bin/activate
-conda create -n vim python=3.8
+conda create -y -n vim python=3.8
 conda activate vim
 pip install "python-lsp-server[all]" pyls-flake8 pylsp-mypy flake8 pydocstyle pylint mypy
 conda install clangdev clang

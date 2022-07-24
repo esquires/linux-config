@@ -70,9 +70,13 @@ return require('packer').startup(function()
   use 'p00f/nvim-ts-rainbow'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
 
-  use 'tjdevries/colorbuddy.vim'
-  use 'tjdevries/gruvbuddy.nvim'
-
-  -- use 'jbyuki/nabla.nvim'
+  use {
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
+    config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
+      require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+    end
+  }
 
 end)

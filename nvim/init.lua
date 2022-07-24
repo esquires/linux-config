@@ -275,6 +275,11 @@ vim.api.nvim_exec([[
     set foldexpr=nvim_treesitter#foldexpr()
 ]], true)
 
+-- hop
+keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>')
+-- keymap('v', '<localleader>h', ':lua require("hop").hint_words()<cr>')
+
+
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Load all the default modules
@@ -447,3 +452,11 @@ function GoToDefinitionInNewTab()
   end
 end
 cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
+
+
+-- extra highlights
+vim.api.nvim_command('highlight default HopNextKey  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+vim.api.nvim_command('highlight default HopNextKey1  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+
+require'hop.highlight'.insert_highlights()
