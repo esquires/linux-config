@@ -309,7 +309,7 @@ require('neorg').setup {
     ["core.keybinds"] = { -- Configure core.keybinds
       config = {
         default_keybinds = true, -- Generate the default keybinds
-        neorg_leader = "<Leader>o" 
+        neorg_leader = "<Leader>o"
       }
     },
     ["core.norg.qol.toc"] = {},
@@ -428,7 +428,7 @@ function GoToDefinitionInNewTab()
     else
       -- opened in same file don't do anything else
     end
-    
+
   else
     -- opened new file so move it to a new tab
     local bufnr = vim.api.nvim_get_current_buf()

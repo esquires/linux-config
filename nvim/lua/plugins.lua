@@ -57,8 +57,6 @@ return require('packer').startup(function()
         'nvim-lua/plenary.nvim', 'folke/zen-mode.nvim', 'Pocco81/TrueZen.nvim', "nvim-neorg/neorg-telescope"
     } }
   }
-  use 'folke/zen-mode.nvim'
-  use 'Pocco81/TrueZen.nvim'
 
   -- use {'~/repos/temp/neorg-dateinserter'}
   use {'~/repos/temp/neorg-gtd-project-tags'}
