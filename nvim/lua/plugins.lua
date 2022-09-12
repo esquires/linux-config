@@ -77,4 +77,5 @@ return require('packer').startup(function()
     end
   }
 
+  use 'bluz71/vim-moonfly-colors'
 end)

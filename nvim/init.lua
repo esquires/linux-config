@@ -42,6 +42,7 @@ vim.g.titlestring = "%:t"
 cmd('nnoremap / /\\v')
 cmd('nnoremap ? ?\\v')
 vim.opt.smartcase = true
+vim.opt.mouse = ''
 
 vim.opt.title = true
 vim.opt.cmdheight= 2
@@ -379,12 +380,10 @@ cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')
 --     theme = 'sonokai'
 --   }
 -- }
--- vim.g.sonokai_style = "shusia"
--- vim.g.sonokai_better_performance = 1
 -- colorscheme sonokai
--- cmd('colorscheme sonokai')
+cmd('colorscheme moonfly')
 -- vim.g.lightline.colorscheme = 'sonokai'
-cmd('colorscheme wombat256A')
+-- cmd('colorscheme wombat256A')
 -- require('colorbuddy').colorscheme('gruvbuddy')
 
 require "nvim-treesitter.configs".setup {
