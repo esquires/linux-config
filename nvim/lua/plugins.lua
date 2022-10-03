@@ -32,9 +32,9 @@ return require('packer').startup(function()
   }
 
   -- personal
-  use '~/repos/vim/vim-map-medley'
-  use '~/repos/vim/tabcity'
-  use '~/repos/vim/lvdb'
+  use 'esquires/vim-map-medley'
+  use 'esquires/tabcity'
+  use 'esquires/lvdb'
 
   -- other
   use 'majutsushi/tagbar'

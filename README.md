@@ -55,9 +55,8 @@ ln -s $PWD/rc.lua ~/.config/awesome/rc.lua
 # nvr --servername /tmp/vimlatexserver --remote-silent +%l "%f"
 
 # add scripts
-mkdir ~/bin
-for f in $(ls scripts); do ln -s $PWD/scripts/$f ~/bin/$f; done
-
+mkdir -p ~/bin
+ln -s $PWD/scripts ~/bin/scripts
 ```
 
 Manual steps:
