@@ -71,7 +71,10 @@ ls.add_snippets(nil, {
     s("def", {
       t("def "), i(1), t("(self"), i(2), t(") -> "), i(3), t({":", "\t"}),
       i(4, "pass"),
-      })
+      }),
+    s("ic", {
+      t("from icecream import ic; ic("), i(1), t(")")
+    }),
   },
   cpp = {
     s("cout", {

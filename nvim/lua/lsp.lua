@@ -75,7 +75,7 @@ cmp.setup.cmdline(':', {
 
 -- Setup lspconfig.
 local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- local servers = { 'clangd', 'pyright'}
 local servers = { 'clangd', 'pylsp' }
 for _, lsp in ipairs(servers) do
@@ -88,7 +88,7 @@ end
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
 lspconfig.pylsp.setup {
   filetypes = {"python"},
-  capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   settings = {
     -- https://github.com/neovim/nvim-lspconfig/issues/903
     formatCommand = {"black"},

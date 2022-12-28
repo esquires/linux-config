@@ -38,7 +38,11 @@ return require('packer').startup(function()
 
   -- other
   use 'majutsushi/tagbar'
-  use 'vim-airline/vim-airline'
+  -- use 'vim-airline/vim-airline'
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
   use 'chaoren/vim-wordmotion'
   use 'plasticboy/vim-markdown'
   use 'kchmck/vim-coffee-script'
@@ -51,11 +55,37 @@ return require('packer').startup(function()
 
   -- neorg
   use {
-    'nvim-neorg/neorg',
+    "nvim-neorg/neorg",
+    run = ":Neorg sync-parsers", -- This is the important bit!
     branch = 'main',
     requires = { {
-        'nvim-lua/plenary.nvim', 'folke/zen-mode.nvim', 'Pocco81/TrueZen.nvim', "nvim-neorg/neorg-telescope"
-    } }
+      'nvim-lua/plenary.nvim', "nvim-neorg/neorg-telescope"
+    } },
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {}, -- Load all the default modules
+          ["core.norg.concealer"] = { config = { markup_preset = "conceal" } },
+          ["core.norg.esupports.metagen"] = {config = {type = "auto"}},
+          ["core.export"] = {config = {extensions = "all"}},
+          ["core.export.markdown"] = {config = {extensions = "all"}},
+          ["core.norg.dirman"] = { -- Manage your directories with Neorg
+            config = {
+              workspaces = { my_workspace = "~/norg" },
+              autochdir = true,
+            }
+          },
+          ["core.norg.completion"] = { config = { engine = "nvim-cmp" } },
+          ["core.keybinds"] = { -- Configure core.keybinds
+            config = {
+              default_keybinds = true, -- Generate the default keybinds
+              neorg_leader = "<Leader>o"
+            }
+          },
+          ["core.integrations.telescope"] = {}
+        },
+      }
+    end,
   }
 
   -- use {'~/repos/temp/neorg-dateinserter'}
@@ -77,5 +107,5 @@ return require('packer').startup(function()
     end
   }
 
-  use 'bluz71/vim-moonfly-colors'
+  use 'esquires/vim-moonfly-colors'
 end)

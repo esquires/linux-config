@@ -77,11 +77,51 @@ vim.g.lvdb_close_tabs = 1
 keymap('n', '<localleader>t', ':TagbarToggle<CR>')
 
 -- airline
-cmd("let g:airline_extensions = ['tabline']")
-cmd("let g:airline#extensions#tabline#enabled = 1")
-cmd("let g:airline#extensions#tabline#tab_nr_type = 1")  -- tabnumber
-cmd("let g:airline#extensions#tabline#formatter = 'unique_tail'")
-cmd("let g:airline#extensions#tabline#show_splits = 0")
+-- cmd("let g:airline_extensions = ['tabline']")
+-- cmd("let g:airline#extensions#tabline#enabled = 1")
+-- cmd("let g:airline#extensions#tabline#tab_nr_type = 1")  -- tabnumber
+-- cmd("let g:airline#extensions#tabline#formatter = 'unique_tail'")
+-- cmd("let g:airline#extensions#tabline#show_splits = 0")
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 
 -- fugitive
 keymap('n', '<localleader>gs', ':G<cr>}jj<c-w>H')
@@ -220,32 +260,6 @@ function _G.put(...)
 end
 
 -- neorg
-local parser_configs = require('nvim-treesitter.parsers').get_parser_configs()
-
-parser_configs.norg = {
-  install_info = {
-    url = "https://github.com/nvim-neorg/tree-sitter-norg",
-    files = { "src/parser.c", "src/scanner.cc" },
-    branch = "main"
-  },
-}
-
-parser_configs.norg_meta = {
-  install_info = {
-    url = "https://github.com/nvim-neorg/tree-sitter-norg-meta",
-    files = { "src/parser.c" },
-    branch = "main"
-  },
-}
-
-parser_configs.norg_table = {
-  install_info = {
-    url = "https://github.com/nvim-neorg/tree-sitter-norg-table",
-    files = { "src/parser.c" },
-    branch = "main"
-  },
-}
-
 require('nvim-treesitter.configs').setup {
   ensure_installed = "all",
   highlight = { -- Be sure to enable highlights if you haven't!
@@ -296,46 +310,6 @@ vim.api.nvim_exec([[
 -- hop
 keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>')
 -- keymap('v', '<localleader>h', ':lua require("hop").hint_words()<cr>')
-
-
-require('neorg').setup {
-  load = {
-    ["core.defaults"] = {}, -- Load all the default modules
-    ["core.norg.concealer"] = { config = { markup_preset = "conceal" } },
-    ["core.norg.esupports.metagen"] = {config = {type = "auto"}},
-    ["core.presenter"] = {config = {zen_mode = "zen-mode"}},
-    ["core.export"] = {config = {extensions = "all"}},
-    ["core.export.markdown"] = {
-        config = {
-            extensions = "all",
-        }
-    },
-    ["core.norg.dirman"] = { -- Manage your directories with Neorg
-      config = {
-        workspaces = { my_workspace = "~/norg" },
-        autochdir = true,
-      }
-    },
-    ["core.norg.completion"] = { config = { engine = "nvim-cmp" } },
-    ["core.gtd.base"] = {
-      config = {
-        displayers = { projects = { }, },
-        workspace = "my_workspace"
-      },
-    },
-    ["core.gtd.ui"] = {},
-    ["core.keybinds"] = { -- Configure core.keybinds
-      config = {
-        default_keybinds = true, -- Generate the default keybinds
-        neorg_leader = "<Leader>o"
-      }
-    },
-    ["core.norg.qol.toc"] = {},
-    ["external.gtd-project-tags"] = {},
-    -- ["external.math"] = {},
-    ["core.integrations.telescope"] = {}
-  },
-}
 
 local neorg_callbacks = require("neorg.callbacks")
 
