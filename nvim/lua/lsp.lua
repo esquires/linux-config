@@ -90,8 +90,6 @@ lspconfig.pylsp.setup {
   filetypes = {"python"},
   capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   settings = {
-    -- https://github.com/neovim/nvim-lspconfig/issues/903
-    formatCommand = {"black"},
     pylsp = {
       plugins = {
         jedi_completion = {
@@ -101,14 +99,14 @@ lspconfig.pylsp.setup {
         pylsp_mypy = {
           enabled = true,
           live_mode = false,
-          dmypy = true,
+          dmypy = false,
           strict = true,
           overrides = {'--disallow-untyped-defs', '--ignore-missing-imports', true},
         },
-        pydocstyle = {
-          enabled = true,
-          ignore = {'D1', 'D203', 'D213', 'D416'},
-        },
+        -- pydocstyle = {
+        --   enabled = true,
+        --   ignore = {'D1', 'D203', 'D213', 'D416'},
+        -- },
         pylint = {
           enabled = true,
           args = {'--rcfile=' .. os.getenv("HOME") .. '/repos/linux-config/.pylintrc'}
@@ -116,11 +114,6 @@ lspconfig.pylsp.setup {
         flake8 = {
           enabled = true,
         },
-        black = {
-          enabled = true,
-          cache_config = true,
-          line_length = 79,
-        }
       },
     },
   },
