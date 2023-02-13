@@ -15,8 +15,6 @@ source $ZSH/oh-my-zsh.sh
 
 ZSH_COLORIZE_STYLE="fruity"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=100000
@@ -106,3 +104,7 @@ alias gvim="gnome-terminal -- nvim -p"
 alias rm='echo "use trash-put!"'
 
 export PATH=$PATH:~/bin/scripts
+
+if [ -f ~/.fzf.zsh ]; then
+    source ~/.fzf.zsh
+fi
