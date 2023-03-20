@@ -84,10 +84,10 @@ keymap('n', '<localleader>t', ':TagbarToggle<CR>')
 -- cmd("let g:airline#extensions#tabline#show_splits = 0")
 require('lualine').setup {
   options = {
-    icons_enabled = true,
+    icons_enabled = false,
     theme = 'auto',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    component_separators = { left = '│', right = '│'},
+    section_separators = { left = '┃', right = '┃'},
     disabled_filetypes = {
       statusline = {},
       winbar = {},
@@ -103,9 +103,28 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_b = {'branch'},
+    lualine_c = {
+      {
+        'filename',
+        file_status = true,      -- Displays file status (readonly status, modified status)
+        newfile_status = false,  -- Display new file status (new file means no write after created)
+        path = 1,                -- 0: Just the filename
+                                 -- 1: Relative path
+                                 -- 2: Absolute path
+                                 -- 3: Absolute path, with tilde as the home directory
+  
+        shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
+                                 -- for other components. (terrible name, any suggestions?)
+        symbols = {
+          modified = '[+]',      -- Text to show when the file is modified.
+          readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+          unnamed = '[No Name]', -- Text to show for unnamed buffers.
+          newfile = '[New]',     -- Text to show for newly created file before first write
+        }
+      }
+    },
+    lualine_x = {'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -131,6 +150,7 @@ keymap('n', '<localleader>gl', ':Gclog --pretty=format:"%h %ad %s %d [%an]" --de
 keymap('n', '<localleader>gd', ':Gdiffsplit<cr>')
 keymap('n', '<localleader>gco', ':Git checkout ')
 keymap('n', '<localleader>gp', ':Git push origin HEAD<cr>')
+keymap('n', '<localleader>ga', ':Telescope advanced_git_search ')
 
 -- wordmotion
 cmd("let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}")
@@ -262,6 +282,7 @@ end
 -- neorg
 require('nvim-treesitter.configs').setup {
   ensure_installed = "all",
+  ignore_install = { "latex" },
   highlight = { -- Be sure to enable highlights if you haven't!
     enable = true,
   },
@@ -271,18 +292,36 @@ require('nvim-treesitter.configs').setup {
   },
   rainbow = {
     enable = true,
-    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable for files with more than n lines, int
-            colors = {
-                "#ffffff", -- white
-                "#cece32", -- dark yellow
-                "#ff4040", -- red
-                "#00ff00", -- green
-                "#00ffff", -- blue
-            },
-    -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
+    -- list of languages you want to disable the plugin for
+    -- disable = { "jsx", "cpp" },
+    -- Which query to use for finding delimiters
+    query = 'rainbow-parens',
+    -- Highlight the entire buffer all at once
+    strategy = require 'ts-rainbow.strategy.global',
+    hlgroups = {
+       'TSRainbowRed',
+       'TSRainbowBlue',
+       'TSRainbowYellow',
+       'TSRainbowViolet',
+       'TSRainbowOrange',
+       'TSRainbowGreen',
+       'TSRainbowCyan'
+    },
   },
+  -- rainbow = {
+  --   enable = true,
+  --   -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+  --   extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+  --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  --           colors = {
+  --               "#ffffff", -- white
+  --               "#cece32", -- dark yellow
+  --               "#ff4040", -- red
+  --               "#00ff00", -- green
+  --               "#00ffff", -- blue
+  --           },
+  --   -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
+  -- },
 
   textobjects = {
     select = {
@@ -300,6 +339,24 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+  }
 }
 
 vim.api.nvim_exec([[
@@ -359,28 +416,6 @@ cmd('colorscheme moonfly')
 -- vim.g.lightline.colorscheme = 'sonokai'
 -- cmd('colorscheme wombat256A')
 -- require('colorbuddy').colorscheme('gruvbuddy')
-
-require "nvim-treesitter.configs".setup {
-  playground = {
-    enable = true,
-    disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
-    keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
-    },
-  }
-}
-
 
 function FindExistingBuffer(bufnr, tabnum_start)
 

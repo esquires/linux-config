@@ -40,7 +40,6 @@ done
 # make HEAD default
 num_branches=$(echo $branches | wc -w)
 if [[ $num_branches -eq 0 ]]; then
-    echo 'hi'
     echo "usage: glmb [git log options] [--format=1] sha1 [sha2=HEAD sha3 ...]" >&2
     exit 1
 elif [[ $num_branches -eq 1 ]]; then

@@ -30,6 +30,17 @@ return require('packer').startup(function()
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+  use({
+      "aaronhallaert/advanced-git-search.nvim",
+      config = function()
+          require("telescope").load_extension("advanced_git_search")
+      end,
+      requires = {
+          "nvim-telescope/telescope.nvim",
+          -- to show diff splits and open commits in browser
+          "tpope/vim-fugitive",
+      },
+  })
 
   -- personal
   use 'esquires/vim-map-medley'
@@ -94,7 +105,8 @@ return require('packer').startup(function()
   use {'mattn/calendar-vim'}
 
   use 'nvim-treesitter/playground'
-  use 'p00f/nvim-ts-rainbow'
+  -- use 'p00f/nvim-ts-rainbow'
+  use 'HiPhish/nvim-ts-rainbow2'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
 
   use {
