@@ -50,6 +50,8 @@ sudo chsh -s /usr/bin/zsh $USER
 
 # awesoem window manager configuration
 ln -s $PWD/rc.lua ~/.config/awesome/rc.lua
+cd ~/.config/awesome/
+git clone https://github.com/streetturtle/awesome-wm-widgets
 
 # install okular and set editor to 
 # nvr --servername /tmp/vimlatexserver --remote-silent +%l "%f"

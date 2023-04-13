@@ -10,6 +10,14 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+
+-- https://github.com/streetturtle/awesome-wm-widgets/tree/master/volume-widget
+local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
+local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
+local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
+
+
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -46,6 +54,9 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+
+local theme = beautiful.get()
+theme.font = "sans 11"
 
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
@@ -239,8 +250,27 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
-            wibox.widget.systray(),
+            -- mykeyboardlayout,
+            volume_widget{
+              widget_type = horizontal_bar,
+              -- widget_type = 'arc'
+            },
+            batteryarc_widget({
+                show_current_level = true,
+                arc_thickness = 1,
+                font = "Play 8",
+                size = 24,
+            }),
+            logout_menu_widget{
+                    font = 'Play 14',
+                    onlock = function() awful.spawn.with_shell('gnome-screensaver-command --lock') end
+            },
+            -- brightness_widget{
+            --       type = 'icon_and_text',
+            --       program = 'light',
+            --       step = 2,        
+            --   },
+            -- wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
         },
@@ -258,6 +288,11 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+    awful.key({ modkey }, "]", function() volume_widget:inc(5) end),
+    awful.key({ modkey }, "[", function() volume_widget:dec(5) end),
+    -- awful.key({ modkey  }, ";", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
+    -- awful.key({ modkey, }, "'", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
+
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -581,7 +616,7 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
-awful.util.spawn("cbatticon")
-awful.util.spawn("workrave")
-awful.util.spawn("nm-applet")
+awful.util.spawn("gnome-screensaver")
+-- awful.util.spawn("workrave")
+-- awful.util.spawn("nm-applet")
 -- }}}

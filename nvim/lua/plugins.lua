@@ -59,7 +59,7 @@ return require('packer').startup(function()
   use 'kchmck/vim-coffee-script'
   use 'milkypostman/vim-togglelist'
   use 'tomtom/tcomment_vim'
-  use 'tmhedberg/SimpylFold'
+  -- use 'tmhedberg/SimpylFold'
   use 'ludovicchabant/vim-gutentags'
   use 'lervag/vimtex'
 
