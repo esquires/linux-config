@@ -56,7 +56,7 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 local theme = beautiful.get()
-theme.font = "sans 11"
+theme.font = "sans 14"
 
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
@@ -236,7 +236,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height=30 })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -258,8 +258,8 @@ awful.screen.connect_for_each_screen(function(s)
             batteryarc_widget({
                 show_current_level = true,
                 arc_thickness = 1,
-                font = "Play 8",
-                size = 24,
+                font = "Play 12",
+                size = 40,
             }),
             logout_menu_widget{
                     font = 'Play 14',
@@ -270,7 +270,7 @@ awful.screen.connect_for_each_screen(function(s)
             --       program = 'light',
             --       step = 2,        
             --   },
-            -- wibox.widget.systray(),
+            wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
         },
@@ -289,6 +289,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
     awful.key({ modkey }, "]", function() volume_widget:inc(5) end),
+    awful.key({ modkey }, "[", function() volume_widget:dec(5) end),
     awful.key({ modkey }, "[", function() volume_widget:dec(5) end),
     -- awful.key({ modkey  }, ";", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
     -- awful.key({ modkey, }, "'", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
@@ -345,14 +346,14 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
+    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
+    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
+    -- awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
+    --           {description = "increase the number of master clients", group = "layout"}),
+    -- awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
+    --           {description = "decrease the number of master clients", group = "layout"}),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
@@ -361,6 +362,9 @@ globalkeys = gears.table.join(
               {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
+    awful.key({ modkey, "Shift"   }, "l", function() awful.spawn.with_shell('gnome-screensaver-command --lock') end,
+              {description = "select previous", group = "layout"}),
+
 
     awful.key({ modkey, "Control" }, "n",
               function ()
@@ -618,5 +622,5 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 awful.util.spawn("gnome-screensaver")
 -- awful.util.spawn("workrave")
--- awful.util.spawn("nm-applet")
+awful.util.spawn("nm-applet")
 -- }}}
