@@ -28,5 +28,5 @@ function! QuickFixWrapper()
 endfunction
 
 let g:toggle_list_no_mappings=1
-nnoremap <leader>l :call ToggleLocationList()<cr>
+" nnoremap <leader>l :call ToggleLocationList()<cr>
 nnoremap <leader>q :call QuickFixWrapper()<cr>

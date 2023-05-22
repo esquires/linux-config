@@ -26,6 +26,11 @@ cmp.setup({
     { name = 'neorg'}
   }),
 
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
@@ -52,20 +57,22 @@ cmp.setup({
     native_menu = false,
 
     -- Let's play with this for a day or two
-    ghost_text = true,
+    ghost_text = false,
   },
 
 })
 
 -- Use buffer source for `/`.
-cmp.setup.cmdline('/', {
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = 'buffer' },
+    { name = 'buffer' }
   }
 })
 
 -- Use cmdline & path source for ':'.
 cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
@@ -85,6 +92,35 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', '<leader>ld', vim.lsp.buf.declaration, { buffer = ev.buf, desc = 'func declaration'})
+    vim.keymap.set('n', '<leader>lD', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'func definition'})
+    vim.keymap.set('n', '<leader>lh', vim.lsp.buf.hover, {buffer = ev.buf, desc = 'hover'})
+    vim.keymap.set('n', '<leader>li', vim.lsp.buf.implementation, {buffer = ev.buf, desc = 'implementation'})
+    vim.keymap.set('n', '<leader>ls', vim.lsp.buf.signature_help, {buffer = ev.buf, desc = 'signature'})
+    vim.keymap.set('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, {buffer = ev.buf, desc = 'add workspace folder'})
+    vim.keymap.set('n', '<leader>lwr', vim.lsp.buf.remove_workspace_folder, {buffer = ev.buf, desc = 'rm workspace folder'})
+    vim.keymap.set('n', '<leader>lwp', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, {buffer = ev.buf, desc = 'list workspace folder'})
+    vim.keymap.set('n', '<leader>lt', vim.lsp.buf.type_definition, {buffer = ev.buf, desc = 'type definition'})
+    vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, {buffer = ev.buf, desc = 'buf rename'})
+    vim.keymap.set({ 'n', 'v' }, '<leader>lc', vim.lsp.buf.code_action, {buffer = ev.buf, desc = 'code action'})
+    vim.keymap.set('n', '<leader>lr', vim.lsp.buf.references, {buffer = ev.buf, desc='references'})
+    vim.keymap.set('n', '<leader>lf', function()
+      vim.lsp.buf.format { async = true }
+    end, {buffer = ev.buf, desc = 'format'})
+  end,
+})
+
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
 lspconfig.pylsp.setup {
   filetypes = {"python"},
@@ -94,12 +130,19 @@ lspconfig.pylsp.setup {
       plugins = {
         jedi_completion = {
           include_params = true,
-          enable = true,
+          enabled = true,
+          fuzzy = true,
+        },
+        jedi_definition = {
+          enabled = true,
+        },
+        jedi_hover = {
+          enabled = true,
         },
         pylsp_mypy = {
           enabled = true,
           live_mode = false,
-          dmypy = false,
+          dmypy = true,
           strict = true,
           overrides = {'--disallow-untyped-defs', '--ignore-missing-imports', true},
         },
@@ -128,6 +171,10 @@ require('lspconfig').clangd.setup {
   },
   filetypes = {"c", "cpp", "objc", "objcpp"},
 }
+
+require "lsp_signature".setup({
+  transparancy = 100
+})
 
 vim.cmd [[
   imap <silent><expr> <c-k> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-k>'

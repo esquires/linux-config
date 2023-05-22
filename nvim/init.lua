@@ -3,8 +3,8 @@ require("plugins")
 
 -- helper functions
 cmd = vim.api.nvim_command
-function keymap(mode, src, dst)
-    vim.api.nvim_set_keymap(mode, src, dst, { noremap = true})
+function keymap(mode, src, dst, desc)
+    vim.api.nvim_set_keymap(mode, src, dst, { noremap = true, desc = desc})
 end
 
 -- Setup nvim-cmp.
@@ -63,18 +63,18 @@ cmd('nnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
 cmd('tnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
 cmd('tnoremap <M-w> <C-\\><C-n>w')
 cmd('command! Newterm :tabnew | term')
-cmd('nnoremap <localleader>o :tabo<cr>')
+-- cmd('nnoremap <localleader>o :tabo<cr>')
 
 vim.opt.scrollback = 100000
 
 -- lvdb
-keymap('n', '<localleader>d', ':call lvdb#Python_debug()<cr>')
-keymap('n', '<leader>n', ':call lines#ToggleNumber()<cr>')
+keymap('n', '<localleader>d', ':call lvdb#Python_debug()<cr>', 'start lvdb')
+keymap('n', '<leader>n', ':call lines#ToggleNumber()<cr>', 'toggle line numbers')
 vim.g.lvdb_toggle_lines = 3
 vim.g.lvdb_close_tabs = 1
 
 -- tagbar
-keymap('n', '<localleader>t', ':TagbarToggle<CR>')
+keymap('n', '<localleader>t', ':TagbarToggle<CR>', 'tag bar')
 
 -- airline
 -- cmd("let g:airline_extensions = ['tabline']")
@@ -143,10 +143,10 @@ require('lualine').setup {
 }
 
 -- fugitive
-keymap('n', '<localleader>gs', ':G<cr>}jj<c-w>H')
+keymap('n', '<localleader>gs', ':G<cr>}jj<c-w>H', 'git status')
 keymap('n', '<localleader>gb', ':Git blame<cr>')
 keymap('n', '<localleader>gt', ':Git commit<cr>')
-keymap('n', '<localleader>gl', ':Gclog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>')
+keymap('n', '<localleader>gl', ':Gclog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>', 'git log')
 keymap('n', '<localleader>gd', ':Gdiffsplit<cr>')
 keymap('n', '<localleader>gco', ':Git checkout ')
 keymap('n', '<localleader>gp', ':Git push origin HEAD<cr>')
@@ -160,11 +160,11 @@ cmd("let g:wordmotion_mappings = {'W': '', 'B': '', 'E': ''}")
 -- https://dev.to/dlains/create-your-own-vim-commands-415b
 require('telescope').load_extension('fzf')
 keymap('n', '<leader>ff', ":FindFiles ")
-keymap('n', '<leader>fg', ":lua GitFindFilesHelper(false)<cr>")
-keymap('n', '<leader>fG', ":lua GitFindFilesHelper(true)<cr>")
-keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>")
+keymap('n', '<leader>fg', ":lua GitFindFilesHelper(false)<cr>", 'find git files')
+keymap('n', '<leader>fG', ":lua GitFindFilesHelper(true)<cr>", 'find git files recursive')
+keymap('n', '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>", 'find in buffers')
 keymap('n', '<leader>fr', ":LiveGrep ")
-keymap('n', '=', "za")
+-- keymap('n', '=', "za")
 
 local function GetCwdHelper(cwd)
   if cwd == nil then
@@ -365,28 +365,47 @@ vim.api.nvim_exec([[
 ]], true)
 
 -- hop
-keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>')
+keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>', 'hop to word')
 -- keymap('v', '<localleader>h', ':lua require("hop").hint_words()<cr>')
 
-local neorg_callbacks = require("neorg.callbacks")
+-- local neorg_callbacks = require("neorg.callbacks")
 
-neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
-    -- Map all the below keybinds only when the "norg" mode is active
-    keybinds.map_event_to_mode("norg", {
-        n = { -- Bind keys in normal mode
-            { "<C-s>", "core.integrations.telescope.find_linkable" },
-        },
+-- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+--     -- Map all the below keybinds only when the "norg" mode is active
+--     keybinds.map_event_to_mode("norg", {
+--         n = { -- Bind keys in normal mode
+--             { "<C-s>", "core.integrations.telescope.find_linkable" },
+--         },
+--
+--         i = { -- Bind in insert mode
+--             { "<C-l>", "core.integrations.telescope.insert_link" },
+--         },
+--     }, {
+--         silent = true,
+--         noremap = true,
+--     })
+-- end)
 
-        i = { -- Bind in insert mode
-            { "<C-l>", "core.integrations.telescope.insert_link" },
-        },
-    }, {
-        silent = true,
-        noremap = true,
-    })
-end)
-
-
+-- function SetNeorgCallbacks(bufnr, tabnum_start)
+--   local neorg_callbacks = require("neorg.callbacks")
+--
+--   neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+--       -- Map all the below keybinds only when the "norg" mode is active
+--       keybinds.map_event_to_mode("norg", {
+--           n = { -- Bind keys in normal mode
+--               { "<C-s>", "core.integrations.telescope.find_linkable" },
+--           },
+--
+--           i = { -- Bind in insert mode
+--               { "<C-l>", "core.integrations.telescope.insert_link" },
+--           },
+--       }, {
+--           silent = true,
+--           noremap = true,
+--       })
+--   end)
+-- end
+--
 -- local neorg_callbacks = require('neorg.callbacks')
 
 -- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
@@ -404,7 +423,7 @@ end)
 --       },
 --     }, { silent = true, noremap = true })
 -- end)
-cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')
+-- cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')
 
 -- require'lualine'.setup {
 --   options = {

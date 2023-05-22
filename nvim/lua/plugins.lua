@@ -18,6 +18,7 @@ return require('packer').startup(function()
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lua'
   use 'onsails/lspkind-nvim'
+  use 'ray-x/lsp_signature.nvim'
 
   -- nvim-telescope
   use 'kyazdani42/nvim-web-devicons'
@@ -48,6 +49,15 @@ return require('packer').startup(function()
   use 'esquires/lvdb'
 
   -- other
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup {
+      }
+    end
+  }
   use 'majutsushi/tagbar'
   -- use 'vim-airline/vim-airline'
   use {
@@ -64,48 +74,42 @@ return require('packer').startup(function()
   use 'lervag/vimtex'
 
   -- neorg
-  use {
-    "nvim-neorg/neorg",
-    run = ":Neorg sync-parsers", -- This is the important bit!
-    branch = 'main',
-    requires = { {
-      'nvim-lua/plenary.nvim', "nvim-neorg/neorg-telescope"
-    } },
-    config = function()
-      require("neorg").setup {
-        load = {
-          ["core.defaults"] = {}, -- Load all the default modules
-          ["core.norg.concealer"] = { config = { markup_preset = "conceal" } },
-          ["core.norg.esupports.metagen"] = {config = {type = "auto"}},
-          ["core.export"] = {config = {extensions = "all"}},
-          ["core.export.markdown"] = {config = {extensions = "all"}},
-          ["core.norg.dirman"] = { -- Manage your directories with Neorg
-            config = {
-              workspaces = { my_workspace = "~/norg" },
-              autochdir = true,
-            }
-          },
-          ["core.norg.completion"] = { config = { engine = "nvim-cmp" } },
-          ["core.keybinds"] = { -- Configure core.keybinds
-            config = {
-              default_keybinds = true, -- Generate the default keybinds
-              neorg_leader = "<Leader>o"
-            }
-          },
-          ["core.integrations.telescope"] = {}
-        },
-      }
-    end,
-  }
-
-  -- use {'~/repos/temp/neorg-dateinserter'}
-  use {'~/repos/temp/neorg-gtd-project-tags'}
-  -- use {'~/repos/temp/neorg-math'}
   use {'nvim-neorg/neorg-telescope'}
-  use {'mattn/calendar-vim'}
+  -- use {'nvim-neorg/neorg'}
+  -- use {
+  --   "nvim-neorg/neorg",
+  --   -- tag = "*",
+  --   ft = "norg",
+  --   config = function()
+  --     require('neorg').setup {
+  --       load = {
+  --         ["core.defaults"] = {}, -- Loads default behaviour
+  --         ["core.concealer"] = {}, -- Adds pretty icons to your documents
+  --         ["core.dirman"] = {
+  --           config = {workspaces = {notes = "~/Documents/notes/norg", },},
+  --         },
+  --         ["core.export"] = {config = {extensions = "all"}},
+  --         ["core.export.markdown"] = {config = {extensions = "all"}},
+  --         ["core.completion"] = { config = { engine = "nvim-cmp" } },
+  --         ["core.keybinds"] = { -- Configure core.keybinds
+  --           config = {
+  --             default_keybinds = false,
+  --               hook = function(keybinds)
+  --                   keybinds.remap_event("norg", "n", "<C-S>", "core.integrations.telescope.find_linkable")
+  --                   keybinds.remap_event("norg", "i", "<C-l>", "core.integrations.telescope.insert_link")
+  --                   keybinds.remap("norg", "n", "gtd", "<cmd>echo 'Hello!'<CR>")
+  --               end,
+  --           }
+  --         },
+  --         ["core.integrations.telescope"] = {},
+  --       },
+  --     }
+  --   end,
+  --   run = ":Neorg sync-parsers",
+  --   requires = "nvim-lua/plenary.nvim",
+  -- }
 
-  use 'nvim-treesitter/playground'
-  -- use 'p00f/nvim-ts-rainbow'
+
   use 'HiPhish/nvim-ts-rainbow2'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
 
