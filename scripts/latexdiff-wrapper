@@ -8,12 +8,12 @@ import subprocess as sp
 import re
 
 
-def get_subfiles(fname):
+def get_files(fname, tgt):
     try:
-        out = sp.check_output(
-            ['grep', '-E', r'^\\subfile', fname], encoding='utf-8')
+        cmd = ['grep', '-E', r'^\\' + tgt, fname]
+        out = sp.check_output(cmd, encoding='utf-8')
 
-        r = re.compile(r'\\subfile\{(.*)\}')
+        r = re.compile(r'\\' + tgt + r'\{(.*)\}')
         return {r.match(ln).group(1) for ln in out.splitlines()}
     except sp.CalledProcessError:
         return set()
@@ -75,8 +75,10 @@ def main():
     run_latexdiff(rel_main)
 
     subfiles = [op.join(op.dirname(rel_main), f)
-                for f in get_subfiles(diff_main)]
-    for subfile in subfiles:
+                for f in get_files(diff_main, 'subfile')]
+    input_files = [op.join(op.dirname(rel_main), f)
+                   for f in get_files(diff_main, 'input')]
+    for subfile in subfiles + input_files:
         run_latexdiff(subfile)
         sp.check_call(['sed', r'/%DIF /d', '-i', op.join(diff_dir, subfile)])
 

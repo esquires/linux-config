@@ -4,7 +4,36 @@
 local cmp = require'cmp'
 local lspkind = require "lspkind"
 
+local __under = function(entry1, entry2)
+  -- https://github.com/lukas-reineke/cmp-under-comparator
+  local _, entry1_under = entry1.completion_item.label:find "^_+"
+  local _, entry2_under = entry2.completion_item.label:find "^_+"
+  entry1_under = entry1_under or 0
+  entry2_under = entry2_under or 0
+  if entry1_under > entry2_under then
+    return false
+  elseif entry1_under < entry2_under then
+    return true
+  end
+end
+
 cmp.setup({
+  sorting = {
+    comparators = {
+      -- __under,
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      -- compare.scopes,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      -- compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
+
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -142,7 +171,7 @@ lspconfig.pylsp.setup {
         pylsp_mypy = {
           enabled = true,
           live_mode = false,
-          dmypy = true,
+          dmypy = false,
           strict = true,
           overrides = {'--disallow-untyped-defs', '--ignore-missing-imports', true},
         },
@@ -172,8 +201,13 @@ require('lspconfig').clangd.setup {
   filetypes = {"c", "cpp", "objc", "objcpp"},
 }
 
+-- require'lspconfig'.gopls.setup()
 require "lsp_signature".setup({
-  transparancy = 100
+  bind = true, -- This is mandatory, otherwise border config won't get registered.
+  handler_opts = {
+    border = "rounded",
+  },
+  -- transparency = 20,
 })
 
 vim.cmd [[
@@ -187,6 +221,6 @@ vim.cmd [[
 ]]
 
 -- other settings
-cmd('nnoremap <localleader>f :lua vim.lsp.buf.formatting()<cr>')
+-- cmd('nnoremap <localleader>f :lua vim.lsp.buf.formatting()<cr>')
 -- cmd('nnoremap <localleader>s :lua vim.lsp.buf.definition()<cr>')
 

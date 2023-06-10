@@ -1,5 +1,226 @@
 -- packer configuration
-require("plugins")
+vim.loader.enable()
+
+-- leaders
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  -- colorscheme
+  {
+    'esquires/vim-moonfly-colors',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      vim.cmd([[colorscheme moonfly]])
+    end,
+  },
+  { 'lervag/vimtex', lazy = false },
+  { 'jbyuki/nabla.nvim', lazy = false },
+  { "folke/which-key.nvim", lazy = false },
+  { "kchmck/vim-coffee-script", lazy = false },
+  { "tpope/vim-fugitive", lazy = false },
+  -- { "L3MON4D3/LuaSnip", lazy = true },
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp"
+  },
+  { 'kyazdani42/nvim-web-devicons', lazy = false },
+  { 'ray-x/lsp_signature.nvim', lazy = false},
+  { 'esquires/vim-map-medley', lazy = false},
+  { 'esquires/tabcity', lazy = false},
+  { 'esquires/lvdb', lazy = false},
+  { 'majutsushi/tagbar', lazy = false},
+  { 'chaoren/vim-wordmotion', lazy = false},
+  { 'plasticboy/vim-markdown', lazy = false},
+  { 'milkypostman/vim-togglelist', lazy = false},
+  { 'tomtom/tcomment_vim', lazy = false},
+  { 'ludovicchabant/vim-gutentags', lazy = false},
+  { 'HiPhish/nvim-ts-rainbow2', lazy = false},
+  { 'nvim-treesitter/nvim-treesitter-textobjects', lazy = false},
+  {
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    version = false, -- last release is way too old and doesn't work on Windows
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "HiPhish/nvim-ts-rainbow2",
+      "nvim-treesitter/nvim-treesitter-textobjects"
+    },
+    ---@type TSConfig
+    opts = {
+      highlight = { enable = true },
+      indent = { enable = true },
+      ensure_installed = 'all',
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
+      textobjects = {
+        select = {
+          enable = true,
+
+          -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true,
+
+          keymaps = {
+            -- You can use the capture groups defined in textobjects.scm
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+      },
+      rainbow = {
+        enable = true,
+        -- list of languages you want to disable the plugin for
+        -- disable = { "jsx", "cpp" },
+        -- Which query to use for finding delimiters
+        query = 'rainbow-parens',
+        -- Highlight the entire buffer all at once
+        -- strategy = require('ts-rainbow').strategy.global,
+        hlgroups = {
+           'TSRainbowRed',
+           'TSRainbowBlue',
+           'TSRainbowYellow',
+           'TSRainbowViolet',
+           'TSRainbowOrange',
+           'TSRainbowGreen',
+           'TSRainbowCyan'
+        },
+      },
+    },
+    ---@param opts TSConfig
+    config = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        ---@type table<string, boolean>
+        local added = {}
+        opts.ensure_installed = vim.tbl_filter(function(lang)
+          if added[lang] then
+            return false
+          end
+          added[lang] = true
+          return true
+        end, opts.ensure_installed)
+      end
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
+  { 'phaazon/hop.nvim',
+    lazy = false,
+    branch = 'v1', -- optional but strongly recommended
+    config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
+      require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+    end
+  },
+  { 'nvim-lualine/lualine.nvim', lazy = false,
+    dependencies = {'kyazdani42/nvim-web-devicons'},
+  },
+  { 'nvim-telescope/telescope.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-fzf-native.nvim',
+    },
+    cmd = "Telescope",
+    keys = {
+      { '<leader>ff', ":FindFiles "},
+      { '<leader>fg', ":lua GitFindFilesHelper(false)<cr>" },
+      { '<leader>fG', ":lua GitFindFilesHelper(true)<cr>" },
+      { '<leader>fb', ":lua require('telescope.builtin').buffers({ignore_current_buffer=true})<cr>" },
+      { '<leader>fr', ":LiveGrep " },
+    }
+  },
+  { 'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'make',
+    lazy = false,
+  },
+  { 'neovim/nvim-lspconfig', lazy = false },
+  {
+    "hrsh7th/nvim-cmp",
+    lazy = false,
+    event = "InsertEnter",  -- load cmp on InsertEnter
+    -- these dependencies will only be loaded when cmp loads
+    -- dependencies are always lazy-loaded unless specified otherwise
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/nvim-cmp',
+      'hrsh7th/cmp-nvim-lua',
+      'onsails/lspkind-nvim',
+      'saadparwaiz1/cmp_luasnip',
+    },
+    config = function()
+      require 'lsp'
+    end,
+  },
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {}, -- Loads default behaviour
+          ["core.concealer"] = {}, -- Adds pretty icons to your documents
+          ["core.dirman"] = { -- Manages Neorg workspaces
+            config = {
+              workspaces = {
+                notes = "~/Documents/notes/norg",
+              },
+            },
+          },
+          ["core.integrations.telescope"] = {},
+        },
+      }
+    end,
+  },
+})
+
+local neorg_callbacks = require("neorg.callbacks")
+
+neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+    -- Map all the below keybinds only when the "norg" mode is active
+    keybinds.map_event_to_mode("norg", {
+        n = { -- Bind keys in normal mode
+            { "<C-s>", "core.integrations.telescope.find_linkable" },
+        },
+
+        i = { -- Bind in insert mode
+            { "<C-l>", "core.integrations.telescope.insert_link" },
+        },
+    }, {
+        silent = true,
+        noremap = true,
+    })
+end)
 
 -- helper functions
 cmd = vim.api.nvim_command
@@ -8,17 +229,15 @@ function keymap(mode, src, dst, desc)
 end
 
 -- Setup nvim-cmp.
-require('lsp')
+-- require('lsp')
 
 -- setup snippets
 require("snippets")
 
--- colors
--- cmd('colorscheme wombat256A')
-
 -- vimtex
 vim.g.vimtex_view_general_viewer = 'okular'
 vim.g.vimtex_view_general_options = '--unique file:@pdf#src:@line@tex'
+vim.g.vimtex_quickfix_autoclose_after_keystrokes = 1
 vim.g.vimtex_compiler_latexmk = {
  build_dir = 'build',
  callback = 1,
@@ -33,9 +252,6 @@ vim.g.vimtex_compiler_latexmk = {
  },
 }
 
--- leaders
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
 vim.g.titlestring = "%:t"
 
 -- settings
@@ -66,6 +282,10 @@ cmd('command! Newterm :tabnew | term')
 -- cmd('nnoremap <localleader>o :tabo<cr>')
 
 vim.opt.scrollback = 100000
+
+keymap('n', '<localleader>p', ':lua require("nabla").popup()<CR>', 'show eqn')
+keymap('n', '<localleader>v', ':lua require"nabla".enable_virt({autogen = true, silent = true})<cr>', 'virtual txt')
+keymap('n', '<localleader>V', ':lua require"nabla".disable_virt()<cr>', 'disable virtual txt')
 
 -- lvdb
 keymap('n', '<localleader>d', ':call lvdb#Python_debug()<cr>', 'start lvdb')
@@ -280,84 +500,84 @@ function _G.put(...)
 end
 
 -- neorg
-require('nvim-treesitter.configs').setup {
-  ensure_installed = "all",
-  ignore_install = { "latex" },
-  highlight = { -- Be sure to enable highlights if you haven't!
-    enable = true,
-  },
-  indent = {
-    enable = true,
-    disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
-  },
-  rainbow = {
-    enable = true,
-    -- list of languages you want to disable the plugin for
-    -- disable = { "jsx", "cpp" },
-    -- Which query to use for finding delimiters
-    query = 'rainbow-parens',
-    -- Highlight the entire buffer all at once
-    strategy = require 'ts-rainbow.strategy.global',
-    hlgroups = {
-       'TSRainbowRed',
-       'TSRainbowBlue',
-       'TSRainbowYellow',
-       'TSRainbowViolet',
-       'TSRainbowOrange',
-       'TSRainbowGreen',
-       'TSRainbowCyan'
-    },
-  },
-  -- rainbow = {
-  --   enable = true,
-  --   -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-  --   extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-  --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
-  --           colors = {
-  --               "#ffffff", -- white
-  --               "#cece32", -- dark yellow
-  --               "#ff4040", -- red
-  --               "#00ff00", -- green
-  --               "#00ffff", -- blue
-  --           },
-  --   -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
-  -- },
-
-  textobjects = {
-    select = {
-      enable = true,
-
-      -- Automatically jump forward to textobj, similar to targets.vim
-      lookahead = true,
-
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        ["ic"] = "@class.inner",
-      },
-    },
-  },
-  playground = {
-    enable = true,
-    disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
-    keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
-    },
-  }
-}
+-- require('nvim-treesitter.configs').setup {
+--   ensure_installed = "all",
+--   ignore_install = { "latex" },
+--   highlight = { -- Be sure to enable highlights if you haven't!
+--     enable = true,
+--   },
+--   indent = {
+--     enable = true,
+--     disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
+--   },
+--   rainbow = {
+--     enable = true,
+--     -- list of languages you want to disable the plugin for
+--     -- disable = { "jsx", "cpp" },
+--     -- Which query to use for finding delimiters
+--     query = 'rainbow-parens',
+--     -- Highlight the entire buffer all at once
+--     strategy = require 'ts-rainbow.strategy.global',
+--     hlgroups = {
+--        'TSRainbowRed',
+--        'TSRainbowBlue',
+--        'TSRainbowYellow',
+--        'TSRainbowViolet',
+--        'TSRainbowOrange',
+--        'TSRainbowGreen',
+--        'TSRainbowCyan'
+--     },
+--   },
+--   -- rainbow = {
+--   --   enable = true,
+--   --   -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+--   --   extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+--   --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
+--   --           colors = {
+--   --               "#ffffff", -- white
+--   --               "#cece32", -- dark yellow
+--   --               "#ff4040", -- red
+--   --               "#00ff00", -- green
+--   --               "#00ffff", -- blue
+--   --           },
+--   --   -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
+--   -- },
+--
+--   textobjects = {
+--     select = {
+--       enable = true,
+--
+--       -- Automatically jump forward to textobj, similar to targets.vim
+--       lookahead = true,
+--
+--       keymaps = {
+--         -- You can use the capture groups defined in textobjects.scm
+--         ["af"] = "@function.outer",
+--         ["if"] = "@function.inner",
+--         ["ac"] = "@class.outer",
+--         ["ic"] = "@class.inner",
+--       },
+--     },
+--   },
+--   playground = {
+--     enable = true,
+--     disable = {},
+--     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+--     persist_queries = false, -- Whether the query persists across vim sessions
+--     keybindings = {
+--       toggle_query_editor = 'o',
+--       toggle_hl_groups = 'i',
+--       toggle_injected_languages = 't',
+--       toggle_anonymous_nodes = 'a',
+--       toggle_language_display = 'I',
+--       focus_language = 'f',
+--       unfocus_language = 'F',
+--       update = 'R',
+--       goto_node = '<cr>',
+--       show_help = '?',
+--     },
+--   }
+-- }
 
 vim.api.nvim_exec([[
     set foldmethod=expr
@@ -430,11 +650,8 @@ keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>', 'hop to wo
 --     theme = 'sonokai'
 --   }
 -- }
--- colorscheme sonokai
+
 cmd('colorscheme moonfly')
--- vim.g.lightline.colorscheme = 'sonokai'
--- cmd('colorscheme wombat256A')
--- require('colorbuddy').colorscheme('gruvbuddy')
 
 function FindExistingBuffer(bufnr, tabnum_start)
 

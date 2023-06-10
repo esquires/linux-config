@@ -25,7 +25,7 @@ Installation:
 sudo apt install autojump ripgrep
 
 # extra utilities
-sudo apt install awesome okular trash-cli ccache zsh terminator exhuberant-ctags htop ninja-build
+sudo apt install awesome okular trash-cli ccache zsh terminator exhuberant-ctags htop ninja-build libliajit-5.1-dev
 
 # neovim package management
 mkdir -p ~/.config/nvim/pack/packer/start
