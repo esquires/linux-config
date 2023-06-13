@@ -5,6 +5,9 @@ vim.loader.enable()
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -41,7 +44,7 @@ require("lazy").setup({
     -- install jsregexp (optional!).
     build = "make install_jsregexp"
   },
-  { 'kyazdani42/nvim-web-devicons', lazy = false },
+  { 'nvim-tree/nvim-web-devicons', lazy = false },
   { 'ray-x/lsp_signature.nvim', lazy = false},
   { 'esquires/vim-map-medley', lazy = false},
   { 'esquires/tabcity', lazy = false},
@@ -54,6 +57,14 @@ require("lazy").setup({
   { 'ludovicchabant/vim-gutentags', lazy = false},
   { 'HiPhish/nvim-ts-rainbow2', lazy = false},
   { 'nvim-treesitter/nvim-treesitter-textobjects', lazy = false},
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons" 
+    },
+    config = function () require("nvim-tree").setup {} end
+  },
   {
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
@@ -138,7 +149,7 @@ require("lazy").setup({
     end
   },
   { 'nvim-lualine/lualine.nvim', lazy = false,
-    dependencies = {'kyazdani42/nvim-web-devicons'},
+    dependencies = {'nvim-tree/nvim-web-devicons'},
   },
   { 'nvim-telescope/telescope.nvim',
     lazy = false,
@@ -193,11 +204,14 @@ require("lazy").setup({
           ["core.dirman"] = { -- Manages Neorg workspaces
             config = {
               workspaces = {
-                notes = "~/Documents/notes/norg",
+                main = "~/norg",
               },
+              default_workspace = 'main',
             },
           },
           ["core.integrations.telescope"] = {},
+          ["core.export"] = { config = {export_dir = '/tmp/neorg' } },
+          ["core.export.markdown"] = { config = { extensions = 'all' } },
         },
       }
     end,
