@@ -59,7 +59,7 @@ local theme = beautiful.get()
 theme.font = "sans 14"
 
 -- This is used later as the default terminal and editor to run.
-terminal = "terminator"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 

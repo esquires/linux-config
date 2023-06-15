@@ -212,6 +212,7 @@ require("lazy").setup({
           ["core.integrations.telescope"] = {},
           ["core.export"] = { config = {export_dir = '/tmp/neorg' } },
           ["core.export.markdown"] = { config = { extensions = 'all' } },
+          ["core.summary"] = {},
         },
       }
     end,
@@ -253,7 +254,8 @@ vim.g.vimtex_view_general_viewer = 'okular'
 vim.g.vimtex_view_general_options = '--unique file:@pdf#src:@line@tex'
 vim.g.vimtex_quickfix_autoclose_after_keystrokes = 1
 vim.g.vimtex_compiler_latexmk = {
- build_dir = 'build',
+ aux_dir = 'build',
+ out_dir = 'build',
  callback = 1,
  continuous = 1,
  executable = 'latexmk',
@@ -300,6 +302,7 @@ vim.opt.scrollback = 100000
 keymap('n', '<localleader>p', ':lua require("nabla").popup()<CR>', 'show eqn')
 keymap('n', '<localleader>v', ':lua require"nabla".enable_virt({autogen = true, silent = true})<cr>', 'virtual txt')
 keymap('n', '<localleader>V', ':lua require"nabla".disable_virt()<cr>', 'disable virtual txt')
+keymap('n', '<leader>r', ':NvimTreeOpen<cr>', 'open nvim tree file explorer')
 
 -- lvdb
 keymap('n', '<localleader>d', ':call lvdb#Python_debug()<cr>', 'start lvdb')
