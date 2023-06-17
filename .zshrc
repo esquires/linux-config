@@ -28,7 +28,7 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt sharehistory
 setopt extendedhistory
 
-export EDITOR=vim
+export EDITOR=nvim
 
 bindkey -v
 

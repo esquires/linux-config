@@ -7,6 +7,7 @@ vim.g.maplocalleader = "\\"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.o.scrolloff = 5
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -33,7 +34,13 @@ require("lazy").setup({
   },
   { 'lervag/vimtex', lazy = false },
   { 'jbyuki/nabla.nvim', lazy = false },
-  { "folke/which-key.nvim", lazy = false },
+  { "folke/which-key.nvim",
+    lazy = false,
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+  },
   { "kchmck/vim-coffee-script", lazy = false },
   { "tpope/vim-fugitive", lazy = false },
   -- { "L3MON4D3/LuaSnip", lazy = true },
@@ -140,14 +147,15 @@ require("lazy").setup({
       require("nvim-treesitter.configs").setup(opts)
     end,
   },
-  { 'phaazon/hop.nvim',
-    lazy = false,
-    branch = 'v1', -- optional but strongly recommended
-    config = function()
-      -- you can configure Hop the way you like here; see :h hop-config
-      require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-    end
-  },
+  { 'ggandor/leap.nvim', lazy = false},
+  -- { 'phaazon/hop.nvim',
+  --   lazy = false,
+  --   branch = 'v1', -- optional but strongly recommended
+  --   config = function()
+  --     -- you can configure Hop the way you like here; see :h hop-config
+  --     require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+  --   end
+  -- },
   { 'nvim-lualine/lualine.nvim', lazy = false,
     dependencies = {'nvim-tree/nvim-web-devicons'},
   },
@@ -248,6 +256,9 @@ end
 
 -- setup snippets
 require("snippets")
+-- require('leap').add_default_mappings()
+vim.keymap.set({'n', 'v'}, '<a-l>', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'v'}, '<a-h>', '<Plug>(leap-backward-to)')
 
 -- vimtex
 vim.g.vimtex_view_general_viewer = 'okular'
@@ -733,8 +744,8 @@ cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
 
 
 -- extra highlights
-vim.api.nvim_command('highlight default HopNextKey  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
-vim.api.nvim_command('highlight default HopNextKey1  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
-vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+-- vim.api.nvim_command('highlight default HopNextKey  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+-- vim.api.nvim_command('highlight default HopNextKey1  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
+-- vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
 
-require'hop.highlight'.insert_highlights()
+-- require'hop.highlight'.insert_highlights()
