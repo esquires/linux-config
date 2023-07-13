@@ -9,6 +9,11 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.o.scrolloff = 5
 
+-- backups
+vim.o.backup = true
+vim.o.writebackup = true
+vim.o.backupdir = vim.fn.expand('~/.vim/backups')
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -21,6 +26,7 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+
 
 require("lazy").setup({
   -- colorscheme
@@ -35,10 +41,15 @@ require("lazy").setup({
   { 'lervag/vimtex', lazy = false },
   { 'jbyuki/nabla.nvim', lazy = false },
   { "folke/which-key.nvim",
-    lazy = false,
+    event = "VeryLazy",
     init = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 300
+    end,
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register(opts.defaults)
     end,
   },
   { "kchmck/vim-coffee-script", lazy = false },
@@ -59,6 +70,8 @@ require("lazy").setup({
   { 'majutsushi/tagbar', lazy = false},
   { 'chaoren/vim-wordmotion', lazy = false},
   { 'plasticboy/vim-markdown', lazy = false},
+  { 'windwp/nvim-autopairs', lazy = false, opts = {}},
+  { 'lukas-reineke/indent-blankline.nvim', lazy = false},
   { 'milkypostman/vim-togglelist', lazy = false},
   { 'tomtom/tcomment_vim', lazy = false},
   { 'ludovicchabant/vim-gutentags', lazy = false},
@@ -148,14 +161,6 @@ require("lazy").setup({
     end,
   },
   { 'ggandor/leap.nvim', lazy = false},
-  -- { 'phaazon/hop.nvim',
-  --   lazy = false,
-  --   branch = 'v1', -- optional but strongly recommended
-  --   config = function()
-  --     -- you can configure Hop the way you like here; see :h hop-config
-  --     require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-  --   end
-  -- },
   { 'nvim-lualine/lualine.nvim', lazy = false,
     dependencies = {'nvim-tree/nvim-web-devicons'},
   },
@@ -226,6 +231,67 @@ require("lazy").setup({
     end,
   },
 })
+local Rule = require('nvim-autopairs.rule')
+local npairs = require('nvim-autopairs')
+
+local cmp = require('cmp')
+local compare = require('cmp.config')
+
+SortUnderscore = function(entry1, entry2)
+
+  local num_underscores = function(str)
+    if string.sub(str, 1, 1) ~= '_' then
+      return 0
+    elseif string.sub(str, 2, 2) ~= '_' then
+      return 1
+    else
+      return 2
+    end
+  end
+
+  local n1 = num_underscores(entry1.completion_item.label)
+  local n2 = num_underscores(entry2.completion_item.label)
+  if n1 < n2 then
+    return true
+  elseif n1 > n2 then
+    return false
+  end
+end
+
+cmp.setup({
+    sorting = {
+      priority_weight = 2,
+      comparators = {
+        SortUnderscore,
+        compare.offset,
+        compare.exact,
+        -- compare.scopes,
+        compare.score,
+        compare.recently_used,
+        compare.locality,
+        compare.kind,
+        -- compare.sort_text,
+        compare.length,
+        compare.order,
+      },
+    },
+
+
+})
+-- print(vim.inspect(cmp.config))
+-- print(nvim.inspect(require('cmp')
+
+npairs.add_rule(Rule("$|","|$","norg"))
+
+-- you can use some built-in conditions
+
+local cond = require('nvim-autopairs.conds')
+-- local Rule = require('nvim-autopairs.rule')
+-- local npairs = require('nvim-autopairs')
+-- local cond = require('nvim-autopairs.conds')
+-- npairs.add_rules({
+--   Rule("$", "$",{'norg'})
+-- })
 
 local neorg_callbacks = require("neorg.callbacks")
 
@@ -298,12 +364,11 @@ vim.opt.wildmode = 'list,full'
 vim.opt.termguicolors = true
 
 -- terminal settings
--- todo: get InsertOnTerm working
 cmd('tnoremap <M-[> <C-\\><C-n>')
-cmd('nnoremap <C-h> <C-\\><C-n>gT:call InsertOnTerm()<cr>')
-cmd('tnoremap <C-h> <C-\\><C-n>gT:call InsertOnTerm()<cr>')
-cmd('nnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
-cmd('tnoremap <C-l> <C-\\><C-n>gt:call InsertOnTerm()<cr>')
+cmd('nnoremap <C-h> <C-\\><C-n>gT')
+cmd('tnoremap <C-h> <C-\\><C-n>gT')
+cmd('nnoremap <C-l> <C-\\><C-n>gt')
+cmd('tnoremap <C-l> <C-\\><C-n>gt')
 cmd('tnoremap <M-w> <C-\\><C-n>w')
 cmd('command! Newterm :tabnew | term')
 -- cmd('nnoremap <localleader>o :tabo<cr>')
@@ -515,17 +580,52 @@ vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
 -- fixme: others yet to be updated
 cmd('source ~/.config/nvim/old-cfg.vim')
 
-function _G.put(...)
-  -- https://github.com/nanotee/nvim-lua-guide
-  local objects = {}
-  for i = 1, select('#', ...) do
-    local v = select(i, ...)
-    table.insert(objects, vim.inspect(v))
+function ConvertNeorg()
+  -- local workspace_root = require("neorg").modules.get_module("core.dirman").get_current_workspace()[2]
+  -- local export_path = workspace_root .. '/export'
+  -- local export_path = workspace_root .. '/export'
+
+  local export_path = os.getenv('HOME') .. '/neorg_outputs'
+  local markdown_path = export_path .. '/markdown'
+  local pdf_path = export_path .. '/pdf'
+  local fname = vim.fn.expand('%:t:r')
+
+  local markdown_fname = markdown_path .. '/' .. fname .. '.md'
+  local pdf_fname = pdf_path .. '/' .. fname .. '.pdf'
+
+  local mkdir = function(pth)
+    if vim.fn.isdirectory(pth) == 0 then
+      vim.fn.mkdir(pth)
+    end
   end
 
-  print(table.concat(objects, '\n'))
-  return ...
+  mkdir(export_path)
+  mkdir(markdown_path)
+  mkdir(pdf_path)
+
+  local export_cmd = 'Neorg export to-file ' .. markdown_fname .. ' markdown'
+
+  local job = require'plenary.job'
+  vim.cmd(export_cmd)
+
+  job:new({
+    command = 'pandoc',
+      args = { '-V', 'geometry:margin=1.0in', '-V', 'linkcolor:red', '-V', 'urlcolor:red', markdown_fname, '-o', pdf_fname},
+      on_exit = function(j, return_val)
+        -- print(vim.inspect(return_val))
+        -- print(vim.inspect(j:result()))
+      end,
+  }):start()
+
 end
+
+vim.api.nvim_create_autocmd(
+  {"BufWritePost"},
+  {
+    pattern = {"*.norg"},
+    callback = ConvertNeorg,
+  }
+)
 
 -- neorg
 -- require('nvim-treesitter.configs').setup {
@@ -613,7 +713,7 @@ vim.api.nvim_exec([[
 ]], true)
 
 -- hop
-keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>', 'hop to word')
+-- keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>', 'hop to word')
 -- keymap('v', '<localleader>h', ':lua require("hop").hint_words()<cr>')
 
 -- local neorg_callbacks = require("neorg.callbacks")
@@ -748,4 +848,5 @@ cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
 -- vim.api.nvim_command('highlight default HopNextKey1  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
 -- vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
 
--- require'hop.highlight'.insert_highlights()
+vim.o.foldminlines = 5
+vim.o.foldnestmax = 2
