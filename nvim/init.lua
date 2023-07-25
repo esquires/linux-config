@@ -30,6 +30,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   -- colorscheme
+  { 'nvim-treesitter/nvim-treesitter-context', lazy = false},
   {
     'esquires/vim-moonfly-colors',
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -39,7 +40,18 @@ require("lazy").setup({
     end,
   },
   { 'lervag/vimtex', lazy = false },
+  { 'rcarriga/nvim-notify', lazy = false },
   { 'jbyuki/nabla.nvim', lazy = false },
+  {
+      "kylechui/nvim-surround",
+      version = "*", -- Use for stability; omit to use `main` branch for the latest features
+      event = "VeryLazy",
+      config = function()
+          require("nvim-surround").setup({
+              -- Configuration here, or leave empty to use defaults
+          })
+      end
+  },
   { "folke/which-key.nvim",
     event = "VeryLazy",
     init = function()
@@ -81,7 +93,7 @@ require("lazy").setup({
     "nvim-tree/nvim-tree.lua",
     version = "*",
     dependencies = {
-      "nvim-tree/nvim-web-devicons" 
+      "nvim-tree/nvim-web-devicons"
     },
     config = function () require("nvim-tree").setup {} end
   },
@@ -276,8 +288,9 @@ cmp.setup({
       },
     },
 
-
 })
+
+vim.notify = require("notify")
 -- print(vim.inspect(cmp.config))
 -- print(nvim.inspect(require('cmp')
 
@@ -426,7 +439,7 @@ require('lualine').setup {
                                  -- 1: Relative path
                                  -- 2: Absolute path
                                  -- 3: Absolute path, with tilde as the home directory
-  
+
         shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                  -- for other components. (terrible name, any suggestions?)
         symbols = {
@@ -459,7 +472,7 @@ require('lualine').setup {
 keymap('n', '<localleader>gs', ':G<cr>}jj<c-w>H', 'git status')
 keymap('n', '<localleader>gb', ':Git blame<cr>')
 keymap('n', '<localleader>gt', ':Git commit<cr>')
-keymap('n', '<localleader>gl', ':Gclog --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr>', 'git log')
+keymap('n', '<localleader>gl', ':Git log --pretty=format:"%h %ad %s %d [%an]" --decorate --date=short -100 --graph<cr><c-w>H', 'git log')
 keymap('n', '<localleader>gd', ':Gdiffsplit<cr>')
 keymap('n', '<localleader>gco', ':Git checkout ')
 keymap('n', '<localleader>gp', ':Git push origin HEAD<cr>')
@@ -780,6 +793,11 @@ vim.api.nvim_exec([[
 -- }
 
 cmd('colorscheme moonfly')
+cmd('hi TreesitterContextBottom gui=underline guisp=Grey')
+cmd("nnoremap <localleader>c m':lua require(\"treesitter-context\").go_to_context()<cr>")
+-- vim.keymap.set("n", "<localleader>c", function()
+--   require("treesitter-context").go_to_context()
+-- end, { silent = true })
 
 function FindExistingBuffer(bufnr, tabnum_start)
 
@@ -849,4 +867,4 @@ cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
 -- vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
 
 vim.o.foldminlines = 5
-vim.o.foldnestmax = 2
+vim.o.foldnestmax = 0
