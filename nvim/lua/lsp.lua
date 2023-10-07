@@ -151,6 +151,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
+-- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
 lspconfig.pylsp.setup {
   filetypes = {"python"},
   capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
@@ -175,13 +176,13 @@ lspconfig.pylsp.setup {
           strict = true,
           overrides = {'--disallow-untyped-defs', '--ignore-missing-imports', true},
         },
-        -- pydocstyle = {
-        --   enabled = true,
-        --   ignore = {'D1', 'D203', 'D213', 'D416'},
-        -- },
+        pydocstyle = {
+          enabled = false,
+          ignore = {'D1', 'D203', 'D213', 'D416'},
+        },
         pylint = {
           enabled = true,
-          args = {'--rcfile=' .. os.getenv("HOME") .. '/repos/linux-config/.pylintrc'}
+          args = {}
         },
         flake8 = {
           enabled = true,
