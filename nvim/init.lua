@@ -100,7 +100,7 @@ require("lazy").setup({
   { 'chaoren/vim-wordmotion', lazy = false},
   { 'preservim/vim-markdown', lazy = false},
   { 'windwp/nvim-autopairs', lazy = false, opts = {}},
-  { 'lukas-reineke/indent-blankline.nvim', lazy = false},
+  { 'lukas-reineke/indent-blankline.nvim', main="ibl", lazy = false, opts = {scope = {enabled=false}}},
   { 'milkypostman/vim-togglelist', lazy = false},
   { 'tomtom/tcomment_vim', lazy = false},
   { 'ludovicchabant/vim-gutentags', lazy = false},
@@ -120,6 +120,7 @@ require("lazy").setup({
   --   config = function () require("nvim-tree").setup {} end
   -- },
   {
+    -- https://www.lazyvim.org/plugins/treesitter
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
     version = false, -- last release is way too old and doesn't work on Windows
@@ -131,9 +132,30 @@ require("lazy").setup({
     },
     ---@type TSConfig
     opts = {
-      highlight = { enable = true },
+      highlight = { enable = true, disable = "latex" },
       indent = { enable = true },
-      ensure_installed = 'all',
+      ensure_installed = {
+        "bash",
+        "sql",
+        "c",
+        "html",
+        "javascript",
+        "jsdoc",
+        "json",
+        "lua",
+        "luadoc",
+        "luap",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "query",
+        "regex",
+        "tsx",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "yaml",
+      },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -288,6 +310,7 @@ require('aerial').setup({
 })
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
+vim.keymap.set('n', '<leader>o', '<cmd>vs<CR><cmd>Oil<CR>')
 
 local Rule = require('nvim-autopairs.rule')
 local npairs = require('nvim-autopairs')

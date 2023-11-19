@@ -150,6 +150,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+ -- :h vim.lsp.diagnostic.on_publish_diagnostics
+ vim.lsp.diagnostic.on_publish_diagnostics, {
+   -- Enable underline, use default values
+   underline = false,
+   -- Enable virtual text, override spacing to 4
+   -- virtual_text = {
+   --   spacing = 4,
+   -- },
+   -- -- Use a function to dynamically turn signs off
+   -- -- and on, using buffer local variables
+   -- signs = function(namespace, bufnr)
+   --   return vim.b[bufnr].show_signs == true
+   -- end,
+   -- -- Disable a feature
+   -- update_in_insert = false,
+ }
+)
+
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
 -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
 lspconfig.pylsp.setup {
