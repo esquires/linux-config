@@ -83,6 +83,7 @@ require("lazy").setup({
   },
   { 'nvim-tree/nvim-web-devicons', lazy = false },
   { 'ray-x/lsp_signature.nvim', lazy = false},
+  { 'RRethy/vim-illuminate', lazy = false},
   { 'esquires/vim-map-medley', lazy = false},
   { 'esquires/tabcity', lazy = false},
   { 'esquires/lvdb', lazy = false},
