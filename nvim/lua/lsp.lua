@@ -52,7 +52,8 @@ cmp.setup({
   }, {
     { name = 'buffer' },
     { name = 'nvim_lua' },
-    { name = 'neorg'}
+    { name = 'neorg'},
+    { name = 'vimtex'}
   }),
 
   window = {
@@ -114,11 +115,17 @@ local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- local servers = { 'clangd', 'pyright'}
 local servers = { 'clangd', 'pylsp' }
+-- vim.print(servers)
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    -- on_attach = my_custom_on_attach,
-    capabilities = capabilities,
-  }
+  if lsp == "pylsp" then
+    -- https://www.reddit.com/r/neovim/comments/yv4t5o/why_doesnt_any_python_lsp_work_for_me/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    lspconfig[lsp].setup {
+      -- on_attach = on_attach,
+      capabilities = capabilities,
+    }
+  else
+    lspconfig[lsp].setup {capabilities = capabilities}
+  end
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -174,6 +181,11 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 lspconfig.pylsp.setup {
   filetypes = {"python"},
   capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  -- https://www.reddit.com/r/neovim/comments/yv4t5o/why_doesnt_any_python_lsp_work_for_me/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+  on_attach = function(client, bufnr)
+      client.server_capabilities.documentHighlightProvider = false
+      -- on_attach(client, bufnr)
+  end,
   settings = {
     pylsp = {
       plugins = {

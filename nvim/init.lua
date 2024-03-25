@@ -47,6 +47,7 @@ require("lazy").setup({
     end,
   },
   { 'lervag/vimtex', lazy = false },
+  { 'micangl/cmp-vimtex', lazy = false },
   { 'rcarriga/nvim-notify', lazy = false },
   { 'jbyuki/nabla.nvim', lazy = false },
   {
@@ -105,7 +106,10 @@ require("lazy").setup({
   { 'milkypostman/vim-togglelist', lazy = false},
   { 'tomtom/tcomment_vim', lazy = false},
   { 'ludovicchabant/vim-gutentags', lazy = false},
-  { 'HiPhish/nvim-ts-rainbow2', lazy = false},
+  -- { 'HiPhish/nvim-ts-rainbow2', lazy = false},
+  { 'hiphish/rainbow-delimiters.nvim',
+    lazy = false,
+  },
   { 'nvim-treesitter/nvim-treesitter-textobjects', lazy = false},
   { 'stevearc/oil.nvim',
     opts = {},
@@ -128,7 +132,7 @@ require("lazy").setup({
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      "HiPhish/nvim-ts-rainbow2",
+      "hiphish/rainbow-delimiters.nvim",
       "nvim-treesitter/nvim-treesitter-textobjects"
     },
     ---@type TSConfig
@@ -139,6 +143,7 @@ require("lazy").setup({
         "bash",
         "sql",
         "c",
+        "cpp",
         "html",
         "javascript",
         "jsdoc",
@@ -182,24 +187,24 @@ require("lazy").setup({
           },
         },
       },
-      rainbow = {
-        enable = true,
-        -- list of languages you want to disable the plugin for
-        -- disable = { "jsx", "cpp" },
-        -- Which query to use for finding delimiters
-        query = 'rainbow-parens',
-        -- Highlight the entire buffer all at once
-        -- strategy = require('ts-rainbow').strategy.global,
-        hlgroups = {
-           'TSRainbowRed',
-           'TSRainbowBlue',
-           'TSRainbowYellow',
-           'TSRainbowViolet',
-           'TSRainbowOrange',
-           'TSRainbowGreen',
-           'TSRainbowCyan'
-        },
-      },
+      -- rainbow = {
+      --   enable = true,
+      --   -- list of languages you want to disable the plugin for
+      --   -- disable = { "jsx", "cpp" },
+      --   -- Which query to use for finding delimiters
+      --   query = 'rainbow-parens',
+      --   -- Highlight the entire buffer all at once
+      --   -- strategy = require('ts-rainbow').strategy.global,
+      --   hlgroups = {
+      --      'TSRainbowRed',
+      --      'TSRainbowBlue',
+      --      'TSRainbowYellow',
+      --      'TSRainbowViolet',
+      --      'TSRainbowOrange',
+      --      'TSRainbowGreen',
+      --      'TSRainbowCyan'
+      --   },
+      -- },
     },
     ---@param opts TSConfig
     config = function(_, opts)
@@ -300,6 +305,18 @@ require("lazy").setup({
     end,
   },
 })
+
+require('rainbow-delimiters.setup').setup {
+    highlight = {
+       'RainbowDelimiterRed',
+       'RainbowDelimiterBlue',
+       'RainbowDelimiterYellow',
+       'RainbowDelimiterViolet',
+       'RainbowDelimiterOrange',
+       'RainbowDelimiterGreen',
+       'RainbowDelimiterCyan'
+    },
+}
 
 require('aerial').setup({
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
@@ -933,16 +950,23 @@ function FindExistingBuffer(bufnr, tabnum_start)
 end
 
 function GoToDefinitionInNewTab()
+  vim.lsp.buf.definition()
   local winnr = vim.api.nvim_get_current_win()
   local row = vim.api.nvim_win_get_cursor(winnr)[1]
   local bufnr = vim.api.nvim_get_current_buf()
 
-  vim.lsp.buf.definition()
-  vim.cmd("sleep 100m")
-
   local new_winnr = vim.api.nvim_get_current_win()
   local new_row, new_col = unpack(vim.api.nvim_win_get_cursor(new_winnr))
   local new_bufnr = vim.api.nvim_get_current_buf()
+
+  local ct = 0
+  while ct < 5 and winnr == new_winnr and row == new_row and bufnr == new_bufnr do
+    vim.cmd("sleep 100m")
+    ct = ct + 1
+    new_winnr = vim.api.nvim_get_current_win()
+    new_row, new_col = unpack(vim.api.nvim_win_get_cursor(new_winnr))
+    new_bufnr = vim.api.nvim_get_current_buf()
+  end
 
   if bufnr == new_bufnr then
     if row == new_row then
@@ -984,4 +1008,4 @@ cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
 -- vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
 
 vim.o.foldminlines = 5
-vim.o.foldnestmax = 0
+vim.o.foldnestmax = 2
