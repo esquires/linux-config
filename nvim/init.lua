@@ -46,8 +46,68 @@ require("lazy").setup({
       vim.cmd([[colorscheme moonfly]])
     end,
   },
+  -- {
+  --   "rachartier/tiny-inline-diagnostic.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require('tiny-inline-diagnostic').setup({
+  --       hi = {
+  --           background = "None", -- Can be a highlight or a hexadecimal color (#RRGGBB)
+  --       },
+  --     })
+  --   end,
+  -- },
   { 'lervag/vimtex', lazy = false },
-  { 'micangl/cmp-vimtex', lazy = false },
+  -- {
+  --     'MeanderingProgrammer/markdown.nvim',
+  --     name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+  --     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+  --     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+  --     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+  --     config = function()
+  --         require('render-markdown').setup({})
+  --     end,
+  -- },
+  {
+      "OXY2DEV/markview.nvim",
+      ft = "markdown",
+
+      dependencies = {
+          -- You may not need this if you don't lazy load
+          -- Or if the parsers are in your $RUNTIMEPATH
+          "nvim-treesitter/nvim-treesitter",
+
+          "nvim-tree/nvim-web-devicons"
+      },
+  },
+  { 'micangl/cmp-vimtex',
+    lazy = false,
+    config = function()
+      require('cmp_vimtex').setup({
+        format = function(entry, vim_item)
+          vim_item.menu = ({
+            -- Use this line if you wish to add a specific kind for cmp-vimtex:
+            --vimtex = "[Vimtex]" .. (vim_item.menu ~= nil and vim_item.menu or ""),
+            vimtex = vim_item.menu,
+            buffer = "[Buffer]",
+            nvim_lsp = "[LSP]",
+          })[entry.source.name]
+
+          return vim_item
+        end,
+        additional_information = {
+          info_in_menu = true,
+          info_in_window = true,
+          info_max_length = 60,
+          match_against_info = true,
+          symbols_in_menu = true,
+        },
+        bibtex_parser = {
+          enabled = true,
+        },
+      })
+    end,
+  },
   { 'rcarriga/nvim-notify', lazy = false },
   { 'jbyuki/nabla.nvim', lazy = false },
   {
@@ -60,19 +120,19 @@ require("lazy").setup({
           })
       end
   },
-  { "folke/which-key.nvim",
-    event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    config = function(_, opts)
-      local wk = require("which-key")
-      wk.setup(opts)
-      wk.register(opts.defaults)
-    end,
-  },
-  { "kchmck/vim-coffee-script", lazy = false },
+  -- { "folke/which-key.nvim",
+  --   event = "VeryLazy",
+  --   init = function()
+  --     vim.o.timeout = true
+  --     vim.o.timeoutlen = 300
+  --   end,
+  --   config = function(_, opts)
+  --     local wk = require("which-key")
+  --     wk.setup(opts)
+  --     wk.register(opts.defaults)
+  --   end,
+  -- },
+  -- { "kchmck/vim-coffee-script", lazy = false },
   { "tpope/vim-fugitive", lazy = false },
   -- { "L3MON4D3/LuaSnip", lazy = true },
   {
@@ -105,7 +165,7 @@ require("lazy").setup({
   { 'lukas-reineke/indent-blankline.nvim', main="ibl", lazy = false, opts = {scope = {enabled=false}}},
   { 'milkypostman/vim-togglelist', lazy = false},
   { 'tomtom/tcomment_vim', lazy = false},
-  { 'ludovicchabant/vim-gutentags', lazy = false},
+  -- { 'ludovicchabant/vim-gutentags', lazy = false},
   -- { 'HiPhish/nvim-ts-rainbow2', lazy = false},
   { 'hiphish/rainbow-delimiters.nvim',
     lazy = false,
@@ -137,7 +197,12 @@ require("lazy").setup({
     },
     ---@type TSConfig
     opts = {
-      highlight = { enable = true, disable = "latex" },
+      highlight = {
+        enable = true,
+        disable = "latex",
+        additional_vim_regex_highlighting = {'latex','norg'}
+      },
+
       indent = { enable = true },
       ensure_installed = {
         "bash",
@@ -268,13 +333,29 @@ require("lazy").setup({
     end,
   },
   {
+    -- https://vhyrro.github.io/posts/neorg-and-luarocks
+    "vhyrro/luarocks.nvim",
+    priority = 1000, -- We'd like this plugin to load first out of the rest
+    config = true, -- This automatically runs `require("luarocks-nvim").setup()`
+  },
+  {
     "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
+    dependencies = {
+      "3rd/image.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-neorg/neorg-telescope",
+      "luarocks.nvim",
+    },
+    -- put any other flags you wanted to pass to lazy here!
     config = function()
       require("neorg").setup {
         load = {
-          ["core.defaults"] = {}, -- Loads default behaviour
+          -- https://github.com/nvim-neorg/neorg/issues/1408#issuecomment-2093155213
+          ["core.defaults"] = {
+            config = {
+              disable = { "core.todo-introspector" },
+            },
+          },
           ["core.concealer"] = {}, -- Adds pretty icons to your documents
           ["core.dirman"] = { -- Manages Neorg workspaces
             config = {
@@ -285,9 +366,14 @@ require("lazy").setup({
             },
           },
           ["core.integrations.telescope"] = {},
+          ["core.integrations.image"] = {},
           ["core.export"] = { config = {export_dir = '/tmp/neorg' } },
           ["core.export.markdown"] = { config = { extensions = 'all' } },
           ["core.summary"] = {},
+          ["core.latex.renderer"] = {
+            config = {
+            }
+          },
           ["core.keybinds"] = {
             config = {
               hook = function(keybinds)
@@ -304,6 +390,17 @@ require("lazy").setup({
       }
     end,
   },
+  {
+    "3rd/image.nvim", lazy = false
+  },
+  { "niuiic/track.nvim",
+    lazy = false,
+    dependencies = {
+       "niuiic/core.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+  }
+
 })
 
 require('rainbow-delimiters.setup').setup {
@@ -329,6 +426,8 @@ require('aerial').setup({
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 vim.keymap.set('n', '<leader>o', '<cmd>vs<CR><cmd>Oil<CR>')
+
+-- track
 
 local Rule = require('nvim-autopairs.rule')
 local npairs = require('nvim-autopairs')
@@ -395,21 +494,21 @@ local cond = require('nvim-autopairs.conds')
 
 local neorg_callbacks = require("neorg.core.callbacks")
 
-neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
-    -- Map all the below keybinds only when the "norg" mode is active
-    keybinds.map_event_to_mode("norg", {
-        n = { -- Bind keys in normal mode
-            { "<C-s>", "core.integrations.telescope.find_linkable" },
-        },
-
-        i = { -- Bind in insert mode
-            { "<C-l>", "core.integrations.telescope.insert_link" },
-        },
-    }, {
-        silent = true,
-        noremap = true,
-    })
-end)
+-- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+--     -- Map all the below keybinds only when the "norg" mode is active
+--     keybinds.map_event_to_mode("norg", {
+--         n = { -- Bind keys in normal mode
+--             { "<C-s>", "core.integrations.telescope.find_linkable" },
+--         },
+--
+--         i = { -- Bind in insert mode
+--             { "<C-l>", "core.integrations.telescope.insert_link" },
+--         },
+--     }, {
+--         silent = true,
+--         noremap = true,
+--     })
+-- end)
 
 require("formatter").setup {
   -- Enable or disable logging
@@ -440,6 +539,28 @@ require("snippets")
 -- require('leap').add_default_mappings()
 vim.keymap.set({'n', 'v'}, '<a-l>', '<Plug>(leap-forward-to)')
 vim.keymap.set({'n', 'v'}, '<a-h>', '<Plug>(leap-backward-to)')
+
+-- track
+require('track').setup(
+  {
+    sign = {
+      text = "󰍒",
+      text_color = "#ffff00",
+      priority = 10000,
+    },
+  }
+)
+keymap('n', 'mt', ':lua require("track").toggle()<cr>')
+keymap('n', 'mr', ':lua require("track").remove()<cr>')
+keymap('n', 'me', ':lua require("track").edit()<cr>')
+keymap('n', 'mj', ':lua require("track").jump_to_next()<cr>')
+keymap('n', 'mk', ':lua require("track").jump_to_prev()<cr>')
+keymap('n', 'ms', ':lua require("track").search()<cr>')
+
+-- neorg telescope
+-- neorg.telescope.insert_file_link
+-- vim.keymap.set("n", "<c-i>", "<Plug>(neorg.telescope.insert_file_link)")
+
 
 -- vimtex
 vim.g.vimtex_view_general_viewer = 'okular'
@@ -628,6 +749,7 @@ function FindFilesHelper(cwd)
     table.insert(find_command, '!' .. ignore)
   end
 
+  -- vim.print(find_command)
   require('telescope.builtin').find_files({cwd=cwd, find_command = find_command})
 end
 
@@ -773,6 +895,43 @@ vim.api.nvim_create_autocmd(
     callback = ConvertNeorg,
   }
 )
+
+-- https://github.com/3rd/image.nvim
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+-- default config
+local function ConfigureImageNvim()
+  require("image").setup({
+    backend = "kitty",
+    integrations = {
+      markdown = {
+        enabled = true,
+        clear_in_insert_mode = false,
+        download_remote_images = true,
+        only_render_image_at_cursor = false,
+        filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+      },
+      neorg = {
+        enabled = true,
+        clear_in_insert_mode = false,
+        download_remote_images = true,
+        only_render_image_at_cursor = false,
+        filetypes = { "norg" },
+      },
+    },
+    max_width = nil,
+    max_height = nil,
+    max_width_window_percentage = nil,
+    max_height_window_percentage = 50,
+    window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
+    window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+    editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
+    tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+    hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
+  })
+end
+
+pcall(ConfigureImageNvim)
 
 -- neorg
 -- require('nvim-treesitter.configs').setup {
@@ -968,16 +1127,7 @@ function GoToDefinitionInNewTab()
     new_bufnr = vim.api.nvim_get_current_buf()
   end
 
-  if bufnr == new_bufnr then
-    if row == new_row then
-      -- default to tags
-      print('lsp did not find definition, reverting to ctags')
-      vim.cmd("call tags#Open_tag_in_new_tab()")
-    else
-      -- opened in same file don't do anything else
-    end
-
-  else
+  if bufnr ~= new_bufnr then
     -- opened new file so move it to a new tab
     local bufnr = vim.api.nvim_get_current_buf()
     vim.cmd("pop")

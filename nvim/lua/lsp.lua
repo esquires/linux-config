@@ -68,19 +68,19 @@ cmp.setup({
   },
 
   -- https://github.com/tjdevries/config_manager/blob/master/xdg_config/nvim/after/plugin/completion.lua
-  formatting = {
-    format = lspkind.cmp_format {
-      with_text = true,
-      menu = {
-        buffer = "[buf]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[api]",
-        path = "[path]",
-        luasnip = "[snip]",
-        gh_issues = "[issues]",
-      },
-    },
-  },
+  -- formatting = {
+  --   format = lspkind.cmp_format {
+  --     with_text = true,
+  --     menu = {
+  --       buffer = "[buf]",
+  --       nvim_lsp = "[LSP]",
+  --       nvim_lua = "[api]",
+  --       path = "[path]",
+  --       luasnip = "[snip]",
+  --       gh_issues = "[issues]",
+  --     },
+  --   },
+  -- },
 
   experimental = {
     -- I like the new menu better! Nice work hrsh7th

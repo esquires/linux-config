@@ -15,9 +15,9 @@ alias vimt="nvim -c term"
 alias gvim="gnome-terminal -x nvim -p"
 
 #set editor to vi
-set -o vi
-export EDITOR=vim
-set editing-mode vi
+# set -o vi
+# export EDITOR=vim
+# set editing-mode vi
 shopt -s histverify
 shopt -s extglob
 

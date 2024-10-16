@@ -22,25 +22,27 @@ Installation:
 
 ```bash
 # useful packages
-sudo apt install autojump ripgrep
+sudo apt install autojump 
 
 # extra utilities
-sudo apt install awesome okular trash-cli ccache zsh terminator exhuberant-ctags htop ninja-build libliajit-5.1-dev
+sudo apt install awesome okular trash-cli ccache zsh htop
 
-# neovim package management
-mkdir -p ~/.config/nvim/pack/packer/start
-git clone https://github.com/wbthomason/packer.nvim ~/.config/nvim/pack/packer/start 
-THIS_REPO=$PWD
-ln -s $THIS_REPO/nvim/init.lua ~/.config/nvim
-ln -s $THIS_REPO/nvim/old-cfg.vim ~/.config/nvim
-ln -s $THIS_REPO/nvim/lua ~/.config/nvim
+# neovim dependencies
+sudo apt install ninja-build libluajit-5.1-dev ripgrep
 
 # in virtual env if desired
 source ~/anaconda3/bin/activate
 conda create -y -n vim python=3.8
 conda activate vim
-pip install "python-lsp-server[all]" pyls-flake8 pylsp-mypy flake8 pydocstyle pylint mypy
-conda install clangdev clang
+pip install "python-lsp-server[all]" pyls-flake8 pylsp-mypy flake8 pydocstyle pylint mypy python-lsp-black jedi isort black
+# conda install clangdev clang
+# note: add -DCMAKE_EXPORT_COMPILE_COMMANDS=1 for builds
+# https://stackoverflow.com/q/73546064
+
+ln -s $PWD/nvim/init.lua ~/.config/nvim
+ln -s $PWD/nvim/lua ~/.config/nvim
+ln -s $PWD/nvim/after ~/.config/nvim
+ln -s $PWD/nvim/old-cfg.vim ~/.config/nvim
 
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -48,7 +50,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 # default to zsh
 sudo chsh -s /usr/bin/zsh $USER
 
-# awesoem window manager configuration
+# awesome window manager configuration
 ln -s $PWD/rc.lua ~/.config/awesome/rc.lua
 cd ~/.config/awesome/
 git clone https://github.com/streetturtle/awesome-wm-widgets
