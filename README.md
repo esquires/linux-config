@@ -28,7 +28,7 @@ sudo apt install autojump
 sudo apt install awesome okular trash-cli ccache zsh htop
 
 # neovim dependencies
-sudo apt install ninja-build libluajit-5.1-dev ripgrep
+sudo apt install ninja-build libluajit-5.1-dev ripgrep luarocks imagemagick
 
 # in virtual env if desired
 source ~/anaconda3/bin/activate

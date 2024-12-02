@@ -69,17 +69,26 @@ require("lazy").setup({
   --     end,
   -- },
   {
-      "OXY2DEV/markview.nvim",
-      ft = "markdown",
-
-      dependencies = {
-          -- You may not need this if you don't lazy load
-          -- Or if the parsers are in your $RUNTIMEPATH
-          "nvim-treesitter/nvim-treesitter",
-
-          "nvim-tree/nvim-web-devicons"
-      },
+      'MeanderingProgrammer/render-markdown.nvim',
+      dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+      ---@module 'render-markdown'
+      ---@type render.md.UserConfig
+      opts = {},
   },
+  -- {
+  --     "OXY2DEV/markview.nvim",
+  --     ft = "markdown",
+  --
+  --     dependencies = {
+  --         -- You may not need this if you don't lazy load
+  --         -- Or if the parsers are in your $RUNTIMEPATH
+  --         "nvim-treesitter/nvim-treesitter",
+  --
+  --         "nvim-tree/nvim-web-devicons"
+  --     },
+  -- },
   { 'micangl/cmp-vimtex',
     lazy = false,
     config = function()
@@ -341,10 +350,11 @@ require("lazy").setup({
   {
     "nvim-neorg/neorg",
     dependencies = {
-      "3rd/image.nvim",
+			-- "3rd/image.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-neorg/neorg-telescope",
       "luarocks.nvim",
+      "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" },
     },
     -- put any other flags you wanted to pass to lazy here!
     config = function()
@@ -385,7 +395,12 @@ require("lazy").setup({
                 })
               end,
             }
-          }
+          },
+          ["external.templates"] = {
+            config = {
+              templates_dir = "~/norg/personal/templates",
+            },
+          },
         }
       }
     end,
@@ -847,12 +862,18 @@ function ConvertNeorg()
   local markdown_path = export_path .. '/markdown'
   local pdf_path = export_path .. '/pdf'
   local fname = vim.fn.expand('%:t:r')
-
   local markdown_fname = markdown_path .. '/' .. fname .. '.md'
   local pdf_fname = pdf_path .. '/' .. fname .. '.pdf'
 
+  if string.find(vim.fn.expand('%:p'), "personal/journal") then
+    local dirname = vim.fn.expand('%:p:h:t')
+    export_path = os.getenv('HOME') .. '/blog/content/daily/' .. vim.fn.expand('%:p:h:t')
+    markdown_fname = export_path .. '/' ..  fname .. '.md'
+    pdf_path = nil
+  end
+
   local mkdir = function(pth)
-    if vim.fn.isdirectory(pth) == 0 then
+    if pth ~= nil and vim.fn.isdirectory(pth) == 0 then
       vim.fn.mkdir(pth)
     end
   end
@@ -876,11 +897,20 @@ function ConvertNeorg()
         neorg.lib.lazy_string_concat("Failed to write to file '", markdown_fname, "' for export: ", werr)
       )
 
-      job:new({
-        command = 'pandoc',
-          args = { '-V', 'geometry:margin=1.0in', '-V', 'linkcolor:red', '-V', 'urlcolor:red', markdown_fname, '-o', pdf_fname},
+      if pdf_path ~= nil then
+
+        job:new({
+          command = 'pandoc',
+            args = { '-V', 'geometry:margin=1.0in', '-V', 'linkcolor:red', '-V', 'urlcolor:red', markdown_fname, '-o', pdf_fname},
+            on_exit = NotifyErr,
+        }):start()
+      else
+        job:new({
+          command = 'sed',
+          args = {'-i', 's:^```$::', markdown_fname},
           on_exit = NotifyErr,
-      }):start()
+        }):start()
+      end
 
     end)
 
