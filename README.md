@@ -25,10 +25,10 @@ Installation:
 sudo apt install autojump 
 
 # extra utilities
-sudo apt install awesome okular trash-cli ccache zsh htop
+sudo apt install awesome okular trash-cli ccache zsh htop fzf
 
 # neovim dependencies
-sudo apt install ninja-build libluajit-5.1-dev ripgrep luarocks imagemagick
+sudo apt install ninja-build libluajit-5.1-dev ripgrep gettext luarocks imagemagick libmagickwand-dev
 
 # in virtual env if desired
 source ~/anaconda3/bin/activate
@@ -64,10 +64,6 @@ ln -s $PWD/scripts ~/bin/scripts
 ```
 
 Manual steps:
-
-* In vim, run `PackerSync` and restart
-
-* ``
 
 * Put this in `~/.zshrc`.
 

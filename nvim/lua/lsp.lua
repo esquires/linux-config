@@ -114,7 +114,7 @@ cmp.setup.cmdline(':', {
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- local servers = { 'clangd', 'pyright'}
-local servers = { 'clangd', 'pylsp' }
+local servers = { 'clangd', 'pylsp', 'bashls', 'cmake' }
 -- vim.print(servers)
 for _, lsp in ipairs(servers) do
   if lsp == "pylsp" then

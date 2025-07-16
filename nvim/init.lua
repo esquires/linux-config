@@ -29,6 +29,7 @@ vim.opt.rtp:prepend(lazypath)
 
 
 require("lazy").setup({
+
   -- colorscheme
   { 'nvim-treesitter/nvim-treesitter-context',
     lazy = false,
@@ -36,6 +37,19 @@ require("lazy").setup({
       require("treesitter-context").setup({
         max_lines = 5,
       })
+    end,
+  },
+  {
+    'pteroctopus/faster.nvim'
+  },
+  { 'mfussenegger/nvim-lint',
+    lazy = false,
+    config = function()
+      local lint = require("lint")
+
+      lint.linters_by_ft = {
+        cpp = { "cppcheck" },
+      }
     end,
   },
   {
@@ -58,37 +72,11 @@ require("lazy").setup({
   --   end,
   -- },
   { 'lervag/vimtex', lazy = false },
-  -- {
-  --     'MeanderingProgrammer/markdown.nvim',
-  --     name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
-  --     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-  --     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-  --     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-  --     config = function()
-  --         require('render-markdown').setup({})
-  --     end,
-  -- },
   {
-      'MeanderingProgrammer/render-markdown.nvim',
-      dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-      ---@module 'render-markdown'
-      ---@type render.md.UserConfig
-      opts = {},
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    opts = {},
   },
-  -- {
-  --     "OXY2DEV/markview.nvim",
-  --     ft = "markdown",
-  --
-  --     dependencies = {
-  --         -- You may not need this if you don't lazy load
-  --         -- Or if the parsers are in your $RUNTIMEPATH
-  --         "nvim-treesitter/nvim-treesitter",
-  --
-  --         "nvim-tree/nvim-web-devicons"
-  --     },
-  -- },
   { 'micangl/cmp-vimtex',
     lazy = false,
     config = function()
@@ -430,6 +418,36 @@ require('rainbow-delimiters.setup').setup {
     },
 }
 
+require('render-markdown').setup({
+    code = {
+        enabled = true,
+        render_modes = false,
+        sign = true,
+        style = 'full',
+        position = 'left',
+        language_pad = 0,
+        language_icon = true,
+        language_name = true,
+        disable_background = { 'diff' },
+        width = 'full',
+        left_margin = 0,
+        left_pad = 0,
+        right_pad = 0,
+        min_width = 0,
+        border = 'hide',
+        above = '▄',
+        below = '▀',
+        inline_left = '',
+        inline_right = '',
+        inline_pad = 0,
+        highlight = 'RenderMarkdownCode',
+        highlight_language = nil,
+        highlight_border = 'RenderMarkdownCodeBorder',
+        highlight_fallback = 'RenderMarkdownCodeFallback',
+        highlight_inline = 'RenderMarkdownCodeInline',
+    },
+})
+
 require('aerial').setup({
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
@@ -535,6 +553,9 @@ require("formatter").setup {
       require("formatter.filetypes.python").isort,
       require("formatter.filetypes.python").black,
     },
+    cpp = {
+      require("formatter.filetypes.cpp").clangformat,
+    }
   },
 }
 
@@ -1199,6 +1220,7 @@ vim.o.foldnestmax = 2
 vim.g.terminal_color_2  = '#4e9a06'
 vim.g.terminal_color_2  = '#C68539'
 vim.g.terminal_color_4  = '#397AC6'
+vim.g.terminal_color_3  = '#846b00'
 -- vim.g.terminal_color_3  = '#c4a000'
 -- vim.g.terminal_color_4  = '#3465a4'
 -- vim.g.terminal_color_5  = '#75507b'
@@ -1212,3 +1234,22 @@ vim.g.terminal_color_4  = '#397AC6'
 -- vim.g.terminal_color_13 = '#ad7fa8'
 -- vim.g.terminal_color_14 = '#00f5e9'
 -- vim.g.terminal_color_15 = '#eeeeec'
+
+vim.api.nvim_set_hl(0, "RenderMarkdownCode", {bg="#121212"})
+
+require('lint').linters_by_ft = {
+  cpp = {'cppcheck'},
+}
+
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  callback = function()
+
+    -- try_lint without arguments runs the linters defined in `linters_by_ft`
+    -- for the current filetype
+    require("lint").try_lint()
+
+    -- You can call `try_lint` with a linter name or a list of names to always
+    -- run specific linters, independent of the `linters_by_ft` configuration
+    -- require("lint").try_lint("cspell")
+  end,
+})

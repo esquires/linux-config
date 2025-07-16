@@ -255,12 +255,12 @@ awful.screen.connect_for_each_screen(function(s)
               widget_type = horizontal_bar,
               -- widget_type = 'arc'
             },
-            batteryarc_widget({
-                show_current_level = true,
-                arc_thickness = 1,
-                font = "Play 12",
-                size = 40,
-            }),
+            -- batteryarc_widget({
+            --     show_current_level = true,
+            --     arc_thickness = 1,
+            --     font = "Play 12",
+            --     size = 40,
+            -- }),
             logout_menu_widget{
                     font = 'Play 14',
                     onlock = function() awful.spawn.with_shell('gnome-screensaver-command --lock') end

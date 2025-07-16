@@ -39,6 +39,40 @@ ls.config.set_config({
     enable_autosnippets = true,
 })
 
+local function get_header_guard_str()
+  local get_git_dir = function()
+    local dir_name = vim.fn.expand('%:p:h')
+    local git_root, ret = require("telescope.utils").get_os_command_output(
+      {"git", "rev-parse", "--show-toplevel" }, dir_name
+    )
+    return git_root[1]
+  end
+
+  local fname = vim.fn.expand("%p:r")
+  local success, git_root = pcall(get_git_dir)
+
+  local rel_fname
+
+  if success == false or git_root == nil then
+    rel_fname = vim.fn.expand("%:t:r")
+  else
+    rel_fname = string.sub(fname, string.len(git_root) + 2, string.len(fname))
+  end
+
+  rel_fname = string.upper(string.gsub(rel_fname, "/", "_"))
+  rel_fname = string.upper(string.gsub(rel_fname, "-", "_"))
+  rel_fname = rel_fname .. "_H_"
+  return rel_fname
+
+end
+
+local ri = function(insert_node_id)
+  -- https://www.reddit.com/r/neovim/comments/s0llvm/luasnip_examples
+  local ri = function (insert_node_id)
+    return f(function (args) return args[1][1] end, insert_node_id)
+  end
+end
+
 ls.add_snippets(nil, {
   python = {
     s("parser", {
@@ -82,14 +116,56 @@ ls.add_snippets(nil, {
       i(1),
       t(" << std::endl;")
     }),
+    s("ifndef", {
+      t("#ifndef "),
+      f(get_header_guard_str, {}),
+      t({"", "#define "}),
+      f(get_header_guard_str, {}),
+      t({"", ""}),
+      t({"", ""}),
+      i(1),
+      t({"", ""}),
+      t({"", ""}),
+      t("#endif // "),
+      f(get_header_guard_str, {}),
+    }),
+    s("namespace", {
+      t("namespace "),
+      i(1),
+      t({"{", "\t"}),
+      t({"", ""}),
+      i(2),
+      t({"", ""}),
+      t({"", "}  // "}),
+      ri(1),
+    }),
+    s("class", {
+      t("class "),
+      i(1),
+      t({" {", " public:", "\t"}),
+      i(2),
+      t({"", "};"}),
+    }),
+    s("struct", {
+      t("struct "),
+      i(1),
+      t({" {", "\t"}),
+      i(2),
+      t({"", "};"}),
+    }),
+    s("int_main", {
+      t({"int main(int argc, char *argv[]) {", "\t"}),
+      i(1),
+      t({"", "\treturn 0;", "}"}),
+    }),
     s("for", {
-      t("for (uint32_t i = 0; i < "),
+      t("for (std::size_t i = 0; i < "),
       i(1),
       t({".size(); i++) {", "\t"}),
       i(2),
       t({"","}"})
     }),
-    s("for range", {
+    s("forRange", {
       t("for (auto &"),
       i(1),
       t(" : "),
