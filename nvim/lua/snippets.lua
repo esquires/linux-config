@@ -1,5 +1,4 @@
--- copied/adapted from
---
+-- see https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md
 local ls = require("luasnip")
 -- some shorthands...
 local s = ls.snippet
@@ -11,7 +10,7 @@ local c = ls.choice_node
 local d = ls.dynamic_node
 local isn = ls.indent_snippet_node
 local l = require("luasnip.extras").lambda
-local r = require("luasnip.extras").rep
+local rep = require("luasnip.extras").rep
 local p = require("luasnip.extras").partial
 local m = require("luasnip.extras").match
 local n = require("luasnip.extras").nonempty
@@ -48,7 +47,7 @@ local function get_header_guard_str()
     return git_root[1]
   end
 
-  local fname = vim.fn.expand("%p:r")
+  local fname = vim.fn.expand("%:p:r")
   local success, git_root = pcall(get_git_dir)
 
   local rel_fname
@@ -64,13 +63,6 @@ local function get_header_guard_str()
   rel_fname = rel_fname .. "_H_"
   return rel_fname
 
-end
-
-local ri = function(insert_node_id)
-  -- https://www.reddit.com/r/neovim/comments/s0llvm/luasnip_examples
-  local ri = function (insert_node_id)
-    return f(function (args) return args[1][1] end, insert_node_id)
-  end
 end
 
 ls.add_snippets(nil, {
@@ -132,12 +124,12 @@ ls.add_snippets(nil, {
     s("namespace", {
       t("namespace "),
       i(1),
-      t({"{", "\t"}),
+      t({" {", "\t"}),
       t({"", ""}),
       i(2),
       t({"", ""}),
       t({"", "}  // "}),
-      ri(1),
+      rep(1),
     }),
     s("class", {
       t("class "),

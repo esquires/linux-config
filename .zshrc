@@ -16,8 +16,8 @@ source $ZSH/oh-my-zsh.sh
 ZSH_COLORIZE_STYLE="fruity"
 
 export HISTFILE=~/.zsh_history
-export HISTSIZE=100000
-export SAVEHIST=100000
+export HISTSIZE=10000
+export SAVEHIST=10000
 setopt PUSHD_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
@@ -58,17 +58,12 @@ zle -N zle-keymap-select
 zle -N zle-history-line-set
 export KEYTIMEOUT=1
 
-alias d='docker'
-alias dr="docker run --rm -ti $(docker images | head -2 | tail -1 | tr -s ' ' | cut -d ' ' -f 3) /bin/bash "
-
 #git aliases
 alias gs='git status'
 alias gf='git fetch'
 alias gm='git merge'
-alias gms='git merge -S'
 alias ga='git add'
 alias gcm='git commit'
-alias gcms='git commit -S'
 alias gco='git checkout'
 alias gd='git difftool -y 2> /dev/null'
 alias gb='git branch'
@@ -79,32 +74,14 @@ compdef __git_branch_names glmb
 
 #other aliases
 alias grep='grep --color=auto'
-alias find1='find -maxdepth 1 -mindepth 1'
 alias CLR='for i in {1..99}; do echo; done; clear'
 
-function git_pull_dirs {
-
-    TEMP_OLDPWD=$OLDPWD
-
-    for d in $(dirname $(find -name "\.git")); do
-        cd $d
-        git pull
-        cd $OLDPWD
-    done
-
-    OLDPWD=$TEMP_OLDPWD
-
-}
-
-alias ld="latexdiff-wrapper"
 alias vim="nvim"
 alias vimt="nvim -c term"
-alias vimlatex="nvim --headless -c 'VimtexInverseSearch %l %f'"
-alias gvim="gnome-terminal -- nvim -p"
-alias rm='echo "use trash-put!"'
 
 export PATH=$PATH:~/bin/scripts
 
 if [ -f ~/.fzf.zsh ]; then
     source ~/.fzf.zsh
 fi
+export LINUX_CONFIG_NVIM_FULL=1

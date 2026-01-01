@@ -111,22 +111,26 @@ cmp.setup.cmdline(':', {
 })
 
 -- Setup lspconfig.
-local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
--- local servers = { 'clangd', 'pyright'}
-local servers = { 'clangd', 'pylsp', 'bashls', 'cmake' }
--- vim.print(servers)
-for _, lsp in ipairs(servers) do
-  if lsp == "pylsp" then
-    -- https://www.reddit.com/r/neovim/comments/yv4t5o/why_doesnt_any_python_lsp_work_for_me/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-    lspconfig[lsp].setup {
-      -- on_attach = on_attach,
-      capabilities = capabilities,
-    }
-  else
-    lspconfig[lsp].setup {capabilities = capabilities}
-  end
-end
+-- local lspconfig = require('lspconfig')
+vim.lsp.enable({'clangd', 'pylsp', 'bashls', 'cmake'})
+
+--
+-- local lspconfig = vim.lsp.config
+-- local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- -- local servers = { 'clangd', 'pyright'}
+-- local servers = { 'clangd', 'pylsp', 'bashls', 'cmake' }
+-- -- vim.print(servers)
+-- for _, lsp in ipairs(servers) do
+--   if lsp == "pylsp" then
+--     -- https://www.reddit.com/r/neovim/comments/yv4t5o/why_doesnt_any_python_lsp_work_for_me/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+--     lspconfig[lsp].setup {
+--       -- on_attach = on_attach,
+--       capabilities = capabilities,
+--     }
+--   else
+--     lspconfig[lsp].setup {capabilities = capabilities}
+--   end
+-- end
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -178,7 +182,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 
 -- https://www.reddit.com/r/neovim/comments/qg4nyf/comment/hi8s8di/?utm_source=share&utm_medium=web2x&context=3
 -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
-lspconfig.pylsp.setup {
+vim.lsp.config("pylsp", {
   filetypes = {"python"},
   capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   -- https://www.reddit.com/r/neovim/comments/yv4t5o/why_doesnt_any_python_lsp_work_for_me/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
@@ -221,9 +225,9 @@ lspconfig.pylsp.setup {
       },
     },
   },
-}
+})
 
-require('lspconfig').clangd.setup {
+vim.lsp.config("clangd", {
   cmd = {
     "clangd",
     "--clang-tidy",
@@ -231,7 +235,7 @@ require('lspconfig').clangd.setup {
     "--suggest-missing-includes",
   },
   filetypes = {"c", "cpp", "objc", "objcpp"},
-}
+})
 
 -- require'lspconfig'.gopls.setup()
 require "lsp_signature".setup({
@@ -256,3 +260,4 @@ vim.cmd [[
 -- cmd('nnoremap <localleader>f :lua vim.lsp.buf.formatting()<cr>')
 -- cmd('nnoremap <localleader>s :lua vim.lsp.buf.definition()<cr>')
 
+vim.diagnostic.config({ virtual_text = true, underline = false})

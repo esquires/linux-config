@@ -9,10 +9,8 @@ fi
 # user specific aliases and functions
 ##########################################3
 
-#stuff whose error I don't want to see
 alias vim="nvim"
 alias vimt="nvim -c term"
-alias gvim="gnome-terminal -x nvim -p"
 
 #set editor to vi
 # set -o vi
@@ -25,8 +23,8 @@ shopt -s extglob
 bind '"\C-w":backward-kill-word'
 
 #history settings
-HISTSIZE=2000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=10000
 HISTCONTROL=ignoredups
 
 #allow ctrl_s for backward searching
@@ -50,10 +48,8 @@ fi
 alias gs='git status'
 alias gf='git fetch'
 alias gm='git merge'
-alias gms='git merge -S'
 alias ga='git add'
 alias gcm='git commit'
-alias gcms='git commit -S'
 alias gco='git checkout'
 alias gd='git difftool -y'
 alias gb='git branch'
@@ -62,45 +58,6 @@ alias gl='git log --pretty=format:"%C(yellow)%h %ad %Creset%s %C(red)%d %Cgreen[
 git config --global alias.unstage 'reset HEAD --'
 git config --global --replace-all core.pager "less -F -X"
 alias gu='git unstage'
-
-function git_fetch_dirs {
-
-    TEMP_OLDPWD=$OLDPWD
-
-    for d in $(dirname $(find -name "\.git")); do
-        cd $d
-        echo "fetching " $d
-        git fetch
-        cd $OLDPWD
-    done
-
-    OLDPWD=$TEMP_OLDPWD
-
-}
-
-function check_new_deps {
-
-    aurPkgs=$(pacman -Qm | cut -d ' ' -f 1)
-
-    for aurPkg in $aurPkgs; do
-
-        aurDte=$(pacman -Qi $aurPkg | grep "Install Date" | cut -d ':' -f 2-)
-        aurDte=$(date --date="$aurDte" "+%s")
-
-        depPkgs=$(pacman -Qi $aurPkg | grep "Depends On" | cut -d ':' -f 2-)
-
-        for depPkg in $depPkgs; do 
-
-            depDte=$(pacman -Qi $depPkg | grep "Install Date" | cut -d ':' -f 2-)
-            depDte=$(date --date="$depDte" "+%s")
-            if [[ $aurDte -lt $depDte ]]; then 
-                echo "update $aurPkg given $depPkg is more recent"
-            fi
-
-        done 
-
-    done
-}
 
 #code from here to allow completion on git aliases
 #   https://gist.github.com/JuggoPop/10706934
@@ -130,15 +87,11 @@ git config --global color.ui true
 # git config --global core.whitespace trailing-space, space-before-tab
 
 #other aliases
-alias cb='xclip -selection clipboard'
 alias grep='grep --color=auto'
-alias find1='find -maxdepth 1 -mindepth 1'
-alias l='ls -lh'
 alias CLR='for i in {1..99}; do echo; done; clear'
-alias g="gnome-terminal -x nvim -p"
-alias rm='echo "use trash-put!"'
 
 #machine specific operations
 if [ -f ~/.bash_specific ]; then
     source ~/.bash_specific
 fi
+export LINUX_CONFIG_NVIM_FULL=1

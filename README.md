@@ -22,7 +22,7 @@ Installation:
 
 ```bash
 # useful packages
-sudo apt install autojump 
+sudo apt install autojump xclip
 
 # extra utilities
 sudo apt install awesome okular trash-cli ccache zsh htop fzf
@@ -43,6 +43,7 @@ ln -s $PWD/nvim/init.lua ~/.config/nvim
 ln -s $PWD/nvim/lua ~/.config/nvim
 ln -s $PWD/nvim/after ~/.config/nvim
 ln -s $PWD/nvim/old-cfg.vim ~/.config/nvim
+ln -s ~/sync/repos/linux-config/kitty.conf ~/.config/kitty/kitty.conf
 
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -69,7 +70,6 @@ Manual steps:
 
 ```bash
 source ~/repos/linux-config/.zshrc
-export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
 ```
 
 * Put this in `~/.bashrc`:
@@ -77,7 +77,6 @@ export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
 ```bash
 source ~/repos/linux-config/.bashrc
 export PATH=$PATH:~/bin
-export PATH=$PATH:~/repos/CodeChecker/build/CodeChecker/bin
 ```
 
 * Put this in `~/.editrc`:

@@ -6,6 +6,7 @@ import os.path as op
 import shutil
 import subprocess as sp
 import re
+from pathlib import Path
 
 
 def get_files(fname, tgt):
@@ -19,6 +20,33 @@ def get_files(fname, tgt):
         return set()
 
 
+def create_single_tex_file(base_dir: Path, main_file: str) -> list[str]:
+
+    r = re.compile(r"\s*\\input\{(\S+)\}")
+    with open(base_dir / main_file, 'r') as f:
+        lines = f.read().splitlines()
+
+    i = 0
+    while i < len(lines):
+        m = r.match(lines[i])
+        if m is not None:
+            input_file = m.group(1)
+            temp_lines = create_single_tex_file(base_dir, input_file)
+            if i == 0:
+                lines = temp_lines + lines[1:]
+            else:
+                lines = lines[:i] + temp_lines + lines[i + 1:]
+            i += len(temp_lines)
+        else:
+            i += 1
+    return lines
+
+
+def write_lines(path: Path, lines: list[str]) -> None:
+    with open(path, "w", encoding="UTF-8") as f:
+        f.write("\n".join(lines))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('ref1')
@@ -29,17 +57,18 @@ def main():
     parser.add_argument('--skip_copy', action='store_true')
     parser.add_argument('--pdf_viewer')
     parser.add_argument('--diff_file')
+    parser.add_argument('--patch_files', nargs="+")
     parser.add_argument('--latexengine', default='xelatex')
     parser.add_argument('--no_run_bibtex', action='store_true')
     args = parser.parse_args()
 
-    tmp_dir = op.join(args.tmp_dir, 'tmp_ld')
-    old_dir = op.join(tmp_dir, 'old')
-    new_dir = op.join(tmp_dir, 'new')
-    diff_dir = op.join(tmp_dir, 'diff')
+    tmp_dir = Path(args.tmp_dir) / 'tmp_ld'
+    old_dir = Path(tmp_dir) / 'old'
+    new_dir = Path(tmp_dir) / 'new'
+    diff_dir = Path(tmp_dir) / 'diff'
 
-    repo_root = os.getcwd()
-    if not op.isdir(op.join(repo_root, '.git')):
+    repo_root = Path.cwd()
+    if not (repo_root / '.git').exists():
         raise RuntimeError((
             'This command should be executed from the root directory of '
             'a git repo'))
@@ -60,52 +89,44 @@ def main():
         _call(['git', 'stash'], cwd=new_dir)
         _call(['git', 'checkout', args.ref2], cwd=new_dir)
 
-    diff_main = op.join(diff_dir, args.main)
+    old_lines = create_single_tex_file(old_dir, args.main)
+    new_lines = create_single_tex_file(new_dir, args.main)
 
-    def run_latexdiff(fname):
-        src_old = op.join(old_dir, fname)
-        src_new = op.join(new_dir, fname)
-        dst = op.join(diff_dir, fname)
-        os.makedirs(op.dirname(dst), exist_ok=True)
-        with open(dst, 'w') as f:
-            _call(['latexdiff', src_old, src_new], stdout=f)
+    diff_dir.mkdir(exist_ok=True)
+    old_src = diff_dir / "old.tex"
+    new_src = diff_dir / "new.tex"
+    diff_src = diff_dir / (Path(args.main).stem + "_diff.tex")
+
+    write_lines(old_src, old_lines)
+    write_lines(new_src, new_lines)
+
+    with open(diff_src, 'w', encoding="UTF-8") as f:
+        _call(['latexdiff', old_src, new_src], stdout=f)
 
     # build the tex diff
-    rel_main = op.relpath(args.main, repo_root)
-    run_latexdiff(rel_main)
-
-    subfiles = [op.join(op.dirname(rel_main), f)
-                for f in get_files(diff_main, 'subfile')]
-    input_files = [op.join(op.dirname(rel_main), f)
-                   for f in get_files(diff_main, 'input')]
-    for subfile in subfiles + input_files:
-        run_latexdiff(subfile)
-        sp.check_call(['sed', r'/%DIF /d', '-i', op.join(diff_dir, subfile)])
+    # sp.check_call(['sed', r'/%DIF /d', '-i', op.join(diff_dir, subfile)])
 
     # build the pdf
-    main_basename = op.basename(args.main)
-    main_basename_no_ext, ext = op.splitext(main_basename)
-    diff_main_dir = op.dirname(diff_main)
-
-    main_basename_diff = main_basename_no_ext + "_diff" + ext
-    main_basename_diff_no_ext = main_basename_no_ext + "_diff"
-
-    shutil.copyfile(diff_main, op.join(diff_main_dir, main_basename_diff))
-
     _call(['git', 'add', '.'], cwd=diff_dir)
     _call(['git', 'commit', '-m', 'apply diff'], cwd=diff_dir)
 
     if args.diff_file:
-        _call(['git', 'apply', args.diff_file], cwd=diff_dir)
+        _call(
+            ['git', 'apply', "--reject", "--whitespace=fix", args.diff_file],
+            cwd=diff_dir
+        )
 
-    _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
+    if args.patch_files:
+        _call(["git", "am", "-3"] + args.patch_files, cwd=diff_dir)
+
+    _call([args.latexengine, diff_src], cwd=diff_dir)
 
     if not args.no_run_bibtex:
-        _call(['bibtex', main_basename_diff_no_ext], cwd=diff_main_dir)
-        _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
-        _call([args.latexengine, main_basename_diff], cwd=diff_main_dir)
+        _call(['bibtex', diff_src.parent / diff_src.stem], cwd=diff_dir)
+        _call([args.latexengine, diff_src], cwd=diff_dir)
+        _call([args.latexengine, mdiff_srcain_basename_diff], cwd=diff_dir)
 
-    diff_pdf = op.join(diff_main_dir, main_basename_diff_no_ext) + '.pdf'
+    diff_pdf = diff_src.parent / (diff_src.stem + ".pdf")
     if args.pdf_viewer:
         sp.Popen([args.pdf_viewer, diff_pdf])
 

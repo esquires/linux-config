@@ -5,8 +5,6 @@ let &titlestring=expand("%:t")
 set title
 
 set cmdheight=2
-let g:echodoc_enable_at_startup = 1
-let g:echodoc#enable_force_overwrite = 1
 let spellfile=expand('%:p:h') . '.spellfile.utf-16.add'
 
 nnoremap <localleader>q :q<cr>
@@ -51,11 +49,6 @@ filetype indent on
 
 " tagbar
 nnoremap <localleader>t :TagbarToggle<CR>
-
-" deoplete
-if has("nvim")
-    let g:deoplete#enable_at_startup = 1
-endif
 
 "pathogen plugin
 "call pathogen#infect()
@@ -103,7 +96,6 @@ set bs=2
 "colorscheme stuff
 "change background
 set t_Co=256
-colorscheme wombat256A
 if has("gui_running")
     set spell
 else
@@ -124,158 +116,6 @@ augroup END
 
 nnoremap <leader>c :cnext<CR>
 nnoremap <leader>L :lnext<CR>
-let g:neomake_tex_enabled_makers=['lacheck_wrapper', 'proselint', 'textidote']
-let g:neomake_cpp_enabled_makers=['cpplint', 'cppcheck', 'cppclean', 'flawfinder']
-" let g:neomake_cpp_enabled_makers=['cppcheck']
-let g:neomake_open_list=0
-let g:neomake_highlight_lines=1
-let g:neomake_highlight_columns=1
-let g:neomake_place_signs=1
-let g:neomake_python_enabled_makers=['pylint', 'pydocstyle', 'flake8', 'mypy']
-" let g:neomake_python_enabled_makers=[]
-
-let g:neomake_tex_lacheck_wrapper_maker={
-    \ 'exe': 'lacheck_wrapper.py',
-    \ 'errorformat':
-    \ '%-G** %f:,' .
-    \ '%E"%f"\, line %l: %m'}
-
-let g:neomake_tex_textidote_maker={
-        \ 'exe': "java",
-        \ 'args': ['-jar', '~/bin/textidote.jar', '--no-color', '--ignore', 'sh:c:noin,sh:d:001,sh:nobreak,sh:capperiod,sh:figref,sh:d:003', '--output', 'singleline'],
-        \ 'errorformat': '%f:%l:%m'
-        \ }
-
-
-let g:neomake_cpp_cppclean_maker={
-        \ 'exe': "cpp_static_wrapper.py",
-        \ 'args': ['cppclean', '--no-print-cmd'],
-        \ 'errorformat': '%f:%l: %m, %f:%l %m'
-        \ }
-
-let g:neomake_python_pylint_maker={
-    \ 'exe': 'pylint3',
-    \ 'args': [
-        \ '--rcfile=~/repos/linux-config/.pylintrc',
-        \ '--output-format=text',
-        \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg} [{msg_id}]"',
-        \ '--reports=no'
-    \ ],
-    \ 'errorformat':
-        \ '%A%f:%l:%c:%t: %m,' .
-        \ '%A%f:%l: %m,' .
-        \ '%A%f:(%l): %m,' .
-        \ '%-Z%p^%.%#,' .
-        \ '%-G%.%#',
-    \ 'output_stream': 'both',
-    \ 'postprocess': [
-    \   function('neomake#postprocess#generic_length'),
-    \   function('neomake#makers#ft#python#PylintEntryProcess'),
-    \ ]}
-
-let g:neomake_python_pydocstyle_maker={
-        \ 'exe': 'pydocstyle',
-        \ 'args': [
-          \ '--ignore=D100,D101,D102,D103,D104,D105,D107,D203,D213,D416'
-        \ ],
-        \ 'errorformat':
-        \   '%W%f:%l %.%#:,' .
-        \   '%+C        %m',
-        \ 'postprocess': function('neomake#postprocess#compress_whitespace'),
-        \ }
-
-" copied from neomake: autoload/neomake/makers/ft/python.vim
-function! CustomMypy() abort
-    " NOTE: uses defaults suitable for using it without any config.
-    " ignore_missing_imports cannot be disabled in a config then though
-    let args = [
-                \ '--show-column-numbers',
-                \ '--check-untyped-defs',
-                \ '--ignore-missing-imports',
-                \ '--disallow-untyped-defs',
-                \ ]
-
-    " Append '--py2' to args with Python 2 for Python 2 mode.
-    if !exists('s:python_version')
-        call neomake#makers#ft#python#DetectPythonVersion()
-    endif
-
-    let maker = {
-        \ 'args': args,
-        \ 'output_stream': 'stdout',
-        \ 'errorformat':
-            \ '%E%f:%l:%c: error: %m,' .
-            \ '%W%f:%l:%c: warning: %m,' .
-            \ '%I%f:%l:%c: note: %m,' .
-            \ '%E%f:%l: error: %m,' .
-            \ '%W%f:%l: warning: %m,' .
-            \ '%I%f:%l: note: %m,' .
-            \ '%-GSuccess%.%#,' .
-            \ '%-GFound%.%#,'
-        \ }
-    function! maker.InitForJob(jobinfo) abort
-        let maker = deepcopy(self)
-        let file_mode = a:jobinfo.file_mode
-        if file_mode
-            " Follow imports, but do not emit errors/issues for it, which
-            " would result in errors for other buffers etc.
-            " XXX: dmypy requires "skip" or "error"
-            call insert(maker.args, '--follow-imports=silent')
-        else
-            let project_root = neomake#utils#get_project_root(a:jobinfo.bufnr)
-            if empty(project_root)
-                call add(maker.args, '.')
-            else
-                call add(maker.args, project_root)
-            endif
-        endif
-        return maker
-    endfunction
-    function! maker.supports_stdin(jobinfo) abort
-        if !has_key(self, 'tempfile_name')
-            let self.tempfile_name = self._get_default_tempfilename(a:jobinfo)
-        endif
-        let self.args += ['--shadow-file', '%', self.tempfile_name]
-        return 0
-    endfunction
-    function! maker.postprocess(entry) abort
-        if a:entry.text =~# '\v^Need type (annotation|comment) for'
-            let a:entry.type = 'I'
-        endif
-    endfunction
-    return maker
-endfunction
-
-let g:neomake_python_mypy_maker=CustomMypy()
-
-let g:neomake_cpp_cppcheck_maker={
-        \ 'exe': 'cpp_static_wrapper.py',
-        \ 'args': 'cppcheck',
-        \ 'errorformat' :
-        \   '[%f:%l:%c]: (%trror) %m,' .
-        \   '[%f:%l:%c]: (%tarning) %m,' .
-        \   '[%f:%l:%c]: (%ttyle) %m,' .
-        \   '[%f:%l:%c]: (%terformance) %m,' .
-        \   '[%f:%l:%c]: (%tortability) %m,' .
-        \   '[%f:%l:%c]: (%tnformation) %m,' .
-        \   '[%f:%l:%c]: (%tnconclusive) %m,' .
-        \   '%-G%.%#'}
-
-let g:neomake_cpp_cpplint_maker={
-        \ 'exe': executable('cpplint') ? 'cpplint' : 'cpplint.py',
-        \ 'args': ['--verbose=3'],
-        \ 'errorformat':
-        \     '%A%f:%l:  %m [%t],' .
-        \     '%-G%.%#',
-        \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
-        \ }
-
-let g:neomake_cpp_flawfinder_maker={
-        \ 'exe': 'flawfinder',
-        \ 'args': ['--quiet', '--dataonly', '--singleline'],
-        \ 'errorformat': '%f:%l:  %m,',
-        \ 'postprocess': function('neomake#makers#ft#cpp#CpplintEntryProcess')
-        \ }
 
 " vimtex
 let g:vimtex_fold_enabled = 1
@@ -307,105 +147,10 @@ try
 catch
 endtry
 
-function! MyNeomakeGoodContext(context)
-    return has_key(a:context, "jobinfo") && has_key(a:context["jobinfo"], "name") && a:context["jobinfo"]["name"] == "makeprg"
-endfunction!
-
-function! MyOnNeomakeInit()
-    if MyNeomakeGoodContext(g:neomake_hook_context)
-        let context = g:neomake_hook_context
-        let prefix = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
-        let postfix = ' %#__accent_bold#building'
-        let g:airline_section_c = prefix . postfix
-    endif 
-    call airline#highlighter#reset_hlcache()
-    call airline#load_theme()
-    call airline#update_statusline()
-
-endfunction
-
-function! MyOnNeomakeFinished()
-    if MyNeomakeGoodContext(g:neomake_hook_context)
-        let context = g:neomake_hook_context
-        let prefix = '%<%f%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
-
-        if g:neomake_hook_context['jobinfo']['exit_code'] == '0'
-            let postfix = ' %#__accent_bold#success'
-        else
-            let postfix = ' %#__accent_bold#failed'
-        endif
-        let g:airline_section_c = prefix . postfix
-    endif 
-    call airline#highlighter#reset_hlcache()
-    call airline#load_theme()
-    call airline#update_statusline()
-
-endfunction
-
-augroup my_neomake_hooks
-    au!
-    autocmd User NeomakeJobFinished nested call MyOnNeomakeFinished()
-    autocmd User NeomakeJobInit nested call MyOnNeomakeInit()
-augroup END
-
-"making
-function! MyNeomakeCall()
-    execute "normal! :Neomake\<CR>"
-    if filereadable('Makefile') == 1
-        execute "normal! :Neomake!\<CR>"
-    endif
-endfunction
-autocmd! BufWritePost * :call MyNeomakeCall()
-
-" neosnip
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-nnoremap <localleader>s :NeoSnippetMakeCache<cr>
-imap <c-k>     <Plug>(neosnippet_expand_or_jump)
-smap <c-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <c-k>     <Plug>(neosnippet_expand_target)
-let g:neosnippet#snippets_directory = "/home/esquires3/.vim/bundle/neosnippet-snippets/neosnippets"
-
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
 " For conceal markers.
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
-
-function! GetGitPath(fname)
-    let p = fnamemodify(a:fname, ':p:h')
-    let b = 0
-    while p != '/' && b < 30
-      let b += 1
-      if isdirectory(p . '/.git')
-          return a:fname[len(p) + 1:]
-      endif 
-      let p = fnamemodify(p, ':h')
-    endwhile 
-    return fnamemodify(a:fname, ':t')
-endfunction
-
-function! GetClass(fname)
-    return 'Class ' . fnamemodify(a:fname, ':r') . " {\npublic:\n    "
-endfunction
-
-function! GetHeaderGuard(fname)
-    let include_txt = GetGitPath(a:fname)
-    let include_txt = toupper(include_txt)
-    let include_txt = substitute(include_txt, "/", "_", "g")
-    let include_txt = substitute(include_txt, "-", "_", "g")
-    let include_txt = substitute(include_txt, "\\.", "_", "g")
-    let include_txt = include_txt . '_'
-    return include_txt
-endfunction
 
 " let g:vimtex_view_method = 'zathura'
 let g:vimtex_view_general_viewer = 'okular'
@@ -452,11 +197,6 @@ let g:vimtex_quickfix_latexlog = {
       \ },
 \}
 let g:vimtex_quickfix_autoclose_after_keystrokes=1
-
-" configure deoplete to work with vimtex
-call deoplete#custom#var('omni', 'input_patterns', {
-      \ 'tex': g:vimtex#re#deoplete
-      \})
 
 let g:tex_flavor = 'latex'
 let g:vimtex_quickfix_open_on_warning=1

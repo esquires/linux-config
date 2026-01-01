@@ -1,6 +1,7 @@
 -- packer configuration
 vim.loader.enable()
 
+
 -- leaders
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
@@ -27,29 +28,13 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
-require("lazy").setup({
-
-  -- colorscheme
+local lazy_setup_table = {
   { 'nvim-treesitter/nvim-treesitter-context',
     lazy = false,
     config = function()
       require("treesitter-context").setup({
         max_lines = 5,
       })
-    end,
-  },
-  {
-    'pteroctopus/faster.nvim'
-  },
-  { 'mfussenegger/nvim-lint',
-    lazy = false,
-    config = function()
-      local lint = require("lint")
-
-      lint.linters_by_ft = {
-        cpp = { "cppcheck" },
-      }
     end,
   },
   {
@@ -60,53 +45,13 @@ require("lazy").setup({
       vim.cmd([[colorscheme moonfly]])
     end,
   },
-  -- {
-  --   "rachartier/tiny-inline-diagnostic.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require('tiny-inline-diagnostic').setup({
-  --       hi = {
-  --           background = "None", -- Can be a highlight or a hexadecimal color (#RRGGBB)
-  --       },
-  --     })
-  --   end,
-  -- },
-  { 'lervag/vimtex', lazy = false },
   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     opts = {},
   },
-  { 'micangl/cmp-vimtex',
-    lazy = false,
-    config = function()
-      require('cmp_vimtex').setup({
-        format = function(entry, vim_item)
-          vim_item.menu = ({
-            -- Use this line if you wish to add a specific kind for cmp-vimtex:
-            --vimtex = "[Vimtex]" .. (vim_item.menu ~= nil and vim_item.menu or ""),
-            vimtex = vim_item.menu,
-            buffer = "[Buffer]",
-            nvim_lsp = "[LSP]",
-          })[entry.source.name]
-
-          return vim_item
-        end,
-        additional_information = {
-          info_in_menu = true,
-          info_in_window = true,
-          info_max_length = 60,
-          match_against_info = true,
-          symbols_in_menu = true,
-        },
-        bibtex_parser = {
-          enabled = true,
-        },
-      })
-    end,
-  },
+  { 'p00f/clangd_extensions.nvim', lazy = false},
   { 'rcarriga/nvim-notify', lazy = false },
-  { 'jbyuki/nabla.nvim', lazy = false },
   {
       "kylechui/nvim-surround",
       version = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -117,21 +62,7 @@ require("lazy").setup({
           })
       end
   },
-  -- { "folke/which-key.nvim",
-  --   event = "VeryLazy",
-  --   init = function()
-  --     vim.o.timeout = true
-  --     vim.o.timeoutlen = 300
-  --   end,
-  --   config = function(_, opts)
-  --     local wk = require("which-key")
-  --     wk.setup(opts)
-  --     wk.register(opts.defaults)
-  --   end,
-  -- },
-  -- { "kchmck/vim-coffee-script", lazy = false },
   { "tpope/vim-fugitive", lazy = false },
-  -- { "L3MON4D3/LuaSnip", lazy = true },
   {
     "L3MON4D3/LuaSnip",
     -- follow latest release.
@@ -142,7 +73,7 @@ require("lazy").setup({
   { 'nvim-tree/nvim-web-devicons', lazy = false },
   { 'ray-x/lsp_signature.nvim', lazy = false},
   { 'RRethy/vim-illuminate', lazy = false},
-  { 'esquires/vim-map-medley', lazy = false},
+  { 'esquires/vim-map-medley', branch = "main", lazy = false},
   { 'esquires/tabcity', lazy = false},
   { 'esquires/lvdb', lazy = false},
   { 'mhartington/formatter.nvim', lazy = false },
@@ -155,15 +86,11 @@ require("lazy").setup({
        "nvim-tree/nvim-web-devicons"
     },
   },
-  -- { 'majutsushi/tagbar', lazy = false},
   { 'chaoren/vim-wordmotion', lazy = false},
-  { 'preservim/vim-markdown', lazy = false},
   { 'windwp/nvim-autopairs', lazy = false, opts = {}},
   { 'lukas-reineke/indent-blankline.nvim', main="ibl", lazy = false, opts = {scope = {enabled=false}}},
   { 'milkypostman/vim-togglelist', lazy = false},
   { 'tomtom/tcomment_vim', lazy = false},
-  -- { 'ludovicchabant/vim-gutentags', lazy = false},
-  -- { 'HiPhish/nvim-ts-rainbow2', lazy = false},
   { 'hiphish/rainbow-delimiters.nvim',
     lazy = false,
   },
@@ -173,18 +100,11 @@ require("lazy").setup({
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
-  -- {
-  --   "nvim-tree/nvim-tree.lua",
-  --   version = "*",
-  --   dependencies = {
-  --     "nvim-tree/nvim-web-devicons"
-  --   },
-  --   config = function () require("nvim-tree").setup {} end
-  -- },
   {
     -- https://www.lazyvim.org/plugins/treesitter
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
+    branch = "master",
     version = false, -- last release is way too old and doesn't work on Windows
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
@@ -249,24 +169,6 @@ require("lazy").setup({
           },
         },
       },
-      -- rainbow = {
-      --   enable = true,
-      --   -- list of languages you want to disable the plugin for
-      --   -- disable = { "jsx", "cpp" },
-      --   -- Which query to use for finding delimiters
-      --   query = 'rainbow-parens',
-      --   -- Highlight the entire buffer all at once
-      --   -- strategy = require('ts-rainbow').strategy.global,
-      --   hlgroups = {
-      --      'TSRainbowRed',
-      --      'TSRainbowBlue',
-      --      'TSRainbowYellow',
-      --      'TSRainbowViolet',
-      --      'TSRainbowOrange',
-      --      'TSRainbowGreen',
-      --      'TSRainbowCyan'
-      --   },
-      -- },
     },
     ---@param opts TSConfig
     config = function(_, opts)
@@ -315,7 +217,6 @@ require("lazy").setup({
     -- these dependencies will only be loaded when cmp loads
     -- dependencies are always lazy-loaded unless specified otherwise
     dependencies = {
-      'neovim/nvim-lspconfig',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
@@ -330,81 +231,109 @@ require("lazy").setup({
     end,
   },
   {
-    -- https://vhyrro.github.io/posts/neorg-and-luarocks
-    "vhyrro/luarocks.nvim",
-    priority = 1000, -- We'd like this plugin to load first out of the rest
-    config = true, -- This automatically runs `require("luarocks-nvim").setup()`
-  },
-  {
-    "nvim-neorg/neorg",
-    dependencies = {
-			-- "3rd/image.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-neorg/neorg-telescope",
-      "luarocks.nvim",
-      "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" },
-    },
-    -- put any other flags you wanted to pass to lazy here!
-    config = function()
-      require("neorg").setup {
-        load = {
-          -- https://github.com/nvim-neorg/neorg/issues/1408#issuecomment-2093155213
-          ["core.defaults"] = {
-            config = {
-              disable = { "core.todo-introspector" },
-            },
-          },
-          ["core.concealer"] = {}, -- Adds pretty icons to your documents
-          ["core.dirman"] = { -- Manages Neorg workspaces
-            config = {
-              workspaces = {
-                main = "~/norg",
-              },
-              default_workspace = 'main',
-            },
-          },
-          ["core.integrations.telescope"] = {},
-          ["core.integrations.image"] = {},
-          ["core.export"] = { config = {export_dir = '/tmp/neorg' } },
-          ["core.export.markdown"] = { config = { extensions = 'all' } },
-          ["core.summary"] = {},
-          ["core.latex.renderer"] = {
-            config = {
-            }
-          },
-          ["core.keybinds"] = {
-            config = {
-              hook = function(keybinds)
-                -- vim.pretty_print(keybinds)
-                keybinds.map_to_mode("all", {
-                  n = {
-                    { vim.g.maplocalleader .. "lv", ":lua OpenNeorgPdf()<cr>", opts = { desc = "Enter Norg Mode" } },
-                  },
-                })
-              end,
-            }
-          },
-          ["external.templates"] = {
-            config = {
-              templates_dir = "~/norg/personal/templates",
-            },
-          },
-        }
-      }
-    end,
-  },
-  {
-    "3rd/image.nvim", lazy = false
-  },
-  { "niuiic/track.nvim",
-    lazy = false,
-    dependencies = {
-       "niuiic/core.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
+    "glepnir/nerdicons.nvim", cmd="NerdIcons", config = function() require("nerdicons").setup({}) end
   }
+}
 
-})
+local linux_config_nvim_full = os.getenv("LINUX_CONFIG_NVIM_FULL") or false
+
+if linux_config_nvim_full then
+  table.insert(lazy_setup_table, {
+      -- https://vhyrro.github.io/posts/neorg-and-luarocks
+      "vhyrro/luarocks.nvim",
+      priority = 1000, -- We'd like this plugin to load first out of the rest
+      config = true, -- This automatically runs `require("luarocks-nvim").setup()`
+    }
+  )
+  table.insert(lazy_setup_table, {
+    {
+      "nvim-neorg/neorg",
+      dependencies = {
+        -- "3rd/image.nvim",
+        "nvim-lua/plenary.nvim",
+        "nvim-neorg/neorg-telescope",
+        "luarocks.nvim",
+        "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" },
+      },
+      -- put any other flags you wanted to pass to lazy here!
+      config = function()
+        require("neorg").setup {
+          load = {
+            -- https://github.com/nvim-neorg/neorg/issues/1408#issuecomment-2093155213
+            ["core.defaults"] = {
+              config = {
+                disable = { "core.todo-introspector" },
+              },
+            },
+            ["core.concealer"] = {}, -- Adds pretty icons to your documents
+            ["core.dirman"] = { -- Manages Neorg workspaces
+              config = {
+                workspaces = {
+                  main = "~/norg",
+                },
+                default_workspace = 'main',
+              },
+            },
+            ["core.integrations.telescope"] = {},
+            ["core.integrations.image"] = {},
+            ["core.export"] = { config = {export_dir = '/tmp/neorg' } },
+            ["core.export.markdown"] = { config = { extensions = 'all' } },
+            ["core.summary"] = {},
+            ["core.latex.renderer"] = {
+              config = {
+              }
+            },
+            ["core.keybinds"] = {
+              config = {
+                hook = function(keybinds)
+                  -- vim.pretty_print(keybinds)
+                  keybinds.map_to_mode("all", {
+                    n = {
+                      { vim.g.maplocalleader .. "lv", ":lua OpenNeorgPdf()<cr>", opts = { desc = "Enter Norg Mode" } },
+                    },
+                  })
+                end,
+              }
+            },
+          }
+        }
+      end,
+    },
+  })
+  table.insert(lazy_setup_table, { "3rd/image.nvim", lazy = false })
+  table.insert(lazy_setup_table, { 'lervag/vimtex', lazy = false })
+  table.insert(lazy_setup_table, {
+    'micangl/cmp-vimtex',
+      lazy = false,
+      config = function()
+        require('cmp_vimtex').setup({
+          format = function(entry, vim_item)
+            vim_item.menu = ({
+              -- Use this line if you wish to add a specific kind for cmp-vimtex:
+              --vimtex = "[Vimtex]" .. (vim_item.menu ~= nil and vim_item.menu or ""),
+              vimtex = vim_item.menu,
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+            })[entry.source.name]
+
+            return vim_item
+          end,
+          additional_information = {
+            info_in_menu = true,
+            info_in_window = true,
+            info_max_length = 60,
+            match_against_info = true,
+            symbols_in_menu = true,
+          },
+          bibtex_parser = {
+            enabled = true,
+          },
+        })
+      end,
+  })
+end
+
+require("lazy").setup(lazy_setup_table)
 
 require('rainbow-delimiters.setup').setup {
     highlight = {
@@ -456,11 +385,10 @@ require('aerial').setup({
     vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
   end
 })
--- You probably also want to set a keymap to toggle aerial
+
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 vim.keymap.set('n', '<leader>o', '<cmd>vs<CR><cmd>Oil<CR>')
-
--- track
+vim.keymap.set("n", "<localleader>h", ":vs<cr>:ClangdSwitchSourceHeader<cr>")
 
 local Rule = require('nvim-autopairs.rule')
 local npairs = require('nvim-autopairs')
@@ -510,38 +438,9 @@ cmp.setup({
 })
 
 vim.notify = require("notify")
--- print(vim.inspect(cmp.config))
--- print(nvim.inspect(require('cmp')
 
 npairs.add_rule(Rule("$|","|$","norg"))
-
--- you can use some built-in conditions
-
 local cond = require('nvim-autopairs.conds')
--- local Rule = require('nvim-autopairs.rule')
--- local npairs = require('nvim-autopairs')
--- local cond = require('nvim-autopairs.conds')
--- npairs.add_rules({
---   Rule("$", "$",{'norg'})
--- })
-
-local neorg_callbacks = require("neorg.core.callbacks")
-
--- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
---     -- Map all the below keybinds only when the "norg" mode is active
---     keybinds.map_event_to_mode("norg", {
---         n = { -- Bind keys in normal mode
---             { "<C-s>", "core.integrations.telescope.find_linkable" },
---         },
---
---         i = { -- Bind in insert mode
---             { "<C-l>", "core.integrations.telescope.insert_link" },
---         },
---     }, {
---         silent = true,
---         noremap = true,
---     })
--- end)
 
 require("formatter").setup {
   -- Enable or disable logging
@@ -573,25 +472,9 @@ keymap('n', '<localleader>f', ':Format<CR>')
 -- setup snippets
 require("snippets")
 -- require('leap').add_default_mappings()
-vim.keymap.set({'n', 'v'}, '<a-l>', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'v'}, '<a-h>', '<Plug>(leap-backward-to)')
-
--- track
-require('track').setup(
-  {
-    sign = {
-      text = "󰍒",
-      text_color = "#ffff00",
-      priority = 10000,
-    },
-  }
-)
-keymap('n', 'mt', ':lua require("track").toggle()<cr>')
-keymap('n', 'mr', ':lua require("track").remove()<cr>')
-keymap('n', 'me', ':lua require("track").edit()<cr>')
-keymap('n', 'mj', ':lua require("track").jump_to_next()<cr>')
-keymap('n', 'mk', ':lua require("track").jump_to_prev()<cr>')
-keymap('n', 'ms', ':lua require("track").search()<cr>')
+vim.keymap.set({'n', 'v'}, '<a-l>', function () require('leap').leap { forward = true } end)
+vim.keymap.set({'n', 'v'}, '<a-h>', function () require('leap').leap { backward = true } end)
+    
 
 -- neorg telescope
 -- neorg.telescope.insert_file_link
@@ -853,295 +736,141 @@ vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
 -- fixme: others yet to be updated
 cmd('source ~/.config/nvim/old-cfg.vim')
 
-function GetNeorgOutputPath()
-  return os.getenv('HOME') .. '/neorg_outputs'
-end
-
-function NotifyErr(j, return_val)
-  if return_val ~= 0 then
-    local msg = ''
-    for _, err_msg in pairs(j:stderr_result()) do
-      msg = msg .. '\n' .. err_msg
-      
-    end
-    vim.notify(msg, vim.log.levels.ERROR)
-  end
-end
-
-function OpenNeorgPdf()
-  local fname = GetNeorgOutputPath() .. '/pdf/' .. vim.fn.expand('%:t:r') .. '.pdf'
-  local job = require'plenary.job'
-  job:new({command = 'okular', args = { fname }, on_exit = NotifyErr,}):start()
-end
-
-function ConvertNeorg()
-  -- local workspace_root = require("neorg").modules.get_module("core.dirman").get_current_workspace()[2]
-  -- local export_path = workspace_root .. '/export'
-  -- local export_path = workspace_root .. '/export'
-
-  local export_path = GetNeorgOutputPath()
-  local markdown_path = export_path .. '/markdown'
-  local pdf_path = export_path .. '/pdf'
-  local fname = vim.fn.expand('%:t:r')
-  local markdown_fname = markdown_path .. '/' .. fname .. '.md'
-  local pdf_fname = pdf_path .. '/' .. fname .. '.pdf'
-
-  if string.find(vim.fn.expand('%:p'), "personal/journal") then
-    local dirname = vim.fn.expand('%:p:h:t')
-    export_path = os.getenv('HOME') .. '/blog/content/daily/' .. vim.fn.expand('%:p:h:t')
-    markdown_fname = export_path .. '/' ..  fname .. '.md'
-    pdf_path = nil
+if linux_config_nvim_full then
+  function GetNeorgOutputPath()
+    return os.getenv('HOME') .. '/neorg_outputs'
   end
 
-  local mkdir = function(pth)
-    if pth ~= nil and vim.fn.isdirectory(pth) == 0 then
-      vim.fn.mkdir(pth)
-    end
-  end
-
-  mkdir(export_path)
-  mkdir(markdown_path)
-  mkdir(pdf_path)
-  local job = require'plenary.job'
-  local neorg = require("neorg")
-  local buf = vim.api.nvim_win_get_buf(0)
-
-  local exported = neorg.modules.get_module("core.export").export(buf, "markdown")
-
-  -- copied from neorg/lua/neorg/modules/core/export/module.lua
-  -- to avoid the extra notification
-  vim.loop.fs_open(markdown_fname, "w", 438, function(err, fd)
-    assert(not err, neorg.lib.lazy_string_concat("Failed to open file '", markdown_fname, "' for export: ", err))
-    vim.loop.fs_write(fd, exported, 0, function(werr)
-      assert(
-        not werr,
-        neorg.lib.lazy_string_concat("Failed to write to file '", markdown_fname, "' for export: ", werr)
-      )
-
-      if pdf_path ~= nil then
-
-        job:new({
-          command = 'pandoc',
-            args = { '-V', 'geometry:margin=1.0in', '-V', 'linkcolor:red', '-V', 'urlcolor:red', markdown_fname, '-o', pdf_fname},
-            on_exit = NotifyErr,
-        }):start()
-      else
-        job:new({
-          command = 'sed',
-          args = {'-i', 's:^```$::', markdown_fname},
-          on_exit = NotifyErr,
-        }):start()
+  function NotifyErr(j, return_val)
+    if return_val ~= 0 then
+      local msg = ''
+      for _, err_msg in pairs(j:stderr_result()) do
+        msg = msg .. '\n' .. err_msg
+        
       end
+      vim.notify(msg, vim.log.levels.ERROR)
+    end
+  end
+
+  function OpenNeorgPdf()
+    local fname = GetNeorgOutputPath() .. '/pdf/' .. vim.fn.expand('%:t:r') .. '.pdf'
+    local job = require'plenary.job'
+    job:new({command = 'okular', args = { fname }, on_exit = NotifyErr,}):start()
+  end
+
+  function ConvertNeorg()
+    -- local workspace_root = require("neorg").modules.get_module("core.dirman").get_current_workspace()[2]
+    -- local export_path = workspace_root .. '/export'
+    -- local export_path = workspace_root .. '/export'
+    local file_path = vim.fn.expand("%:p:h")
+    local prefix = string.gsub(file_path, os.getenv("HOME") .. "/norg/", "")
+
+    local export_path = GetNeorgOutputPath()
+    local markdown_path = export_path .. '/markdown' .. "/" .. prefix
+    local pdf_path = export_path .. '/pdf' .. "/" .. prefix
+    local fname = vim.fn.expand('%:t:r')
+    local markdown_fname = markdown_path .. '/' .. fname .. '.md'
+    local pdf_fname = pdf_path .. '/' .. fname .. '.pdf'
+
+    local mkdir = function(pth)
+      if pth ~= nil and vim.fn.isdirectory(pth) == 0 then
+        vim.fn.mkdir(pth, "p")
+      end
+    end
+
+    mkdir(export_path)
+    mkdir(markdown_path)
+    mkdir(pdf_path)
+    local job = require'plenary.job'
+    local neorg = require("neorg")
+    local buf = vim.api.nvim_win_get_buf(0)
+
+    local exported = neorg.modules.get_module("core.export").export(buf, "markdown")
+
+    -- copied from neorg/lua/neorg/modules/core/export/module.lua
+    -- to avoid the extra notification
+    vim.loop.fs_open(markdown_fname, "w", 438, function(err, fd)
+      assert(not err, neorg.lib.lazy_string_concat("Failed to open file '", markdown_fname, "' for export: ", err))
+      vim.loop.fs_write(fd, exported, 0, function(werr)
+        assert(
+          not werr,
+          neorg.lib.lazy_string_concat("Failed to write to file '", markdown_fname, "' for export: ", werr)
+        )
+
+        if pdf_path ~= nil then
+
+          job:new({
+            command = 'pandoc',
+              args = { '-V', 'geometry:margin=1.0in', '-V', 'linkcolor:red', '-V', 'urlcolor:red', markdown_fname, '-o', pdf_fname},
+              on_exit = NotifyErr,
+          }):start()
+        else
+          job:new({
+            command = 'sed',
+            args = {'-i', 's:^```$::', markdown_fname},
+            on_exit = NotifyErr,
+          }):start()
+        end
+
+      end)
 
     end)
 
-  end)
+  end
 
-end
+  vim.api.nvim_create_autocmd(
+    {"BufWritePost"},
+    {
+      pattern = {"*.norg"},
+      callback = ConvertNeorg,
+    }
+  )
 
-vim.api.nvim_create_autocmd(
-  {"BufWritePost"},
-  {
-    pattern = {"*.norg"},
-    callback = ConvertNeorg,
-  }
-)
-
--- https://github.com/3rd/image.nvim
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
--- default config
-local function ConfigureImageNvim()
-  require("image").setup({
-    backend = "kitty",
-    integrations = {
-      markdown = {
-        enabled = true,
-        clear_in_insert_mode = false,
-        download_remote_images = true,
-        only_render_image_at_cursor = false,
-        filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+  -- https://github.com/3rd/image.nvim
+  package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+  package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+  -- default config
+  local function ConfigureImageNvim()
+    require("image").setup({
+      backend = "kitty",
+      integrations = {
+        markdown = {
+          enabled = true,
+          clear_in_insert_mode = false,
+          download_remote_images = true,
+          only_render_image_at_cursor = false,
+          filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+        },
+        neorg = {
+          enabled = true,
+          clear_in_insert_mode = false,
+          download_remote_images = true,
+          only_render_image_at_cursor = false,
+          filetypes = { "norg" },
+        },
       },
-      neorg = {
-        enabled = true,
-        clear_in_insert_mode = false,
-        download_remote_images = true,
-        only_render_image_at_cursor = false,
-        filetypes = { "norg" },
-      },
-    },
-    max_width = nil,
-    max_height = nil,
-    max_width_window_percentage = nil,
-    max_height_window_percentage = 50,
-    window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
-    window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-    editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
-    tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-    hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
-  })
+      max_width = nil,
+      max_height = nil,
+      max_width_window_percentage = nil,
+      max_height_window_percentage = 50,
+      window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
+      window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+      editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
+      tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+      hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
+    })
+  end
+
+  pcall(ConfigureImageNvim)
 end
-
-pcall(ConfigureImageNvim)
-
--- neorg
--- require('nvim-treesitter.configs').setup {
---   ensure_installed = "all",
---   ignore_install = { "latex" },
---   highlight = { -- Be sure to enable highlights if you haven't!
---     enable = true,
---   },
---   indent = {
---     enable = true,
---     disable = {"python",},  -- https://www.reddit.com/r/neovim/comments/ok9frp/v05_treesitter_does_anyone_have_python_indent/
---   },
---   rainbow = {
---     enable = true,
---     -- list of languages you want to disable the plugin for
---     -- disable = { "jsx", "cpp" },
---     -- Which query to use for finding delimiters
---     query = 'rainbow-parens',
---     -- Highlight the entire buffer all at once
---     strategy = require 'ts-rainbow.strategy.global',
---     hlgroups = {
---        'TSRainbowRed',
---        'TSRainbowBlue',
---        'TSRainbowYellow',
---        'TSRainbowViolet',
---        'TSRainbowOrange',
---        'TSRainbowGreen',
---        'TSRainbowCyan'
---     },
---   },
---   -- rainbow = {
---   --   enable = true,
---   --   -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
---   --   extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
---   --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
---   --           colors = {
---   --               "#ffffff", -- white
---   --               "#cece32", -- dark yellow
---   --               "#ff4040", -- red
---   --               "#00ff00", -- green
---   --               "#00ffff", -- blue
---   --           },
---   --   -- termcolors = {'white', 'Yellow', 'blue'} -- table of colour name strings
---   -- },
---
---   textobjects = {
---     select = {
---       enable = true,
---
---       -- Automatically jump forward to textobj, similar to targets.vim
---       lookahead = true,
---
---       keymaps = {
---         -- You can use the capture groups defined in textobjects.scm
---         ["af"] = "@function.outer",
---         ["if"] = "@function.inner",
---         ["ac"] = "@class.outer",
---         ["ic"] = "@class.inner",
---       },
---     },
---   },
---   playground = {
---     enable = true,
---     disable = {},
---     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
---     persist_queries = false, -- Whether the query persists across vim sessions
---     keybindings = {
---       toggle_query_editor = 'o',
---       toggle_hl_groups = 'i',
---       toggle_injected_languages = 't',
---       toggle_anonymous_nodes = 'a',
---       toggle_language_display = 'I',
---       focus_language = 'f',
---       unfocus_language = 'F',
---       update = 'R',
---       goto_node = '<cr>',
---       show_help = '?',
---     },
---   }
--- }
 
 vim.api.nvim_exec([[
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
 ]], true)
 
--- hop
--- keymap('n', '<localleader>h', ':lua require("hop").hint_words()<cr>', 'hop to word')
--- keymap('v', '<localleader>h', ':lua require("hop").hint_words()<cr>')
-
--- local neorg_callbacks = require("neorg.callbacks")
-
--- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
---     -- Map all the below keybinds only when the "norg" mode is active
---     keybinds.map_event_to_mode("norg", {
---         n = { -- Bind keys in normal mode
---             { "<C-s>", "core.integrations.telescope.find_linkable" },
---         },
---
---         i = { -- Bind in insert mode
---             { "<C-l>", "core.integrations.telescope.insert_link" },
---         },
---     }, {
---         silent = true,
---         noremap = true,
---     })
--- end)
-
--- function SetNeorgCallbacks(bufnr, tabnum_start)
---   local neorg_callbacks = require("neorg.callbacks")
---
---   neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
---       -- Map all the below keybinds only when the "norg" mode is active
---       keybinds.map_event_to_mode("norg", {
---           n = { -- Bind keys in normal mode
---               { "<C-s>", "core.integrations.telescope.find_linkable" },
---           },
---
---           i = { -- Bind in insert mode
---               { "<C-l>", "core.integrations.telescope.insert_link" },
---           },
---       }, {
---           silent = true,
---           noremap = true,
---       })
---   end)
--- end
---
--- local neorg_callbacks = require('neorg.callbacks')
-
--- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
--- 	keybinds.map_event_to_mode("norg", {
--- 		n = {
--- 			{ neorg_leader .. "a", "utilities.dateinserter.my_keybind" },
--- 		},
--- 	}, { silent = true, noremap = true })
--- end)
--- local neorg_callbacks = require('neorg.callbacks')
--- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
--- 	keybinds.map_event_to_mode("norg", {
---       n = {
---         { "<Leader>o" .. "p", "utilities.gtd_project_tags.views" },
---       },
---     }, { silent = true, noremap = true })
--- end)
--- cmd('nnoremap <Leader>op :Neorg gtd_project_tags 0 0 1<cr>')
-
--- require'lualine'.setup {
---   options = {
---     theme = 'sonokai'
---   }
--- }
-
-cmd('colorscheme moonfly')
 cmd('hi TreesitterContextBottom gui=underline guisp=Grey')
 cmd("nnoremap <localleader>c m':lua require(\"treesitter-context\").go_to_context()<cr>")
--- vim.keymap.set("n", "<localleader>c", function()
---   require("treesitter-context").go_to_context()
--- end, { silent = true })
 
 function FindExistingBuffer(bufnr, tabnum_start)
 
@@ -1202,54 +931,14 @@ function GoToDefinitionInNewTab()
 end
 cmd('nnoremap <localleader>s :lua GoToDefinitionInNewTab()<cr>')
 
-
--- extra highlights
--- vim.api.nvim_command('highlight default HopNextKey  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
--- vim.api.nvim_command('highlight default HopNextKey1  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
--- vim.api.nvim_command('highlight default HopNextKey2  guifg=#ff007c gui=bold ctermfg=198 cterm=bold')
-
 vim.o.foldminlines = 5
 vim.o.foldnestmax = 2
 
 -- https://vi.stackexchange.com/a/34722
--- vim.g.terminal_color_2 = '#fffcf5'
--- vim.g.terminal_color_2 = '#373737'
 -- https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
--- vim.g.terminal_color_0  = '#2e3436'
--- vim.g.terminal_color_1  = '#cc0000'
 vim.g.terminal_color_2  = '#4e9a06'
 vim.g.terminal_color_2  = '#C68539'
 vim.g.terminal_color_4  = '#397AC6'
 vim.g.terminal_color_3  = '#846b00'
--- vim.g.terminal_color_3  = '#c4a000'
--- vim.g.terminal_color_4  = '#3465a4'
--- vim.g.terminal_color_5  = '#75507b'
--- vim.g.terminal_color_6  = '#0b939b'
--- vim.g.terminal_color_7  = '#d3d7cf'
--- vim.g.terminal_color_8  = '#555753'
--- vim.g.terminal_color_9  = '#ef2929'
--- vim.g.terminal_color_10 = '#8ae234'
--- vim.g.terminal_color_11 = '#fce94f'
--- vim.g.terminal_color_12 = '#729fcf'
--- vim.g.terminal_color_13 = '#ad7fa8'
--- vim.g.terminal_color_14 = '#00f5e9'
--- vim.g.terminal_color_15 = '#eeeeec'
 
 vim.api.nvim_set_hl(0, "RenderMarkdownCode", {bg="#121212"})
-
-require('lint').linters_by_ft = {
-  cpp = {'cppcheck'},
-}
-
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  callback = function()
-
-    -- try_lint without arguments runs the linters defined in `linters_by_ft`
-    -- for the current filetype
-    require("lint").try_lint()
-
-    -- You can call `try_lint` with a linter name or a list of names to always
-    -- run specific linters, independent of the `linters_by_ft` configuration
-    -- require("lint").try_lint("cspell")
-  end,
-})
